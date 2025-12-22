@@ -1,0 +1,6 @@
+GET
+/midpoint
+false
+{
+  "mid": "1800.75"
+}

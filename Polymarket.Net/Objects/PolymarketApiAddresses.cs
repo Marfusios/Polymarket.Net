@@ -1,0 +1,26 @@
+namespace Polymarket.Net.Objects
+{
+    /// <summary>
+    /// Api addresses
+    /// </summary>
+    public class PolymarketApiAddresses
+    {
+        /// <summary>
+        /// The address used by the PolymarketRestClient for the Clob API
+        /// </summary>
+        public string ClobRestClientAddress { get; set; } = "";
+        /// <summary>
+        /// The address used by the PolymarketSocketClient for the websocket API
+        /// </summary>
+        public string SocketClientAddress { get; set; } = "";
+
+        /// <summary>
+        /// The default addresses to connect to the Polymarket API
+        /// </summary>
+        public static PolymarketApiAddresses Default = new PolymarketApiAddresses
+        {
+            ClobRestClientAddress = "https://clob.polymarket.com",
+            SocketClientAddress = "XXX"
+        };
+    }
+}

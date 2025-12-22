@@ -1,0 +1,11 @@
+GET
+/prices-history
+false
+{
+  "history": [
+    {
+      "t": 1697875200,
+      "p": 1800.75
+    }
+  ]
+}
