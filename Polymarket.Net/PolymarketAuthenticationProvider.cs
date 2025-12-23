@@ -39,7 +39,8 @@ namespace Polymarket.Net
             if (!requestConfig.Authenticated)
                 return;
 
-            if (requestConfig.Path.Equals("/auth/api-key") || requestConfig.Path.Equals("/auth/derive-api-key"))
+            if ((requestConfig.Path.Equals("/auth/api-key") && requestConfig.Method == HttpMethod.Post)
+                || (requestConfig.Path.Equals("/auth/derive-api-key") && requestConfig.Method == HttpMethod.Get))
             {
                 // L1 authentication
                 // SignL1Neth(requestConfig);
@@ -113,7 +114,7 @@ namespace Polymarket.Net
             var signData = timestamp + requestConfig.Method.ToString() + requestConfig.Path;
             if (requestConfig.Method == HttpMethod.Post || requestConfig.Method == HttpMethod.Delete)
             {
-                var body = GetSerializedBody(_serializer, requestConfig.BodyParameters ?? new Dictionary<string, object>()); ;
+                var body = (requestConfig.BodyParameters == null || requestConfig.BodyParameters.Count == 0) ? string.Empty : GetSerializedBody(_serializer, requestConfig.BodyParameters);
                 signData += body;
                 requestConfig.SetBodyContent(body);
             }
@@ -121,6 +122,18 @@ namespace Polymarket.Net
             var signature = SignHMACSHA256(signData, SignOutputType.Base64);
             signature = signature.Replace('+', '-').Replace('/', '_');
             requestConfig.Headers.Add("POLY_SIGNATURE", signature);
+
+#warning signature type
+            if (requestConfig.ParameterPosition == HttpMethodParameterPosition.InUri)
+            {
+                requestConfig.QueryParameters ??= new Dictionary<string, object>();
+                requestConfig.QueryParameters.Add("signature_type", 0);
+            }
+            else
+            {
+                requestConfig.BodyParameters ??= new Dictionary<string, object>();
+                requestConfig.BodyParameters.Add("signature_type", 0);
+            }
         }
 
         //public byte[] EncodeEip721Neth(

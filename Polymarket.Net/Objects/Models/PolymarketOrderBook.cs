@@ -14,10 +14,10 @@ namespace Polymarket.Net.Objects.Models
         [JsonPropertyName("market")]
         public string Market { get; set; } = string.Empty;
         /// <summary>
-        /// Asset id
+        /// Asset/token id
         /// </summary>
         [JsonPropertyName("asset_id")]
-        public string AssetId { get; set; } = string.Empty;
+        public string TokenId { get; set; } = string.Empty;
         /// <summary>
         /// Timestamp
         /// </summary>

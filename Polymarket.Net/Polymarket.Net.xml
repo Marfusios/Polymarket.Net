@@ -260,6 +260,26 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.OrderStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.TimeInForce">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.TradeRole">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.TradeStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceRequest">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -280,6 +300,16 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketApiKeys">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketBalanceAllowance">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketBookEntry">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -296,6 +326,11 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketCancelResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClosedOnlyMode">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -365,12 +400,32 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketNotification">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketNotificationArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrder">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrderBase">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrderBaseArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -390,6 +445,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrderScoring">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPagePolymarketMarket">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -401,6 +461,11 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPagePolymarketOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPagePolymarketTrade">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -440,12 +505,27 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTrade">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradePrice">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradePriceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.DictionaryStringBoolean">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -534,6 +614,21 @@
         <member name="M:Polymarket.Net.Converters.PolymarketSourceGenerationContext.GetTypeInfo(System.Type)">
             <inheritdoc/>
         </member>
+        <member name="T:Polymarket.Net.Enums.AssetType">
+            <summary>
+            Asset type
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.AssetType.Collateral">
+            <summary>
+            Collateral
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.AssetType.Conditional">
+            <summary>
+            Conditional
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Enums.DataInterval">
             <summary>
             Data interval
@@ -584,6 +679,21 @@
             Sell
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Enums.OrderStatus">
+            <summary>
+            Order status
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.OrderStatus.Live">
+            <summary>
+            Live
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.OrderStatus.Canceled">
+            <summary>
+            Canceled
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Enums.TimeInForce">
             <summary>
             Time in force
@@ -607,6 +717,51 @@
         <member name="F:Polymarket.Net.Enums.TimeInForce.GoodTillDate">
             <summary>
             Good till specific timestamp
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Enums.TradeRole">
+            <summary>
+            Trade role
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeRole.Taker">
+            <summary>
+            Taker
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeRole.Maker">
+            <summary>
+            Maker
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Enums.TradeStatus">
+            <summary>
+            Trade status
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeStatus.Matched">
+            <summary>
+            Matched
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeStatus.Mined">
+            <summary>
+            Mined
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeStatus.Confirmed">
+            <summary>
+            Confirmed
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeStatus.Retrying">
+            <summary>
+            Retrying
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TradeStatus.Failed">
+            <summary>
+            Failed
             </summary>
         </member>
         <member name="T:Polymarket.Net.ExtensionMethods.PolymarketExtensionMethods">
@@ -641,6 +796,35 @@
             <summary>
             Polymarket Clob account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
             </summary>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiAccount.GetNotificationsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get notifications
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiAccount.DropNotificationsAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Drop notifications
+            </summary>
+            <param name="ids">Ids to drop</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiAccount.GetBalanceAllowanceAsync(Polymarket.Net.Enums.AssetType,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get balance allowance
+            </summary>
+            <param name="assetType">Asset type</param>
+            <param name="tokenId">Token id, required for AssetType.Conditional</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiAccount.UpdateBalanceAllowanceAsync(Polymarket.Net.Enums.AssetType,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Update balance allowance
+            </summary>
+            <param name="assetType">Asset type</param>
+            <param name="tokenId">Token id</param>
+            <param name="ct">Cancellation token</param>
         </member>
         <member name="T:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiExchangeData">
             <summary>
@@ -799,15 +983,110 @@
             <param name="tokenIds">The token ids</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="T:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiShared">
-            <summary>
-            Shared interface for Clob rest API usage
-            </summary>
-        </member>
         <member name="T:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading">
             <summary>
             Polymarket Clob trading endpoints, placing and managing orders.
             </summary>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.GetOpenOrdersAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get open orders
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/get-active-order" /></para>
+            </summary>
+            <param name="orderId">Filter by order id</param>
+            <param name="conditionId">Filter by market/condition id</param>
+            <param name="tokenId">Asset/token id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.GetOrderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get an order by id
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/get-order" /></para>
+            </summary>
+            <param name="orderId">Order id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.GetOrderRewardScoringAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Check if an order is eligible or scoring for Rewards purposes
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/check-scoring" /></para>
+            </summary>
+            <param name="orderId">Order id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.GetOrdersRewardScoringAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Check if orders are eligible or scoring for Rewards purposes
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/check-scoring" /></para>
+            </summary>
+            <param name="orderIds">Order ids</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceOrderAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.TimeInForce,System.Decimal,System.Decimal,System.Int64,System.Decimal,System.Int32,System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Place a new order
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/create-order" /></para>
+            </summary>
+            <param name="tokenId">Token id</param>
+            <param name="side">Side</param>
+            <param name="timeInForce">Time in force</param>
+            <param name="makerQuantity">Maximum quantity maker is willing to spend</param>
+            <param name="takerQuantity">Minimum quantity taker will pay the maker in return</param>
+            <param name="nonce"></param>
+            <param name="feeRateBps">Fee rate basis points as required by the operator</param>
+            <param name="signatureType"></param>
+            <param name="makerAddress">Maker/funding address</param>
+            <param name="signingAddress">Signing address</param>
+            <param name="takerAddress">Taker/operator address</param>
+            <param name="clientOrderId">Client order id</param>
+            <param name="expiration">Expiration time</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.CancelOrderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Cancel an order
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/cancel-orders" /></para>
+            </summary>
+            <param name="orderId">Order id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.CancelOrdersAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Cancel multiple orders
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/cancel-orders" /></para>
+            </summary>
+            <param name="orderIds">Ids of orders to cancel</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.CancelOrdersOnMarketAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Cancel all orders for a specific market
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/cancel-orders" /></para>
+            </summary>
+            <param name="conditionId">The condition/market id</param>
+            <param name="tokenId">Asset/token id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.CancelAllOrdersAsync(System.Threading.CancellationToken)">
+            <summary>
+            Cancel all open orders
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/cancel-orders" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.GetUserTradesAsync(System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get trades matching the filters
+            <para><a href="https://docs.polymarket.com/developers/CLOB/trades/trades" /></para>
+            </summary>
+            <param name="tradeId">Filter by trade id</param>
+            <param name="takerAddress">Filter by taker address</param>
+            <param name="makerAddress">Filter by maker address</param>
+            <param name="conditionId">Filter by condition id</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
+            <param name="cursor">Next page cursor</param>
+            <param name="ct">Cancellation token</param>
         </member>
         <member name="T:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi">
             <summary>
@@ -822,11 +1101,6 @@
             <param name="onMessage">The event handler for the received data</param>
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        </member>
-        <member name="T:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApiShared">
-            <summary>
-            Shared interface for Clob socket API usage
-            </summary>
         </member>
         <member name="T:Polymarket.Net.Interfaces.Clients.IPolymarketRestClient">
             <summary>
@@ -930,6 +1204,31 @@
             Tracker factory
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketApiKeys">
+            <summary>
+            API keys
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketApiKeys.ApiKeys">
+            <summary>
+            API keys
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketBalanceAllowance">
+            <summary>
+            Balance allowance
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBalanceAllowance.Balance">
+            <summary>
+            Balance
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBalanceAllowance.Allowances">
+            <summary>
+            Allowances
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketBuySellPrice">
             <summary>
             Price info
@@ -958,6 +1257,16 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketCancelResult.NotCanceled">
             <summary>
             Not canceled
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketClosedOnlyMode">
+            <summary>
+            Closed only mode
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClosedOnlyMode.ClosedOnly">
+            <summary>
+            Is closed only enabled
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketCreds">
@@ -1260,6 +1569,96 @@
             Negative risk
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketNotification">
+            <summary>
+            Notification
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketOrder">
+            <summary>
+            Order info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrder.TradeIds">
+            <summary>
+            Any trade id the order has been partially included in
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrder.OriginalQuantity">
+            <summary>
+            Original order quantity at placement
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrder.Expiration">
+            <summary>
+            Expiration time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrder.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrder.TimeInForce">
+            <summary>
+            Time in force
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrder.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketOrderBase">
+            <summary>
+            Order info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.OrderId">
+            <summary>
+            Order id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.MakerAddress">
+            <summary>
+            Maker address
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.TokenId">
+            <summary>
+            Asset/token id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.Owner">
+            <summary>
+            API key of the order owner
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.QuantityFilled">
+            <summary>
+            Quantity matched in trade
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.FeeRateBps">
+            <summary>
+            Fee rate in BPS
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.Price">
+            <summary>
+            Price
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.Outcome">
+            <summary>
+            Order outcome description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBase.Side">
+            <summary>
+            Order side
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketOrderBook">
             <summary>
             Token info
@@ -1270,9 +1669,9 @@
             Market
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBook.AssetId">
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBook.TokenId">
             <summary>
-            Asset id
+            Asset/token id
             </summary>
         </member>
         <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderBook.Timestamp">
@@ -1350,6 +1749,16 @@
             Hashes of trades which were executed immediately
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketOrderScoring">
+            <summary>
+            Whether an order is scoring
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderScoring.Scoring">
+            <summary>
+            Is order scoring
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketPage`1">
             <summary>
             Data page
@@ -1423,6 +1832,101 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketTickSize.MinTickSize">
             <summary>
             Minimum tick size
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketTrade">
+            <summary>
+            Trade info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.TradeId">
+            <summary>
+            Trade id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.TakerOrderId">
+            <summary>
+            Taker order id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.ConditionId">
+            <summary>
+            Condition/market id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.TokenId">
+            <summary>
+            Asset/token id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Side">
+            <summary>
+            Side
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.FeeRateBps">
+            <summary>
+            Fee rate BPS
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Price">
+            <summary>
+            Price
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Status">
+            <summary>
+            Trade status
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.MatchTime">
+            <summary>
+            Matching time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.UpdateTime">
+            <summary>
+            Last update time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Outcome">
+            <summary>
+            Outcome string
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.MakerAddress">
+            <summary>
+            Maker address
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Owner">
+            <summary>
+            API key of the taker of the trade
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.TransactionHash">
+            <summary>
+            Transaction hash
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.BucketIndex">
+            <summary>
+            Index of bucket for trade in case trade is executed in multiple transactions
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.Role">
+            <summary>
+            Trade role
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTrade.MakerOrders">
+            <summary>
+            List of the maker trades the taker trade was filled against
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketTradePrice">

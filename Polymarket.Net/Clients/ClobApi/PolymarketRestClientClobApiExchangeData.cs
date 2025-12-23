@@ -118,10 +118,10 @@ namespace Polymarket.Net.Clients.ClobApi
         #region Get Prices
 
         /// <inheritdoc />
-        public async Task<WebCallResult<Dictionary<string, PolymarketBuySellPrice>>> GetPricesAsync(Dictionary<string, OrderSide> tokens, CancellationToken ct = default)
+        public async Task<WebCallResult<Dictionary<string, PolymarketBuySellPrice>>> GetPricesAsync(Dictionary<string, OrderSide> tokenIds, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            parameters.SetBody(tokens.Select(x =>            
+            parameters.SetBody(tokenIds.Select(x =>            
                 new PolymarketPriceRequest
                 {
                     TokenId = x.Key,

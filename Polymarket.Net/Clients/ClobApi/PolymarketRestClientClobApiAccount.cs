@@ -1,6 +1,8 @@
 using CryptoExchange.Net.Objects;
+using Polymarket.Net.Enums;
 using Polymarket.Net.Interfaces.Clients.ClobApi;
 using Polymarket.Net.Objects.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -44,6 +46,69 @@ namespace Polymarket.Net.Clients.ClobApi
                 return getResult;
 
             return await CreateApiCredentialsAsync(nonce).ConfigureAwait(false);
+        }
+
+        public async Task<WebCallResult<PolymarketApiKeys>> GetApiKeysAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/api-keys", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketApiKeys>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult<PolymarketClosedOnlyMode>> GetClosedOnlyModeAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/ban-status/closed-only", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketClosedOnlyMode>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult> DeleteApiKeyAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "auth/api-key", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        // TODO: read-only API keys
+
+        public async Task<WebCallResult<PolymarketNotification[]>> GetNotificationsAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "notifications", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketNotification[]>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult<PolymarketNotification[]>> DropNotificationsAsync(IEnumerable<string> ids, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.Add("ids", string.Join(",", ids));
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "notifications", PolymarketExchange.RateLimiter.Polymarket, 1, true, parameterPosition: HttpMethodParameterPosition.InUri);
+            var result = await _baseClient.SendAsync<PolymarketNotification[]>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult<PolymarketBalanceAllowance>> GetBalanceAllowanceAsync(AssetType assetType, string? tokenId = null, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.AddEnum("asset_type", assetType);
+            parameters.AddOptional("token_id", tokenId);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "balance-allowance", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketBalanceAllowance>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult> UpdateBalanceAllowanceAsync(AssetType assetType, string? tokenId = null, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.AddEnum("asset_type", assetType);
+            parameters.AddOptional("token_id", tokenId);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "balance-allowance/update", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
+            return result;
         }
     }
 }

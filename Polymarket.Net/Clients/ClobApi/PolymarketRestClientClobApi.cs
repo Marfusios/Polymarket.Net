@@ -51,6 +51,7 @@ namespace Polymarket.Net.Clients.ClobApi
             ExchangeData = new PolymarketRestClientClobApiExchangeData(logger, this);
             Trading = new PolymarketRestClientClobApiTrading(logger, this);
 
+            RequestBodyEmptyContent = "";
             ParameterPositions[HttpMethod.Delete] = HttpMethodParameterPosition.InBody;
         }
         #endregion
@@ -91,7 +92,7 @@ namespace Polymarket.Net.Clients.ClobApi
 
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
-            => throw new Exception();
+            => ExchangeData.GetServerTimeAsync();
 
         /// <inheritdoc />
         public override TimeSyncInfo? GetTimeSyncInfo()

@@ -28,14 +28,6 @@ namespace Polymarket.Net.Clients.ClobApi
             _logger = logger;
         }
 
-        public async Task<WebCallResult<PolymarketPage<PolymarketOrder>>> GetOpenOrdersAsync(string? orderId = null, string? marketId = null, string? assetId = null, CancellationToken ct = default)
-        {
-            var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/orders", PolymarketExchange.RateLimiter.Polymarket, 1, true);
-            var result = await _baseClient.SendAsync<PolymarketPage<PolymarketOrder>>(request, parameters, ct).ConfigureAwait(false);
-            return result;
-        }
-
         public async Task<WebCallResult<PolymarketOrderResult>> PlaceOrderAsync(
             string tokenId,
             OrderSide side,
@@ -71,6 +63,41 @@ namespace Polymarket.Net.Clients.ClobApi
             return result;
         }
 
+        public async Task<WebCallResult<PolymarketOrder>> GetOrderAsync(string orderId, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/order/" + orderId, PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketOrder>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult<PolymarketPage<PolymarketOrder>>> GetOpenOrdersAsync(string? orderId = null, string? conditionId = null, string? assetId = null, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/orders", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketPage<PolymarketOrder>>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<WebCallResult<PolymarketOrderScoring>> GetOrderRewardScoringAsync(string orderId, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.Add("order_id", orderId);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/order-scoring", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketOrderScoring>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+
+        public async Task<WebCallResult<Dictionary<string, bool>>> GetOrdersRewardScoringAsync(IEnumerable<string> orderIds, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.SetBody(orderIds.ToArray());
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/orders-scoring", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<Dictionary<string, bool>>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
         public async Task<WebCallResult<PolymarketCancelResult>> CancelOrderAsync(string orderId, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
@@ -89,11 +116,11 @@ namespace Polymarket.Net.Clients.ClobApi
             return result;
         }
 
-        public async Task<WebCallResult<PolymarketCancelResult>> CancelOrdersOnMarketAsync(string? market = null, string? assetId = null, CancellationToken ct = default)
+        public async Task<WebCallResult<PolymarketCancelResult>> CancelOrdersOnMarketAsync(string? market = null, string? tokenId = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", market);
-            parameters.AddOptional("asset_id", assetId);
+            parameters.AddOptional("asset_id", tokenId);
             var request = _definitions.GetOrCreate(HttpMethod.Delete, "/orders", PolymarketExchange.RateLimiter.Polymarket, 1, true);
             var result = await _baseClient.SendAsync<PolymarketCancelResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -106,5 +133,29 @@ namespace Polymarket.Net.Clients.ClobApi
             var result = await _baseClient.SendAsync<PolymarketCancelResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
+
+        public async Task<WebCallResult<PolymarketPage<PolymarketTrade>>> GetUserTradesAsync(
+            string? tradeId = null,
+            string? takerAddress = null,
+            string? makerAddress = null,
+            string? conditionId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            string? cursor = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.AddOptional("id", cursor);
+            parameters.AddOptional("taker", cursor);
+            parameters.AddOptional("maker", cursor);
+            parameters.AddOptional("market", cursor);
+            parameters.AddOptionalMillisecondsString("after", startTime);
+            parameters.AddOptionalMillisecondsString("before", endTime);
+            parameters.AddOptional("next_cursor", cursor);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/trades", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var result = await _baseClient.SendAsync<PolymarketPage<PolymarketTrade>>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
     }
 }
