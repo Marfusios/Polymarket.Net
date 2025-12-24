@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Polymarket.Net.Clients;
 using Polymarket.Net.Objects.Models;
 using Polymarket.Net.Objects.Options;
+using Polymarket.Net.Objects;
 
 namespace Polymarket.Net.UnitTests
 {
@@ -18,7 +19,7 @@ namespace Polymarket.Net.UnitTests
         {
             var client = new PolymarketSocketClient(opts =>
             {
-                opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
+                opts.ApiCredentials = new PolymarketCredentials("123", "456");
             });
             var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Spot", "XXX");
             //await tester.ValidateAsync<PolymarketModel>((client, handler) => client.SpotApi.SubscribeToXXXUpdatesAsync(handler), "XXX");
@@ -33,7 +34,7 @@ namespace Polymarket.Net.UnitTests
 
             var client = new PolymarketSocketClient(Options.Create(new PolymarketSocketOptions
             {
-                ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456"),
+                ApiCredentials = new PolymarketCredentials("123", "456"),
                 OutputOriginalData = true,
                 UseUpdatedDeserialization = newDeserialization
             }), logger);

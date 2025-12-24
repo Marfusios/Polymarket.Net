@@ -9,24 +9,48 @@ namespace Polymarket.Net.Objects
 {
     public class PolymarketCredentials : ApiCredentials
     {
-        public string Address { get; set; }
+        public string PublicAddress { get; set; }
+        public string L1PrivateKey { get; set; }
+        public string? L2ApiKey { get; set; }
+        public string? L2Secret { get; set; }
+        public string? L2Pass { get; set; }
 
-        public PolymarketCredentials(string address, string privateKey) : base(address, privateKey, null, ApiCredentialsType.Hmac)
+        public PolymarketCredentials(string publicAddress, string privateKey) : base(publicAddress, privateKey, null, ApiCredentialsType.Hmac)
         {
-            Address = address;
+            PublicAddress = publicAddress;
+            L1PrivateKey = privateKey;
         }
 
-        public PolymarketCredentials(string address, string key, string secret, string pass) : base(key, secret, pass, ApiCredentialsType.Hmac)
+        public PolymarketCredentials(
+            string publicAddress, 
+            string l1PrivateKey,
+            string l2Key, 
+            string l2Secret, 
+            string l2Pass) : base(l2Key, l2Secret, l2Pass, ApiCredentialsType.Hmac)
         {
-            Address = address;
+            PublicAddress = publicAddress;
+            L1PrivateKey = l1PrivateKey;
+            L2ApiKey = l2Key;
+            L2Secret = l2Secret;
+            L2Pass = l2Pass;
         }
 
         public override ApiCredentials Copy()
         {
-            return new PolymarketCredentials(Address, Key, Secret, Pass)
+            if (L2ApiKey != null)
             {
-                CredentialType = this.CredentialType
-            };
+                return new PolymarketCredentials(PublicAddress, L1PrivateKey, L2ApiKey, L2Secret!, L2Pass!)
+                {
+                    CredentialType = this.CredentialType
+                };
+            }
+            else
+            {
+                return new PolymarketCredentials(PublicAddress, L1PrivateKey)
+                {
+                    CredentialType = this.CredentialType
+                };
+            }
         }
     }
 }

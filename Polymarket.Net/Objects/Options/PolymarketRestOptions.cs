@@ -23,20 +23,20 @@ namespace Polymarket.Net.Objects.Options
         {
             Default?.Set(this);
         }
-
-        
+                
          /// <summary>
         /// Clob API options
         /// </summary>
         public RestApiOptions ClobOptions { get; private set; } = new RestApiOptions();
 
+        public string? BuilderApiKey { get; set; }
+        public string? BuilderSecret { get; set; }
+        public string? BuilderPass { get; set; }
 
         internal PolymarketRestOptions Set(PolymarketRestOptions targetOptions)
         {
-            targetOptions = base.Set<PolymarketRestOptions>(targetOptions);
-            
+            targetOptions = base.Set<PolymarketRestOptions>(targetOptions);            
             targetOptions.ClobOptions = ClobOptions.Set(targetOptions.ClobOptions);
-
             return targetOptions;
         }
     }

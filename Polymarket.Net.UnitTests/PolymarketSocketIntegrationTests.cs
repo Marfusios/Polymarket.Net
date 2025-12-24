@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Polymarket.Net.Clients;
 using Polymarket.Net.Objects.Options;
+using Polymarket.Net.Objects;
 
 namespace Polymarket.Net.UnitTests
 {
@@ -28,7 +29,7 @@ namespace Polymarket.Net.UnitTests
             {
                 OutputOriginalData = true,
                 UseUpdatedDeserialization = newDeserialization,
-                ApiCredentials = Authenticated ? new CryptoExchange.Net.Authentication.ApiCredentials(key, sec) : null
+                ApiCredentials = Authenticated ? new PolymarketCredentials(key, sec) : null
             }), loggerFactory);
         }
 

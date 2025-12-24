@@ -595,6 +595,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.UInt64">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.Default">
             <summary>
             The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
@@ -1022,7 +1027,7 @@
             <param name="orderIds">Order ids</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceOrderAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.TimeInForce,System.Decimal,System.Decimal,System.Int64,System.Decimal,System.Int32,System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceOrderAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.TimeInForce,System.Decimal,System.Decimal,System.Decimal,System.String,System.String,System.String,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
             Place a new order
             <para><a href="https://docs.polymarket.com/developers/CLOB/orders/create-order" /></para>
@@ -1030,11 +1035,10 @@
             <param name="tokenId">Token id</param>
             <param name="side">Side</param>
             <param name="timeInForce">Time in force</param>
-            <param name="makerQuantity">Maximum quantity maker is willing to spend</param>
-            <param name="takerQuantity">Minimum quantity taker will pay the maker in return</param>
+            <param name="quantity">Quantity</param>
+            <param name="price">Price</param>
             <param name="nonce"></param>
             <param name="feeRateBps">Fee rate basis points as required by the operator</param>
-            <param name="signatureType"></param>
             <param name="makerAddress">Maker/funding address</param>
             <param name="signingAddress">Signing address</param>
             <param name="takerAddress">Taker/operator address</param>

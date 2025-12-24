@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Polymarket.Net.Clients;
+using Polymarket.Net.Objects;
 
 namespace Polymarket.Net.UnitTests
 {
@@ -17,7 +18,7 @@ namespace Polymarket.Net.UnitTests
             var client = new PolymarketRestClient(opts =>
             {
                 opts.AutoTimestamp = false;
-                opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
+                opts.ApiCredentials = new PolymarketCredentials("123", "456");
             });
             var tester = new RestRequestValidator<PolymarketRestClient>(client, "Endpoints/Spot/ExchangeData", "XXX", IsAuthenticated);
             await tester.ValidateAsync(client => client.ClobApi.ExchangeData.GetMidpointPriceAsync("123"), "GetMidpointPrice");

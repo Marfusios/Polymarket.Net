@@ -77,6 +77,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketNotification[]>> GetNotificationsAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
+            parameters.Add("signature_type", 0);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "notifications", PolymarketExchange.RateLimiter.Polymarket, 1, true);
             var result = await _baseClient.SendAsync<PolymarketNotification[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -85,6 +86,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketNotification[]>> DropNotificationsAsync(IEnumerable<string> ids, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
+            parameters.Add("signature_type", 0);
             parameters.Add("ids", string.Join(",", ids));
             var request = _definitions.GetOrCreate(HttpMethod.Delete, "notifications", PolymarketExchange.RateLimiter.Polymarket, 1, true, parameterPosition: HttpMethodParameterPosition.InUri);
             var result = await _baseClient.SendAsync<PolymarketNotification[]>(request, parameters, ct).ConfigureAwait(false);
@@ -94,6 +96,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketBalanceAllowance>> GetBalanceAllowanceAsync(AssetType assetType, string? tokenId = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
+            parameters.Add("signature_type", 0);
             parameters.AddEnum("asset_type", assetType);
             parameters.AddOptional("token_id", tokenId);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "balance-allowance", PolymarketExchange.RateLimiter.Polymarket, 1, true);
@@ -104,6 +107,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult> UpdateBalanceAllowanceAsync(AssetType assetType, string? tokenId = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
+            parameters.Add("signature_type", 0);
             parameters.AddEnum("asset_type", assetType);
             parameters.AddOptional("token_id", tokenId);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "balance-allowance/update", PolymarketExchange.RateLimiter.Polymarket, 1, true);

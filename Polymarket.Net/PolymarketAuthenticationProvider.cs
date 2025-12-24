@@ -4,7 +4,9 @@ using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
+using Polymarket.Net.Enums;
 using Polymarket.Net.Objects;
+using Polymarket.Net.Objects.Options;
 using Polymarket.Net.Signing;
 using Polymarket.Net.Utils;
 using System;
@@ -15,6 +17,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Polymarket.Net
 {
@@ -26,6 +29,9 @@ namespace Polymarket.Net
 
         private static IStringMessageSerializer _serializer = new SystemTextJsonMessageSerializer(PolymarketExchange._serializerContext);
 
+        private static readonly byte[] _defaultBytes = [0x64, 0x5f, 0x51, 0x63, 0x50, 0x34, 0x39, 0x42, 0x6e, 0x42, 0x7a, 0x68, 0x5a, 0x72, 0x75, 0x30, 0x6b, 0x35, 0x67, 0x53, 0x30, 0x4a, 0x52, 0x70, 0x72, 0x2d, 0x59, 0x52, 0x61, 0x63, 0x50, 0x56, 0x77, 0x61, 0x62, 0x7a, 0x6f, 0x6a, 0x67, 0x79, 0x37, 0x46, 0x34, 0x3d];
+
+        public string PublicAddress => ((PolymarketCredentials)_credentials).PublicAddress;
         public override ApiCredentialsType[] SupportedCredentialTypes => [ApiCredentialsType.Hmac];
 
         public PolymarketAuthenticationProvider(PolymarketCredentials credentials) : base(credentials)
@@ -49,7 +55,7 @@ namespace Polymarket.Net
             else
             {
                 // L2 authentication
-                SignL2(requestConfig);
+                SignL2(apiClient, requestConfig);
             }
         }
 
@@ -58,12 +64,12 @@ namespace Polymarket.Net
             var timestamp = DateTimeConverter.ConvertToSeconds(DateTime.UtcNow);
             requestConfig.GetPositionParameters().TryGetValue("nonce", out var nonce);
 
-            var msg = EncodeEip721(timestamp.ToString()!, nonce == null ? 0 : (long)nonce);
+            var msg = GetEncodedClobAuth(timestamp.ToString()!, nonce == null ? 0 : (long)nonce);
             var keccakSigned = BytesToHexString(InternalSha3Keccack.CalculateHash(msg));
 
-            var signature = SignRequest(keccakSigned, _credentials.Secret);
+            var signature = SignRequest(keccakSigned, _credentials.L1PrivateKey);
             requestConfig.Headers ??= new Dictionary<string, string>();
-            requestConfig.Headers.Add("POLY_ADDRESS", ApiKey);
+            requestConfig.Headers.Add("POLY_ADDRESS", _credentials.PublicAddress);
             requestConfig.Headers.Add("POLY_SIGNATURE", signature.ToLowerInvariant());
             requestConfig.Headers.Add("POLY_TIMESTAMP", timestamp.Value.ToString());
             requestConfig.Headers.Add("POLY_NONCE", nonce?.ToString() ?? "0");
@@ -95,18 +101,18 @@ namespace Polymarket.Net
         //    requestConfig.Headers.Add("POLY_NONCE", nonce?.ToString() ?? "0");
         //}
 
-        private void SignL2(RestRequestConfiguration requestConfig)
+        private void SignL2(RestApiClient client, RestRequestConfiguration requestConfig)
         {
             if (!_updatedBaseBytes)
             {
-                _sBytes = Convert.FromBase64String(_credentials.Secret.Replace('-', '+').Replace('_', '/'));
+                _sBytes = Convert.FromBase64String(_credentials.L2Secret!.Replace('-', '+').Replace('_', '/'));
                 _updatedBaseBytes = true;
             }
 
             requestConfig.Headers ??= new Dictionary<string, string>();
-            requestConfig.Headers.Add("POLY_ADDRESS", _credentials.Address);
-            requestConfig.Headers.Add("POLY_API_KEY", ApiKey);
-            requestConfig.Headers.Add("POLY_PASSPHRASE", Pass!);
+            requestConfig.Headers.Add("POLY_ADDRESS", _credentials.PublicAddress);
+            requestConfig.Headers.Add("POLY_API_KEY", _credentials.L2ApiKey!);
+            requestConfig.Headers.Add("POLY_PASSPHRASE", _credentials.L2Pass!);
 
             var timestamp = DateTimeConverter.ConvertToMilliseconds(DateTime.UtcNow);
             requestConfig.Headers.Add("POLY_TIMESTAMP", timestamp.Value.ToString());
@@ -123,17 +129,24 @@ namespace Polymarket.Net
             signature = signature.Replace('+', '-').Replace('/', '_');
             requestConfig.Headers.Add("POLY_SIGNATURE", signature);
 
-#warning signature type
-            if (requestConfig.ParameterPosition == HttpMethodParameterPosition.InUri)
-            {
-                requestConfig.QueryParameters ??= new Dictionary<string, object>();
-                requestConfig.QueryParameters.Add("signature_type", 0);
-            }
+            var options = (PolymarketRestOptions)client.ClientOptions;
+            var key = string.IsNullOrWhiteSpace(options.BuilderApiKey) ? "019b4abf-48c5-7c0b-ae70-c01221c5ead1" : options.BuilderApiKey;
+            var pass = string.IsNullOrWhiteSpace(options.BuilderPass) ? "1ee7b124de529ff26079bfe79da3e6d1997cdcfd481ebb7468a019ef3c6767d5" : options.BuilderPass;
+            byte[] secret;
+            if (!string.IsNullOrWhiteSpace(options.BuilderSecret))            
+                secret = Convert.FromBase64String(options.BuilderSecret!.Replace('-', '+').Replace('_', '/'));            
             else
-            {
-                requestConfig.BodyParameters ??= new Dictionary<string, object>();
-                requestConfig.BodyParameters.Add("signature_type", 0);
-            }
+                secret = _defaultBytes;            
+
+            using var encryptor = new HMACSHA256(secret);
+            var resultBytes = encryptor.ComputeHash(Encoding.UTF8.GetBytes(signData));
+            var builderSignature = BytesToBase64String(resultBytes);
+            builderSignature = builderSignature.Replace('+', '-').Replace('/', '_');
+
+            //requestConfig.Headers.Add("POLY_BUILDER_API_KEY", key!);
+            //requestConfig.Headers.Add("POLY_BUILDER_PASSPHRASE", pass!);
+            //requestConfig.Headers.Add("POLY_BUILDER_SIGNATURE", builderSignature);
+            //requestConfig.Headers.Add("POLY_BUILDER_TIMESTAMP", timestamp.Value.ToString());
         }
 
         //public byte[] EncodeEip721Neth(
@@ -177,8 +190,78 @@ namespace Polymarket.Net
         //    public string Message { get; set; }
         //}
 
+        public string GetOrderSignature(ParameterCollection parameters)
+        {
+            var msg = GetEncodedOrder(parameters);
+            var keccakSigned = BytesToHexString(InternalSha3Keccack.CalculateHash(msg));
 
-        public byte[] EncodeEip721(string timestamp, long nonce)
+            var signature = SignRequest(keccakSigned, _credentials.L1PrivateKey);
+            return signature.ToLowerInvariant();
+        }
+        
+        private byte[] GetEncodedOrder(ParameterCollection order)
+        {
+            var typeRaw = new TypedDataRaw
+            {
+                PrimaryType = "Order",
+                DomainRawValues = new MemberValue[]
+                {
+                    new MemberValue { TypeName = "string", Value = "Polymarket CTF Exchange" },
+                    new MemberValue { TypeName = "string", Value = "1" },
+                    //new MemberValue { TypeName = "uint256", Value = 137 },
+                    new MemberValue { TypeName = "uint256", Value = 80002 },
+                    new MemberValue { TypeName = "address", Value = PolymarketUtils.ExchangeContract }
+                },
+                Message = new MemberValue[]
+                {
+                    new MemberValue { TypeName = "uint256", Value = order["salt"].ToString() },
+                    new MemberValue { TypeName = "address", Value = order["maker"]},
+                    new MemberValue { TypeName = "address", Value = order["signer"]},
+                    new MemberValue { TypeName = "address", Value = order["taker"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["tokenId"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["makerAmount"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["takerAmount"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["expiration"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["nonce"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["feeRateBps"]},
+                    new MemberValue { TypeName = "uint8", Value = (byte)(int)order["side"]},
+                    new MemberValue { TypeName = "uint8", Value = (byte)(int)order["signatureType"]}
+                },
+                Types = new Dictionary<string, MemberDescription[]>
+                {
+                    { "EIP712Domain",
+                        new MemberDescription[]
+                        {
+                            new MemberDescription { Name = "name", Type = "string" },
+                            new MemberDescription { Name = "version", Type = "string" },
+                            new MemberDescription { Name = "chainId", Type = "uint256" },
+                            new MemberDescription { Name = "verifyingContract", Type = "address" }
+                        }
+                    },
+                    { "Order",
+                        new MemberDescription[]
+                        {
+                            new MemberDescription { Name = "salt", Type = "uint256" },
+                            new MemberDescription { Name = "maker", Type = "address" },
+                            new MemberDescription { Name = "signer", Type = "address" },
+                            new MemberDescription { Name = "taker", Type = "address" },
+                            new MemberDescription { Name = "tokenId", Type = "uint256" },
+                            new MemberDescription { Name = "makerAmount", Type = "uint256" },
+                            new MemberDescription { Name = "takerAmount", Type = "uint256" },
+                            new MemberDescription { Name = "expiration", Type = "uint256" },
+                            new MemberDescription { Name = "nonce", Type = "uint256" },
+                            new MemberDescription { Name = "feeRateBps", Type = "uint256" },
+                            new MemberDescription { Name = "side", Type = "uint8" },
+                            new MemberDescription { Name = "signatureType", Type = "uint8" },
+                        }
+                    }
+                }
+            };
+
+            return LightEip712TypedDataEncoder.EncodeTypedDataRaw(typeRaw);
+        }
+
+        public byte[] GetEncodedClobAuth(string timestamp, long nonce)
         {
             var typeRaw = new TypedDataRaw
             {

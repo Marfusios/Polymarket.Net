@@ -54,11 +54,10 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         /// <param name="tokenId">Token id</param>
         /// <param name="side">Side</param>
         /// <param name="timeInForce">Time in force</param>
-        /// <param name="makerQuantity">Maximum quantity maker is willing to spend</param>
-        /// <param name="takerQuantity">Minimum quantity taker will pay the maker in return</param>
+        /// <param name="quantity">Quantity</param>
+        /// <param name="price">Price</param>
         /// <param name="nonce"></param>
         /// <param name="feeRateBps">Fee rate basis points as required by the operator</param>
-        /// <param name="signatureType"></param>
         /// <param name="makerAddress">Maker/funding address</param>
         /// <param name="signingAddress">Signing address</param>
         /// <param name="takerAddress">Taker/operator address</param>
@@ -69,16 +68,15 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
             string tokenId,
             OrderSide side,
             TimeInForce timeInForce,
-            decimal makerQuantity,
-            decimal takerQuantity,
-            long nonce,
+            decimal quantity,
+            decimal price,
             decimal feeRateBps,
-            int signatureType,
             string? makerAddress = null,
             string? signingAddress = null,
             string? takerAddress = null,
-            string? clientOrderId = null,
+            long? clientOrderId = null,
             DateTime? expiration = null,
+            long? nonce = null,
             CancellationToken ct = default);
 
         /// <summary>

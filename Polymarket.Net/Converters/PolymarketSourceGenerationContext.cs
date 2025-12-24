@@ -47,6 +47,7 @@ namespace Polymarket.Net.Converters
     [JsonSerializable(typeof(int))]
     [JsonSerializable(typeof(long?))]
     [JsonSerializable(typeof(long))]
+    [JsonSerializable(typeof(ulong))]
     [JsonSerializable(typeof(decimal))]
     [JsonSerializable(typeof(decimal?))]
     [JsonSerializable(typeof(DateTime))]

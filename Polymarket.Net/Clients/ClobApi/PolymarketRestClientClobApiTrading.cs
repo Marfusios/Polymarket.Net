@@ -1,8 +1,11 @@
+using CryptoExchange.Net;
+using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
 using Polymarket.Net.Enums;
 using Polymarket.Net.Interfaces.Clients.ClobApi;
+using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Models;
 using Polymarket.Net.Utils;
 using System;
@@ -32,16 +35,15 @@ namespace Polymarket.Net.Clients.ClobApi
             string tokenId,
             OrderSide side,
             TimeInForce timeInForce,
-            decimal makerQuantity,
-            decimal takerQuantity,
-            long nonce,
+            decimal quantity,
+            decimal price,
             decimal feeRateBps,
-            int signatureType,
-            string? fundingAddress = null,
+            string? makerAddress = null,
             string? signingAddress = null,
-            string? operatorAddress = null,
-            string? clientOrderId = null,
+            string? takerAddress = null,
+            long? clientOrderId = null,
             DateTime? expiration = null,
+            long? nonce = null,
             CancellationToken ct = default)
         {
             var tokenResult = await PolymarketUtils.GetTokenInfoAsync(tokenId, _baseClient).ConfigureAwait(false);
@@ -53,8 +55,42 @@ namespace Polymarket.Net.Clients.ClobApi
             var parameters = new ParameterCollection();
             var orderParameters = new ParameterCollection();
 
+#warning always * 1000?
+            quantity *= 1000;
+            price *= 1000;
+
+            price = price.Normalize();
+            decimal takerQuantity;
+            decimal makerQuantity;
+            if (side == OrderSide.Buy)
+            {
+#warning switched?
+                makerQuantity = quantity;
+                takerQuantity = quantity * price;
+            }
+            else
+            {
+                takerQuantity = quantity;
+                makerQuantity = quantity * price;
+            }
+
+            var authProvider = (PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider!;
+            orderParameters.Add("tokenId", tokenId);
+            orderParameters.AddString("makerAmount", makerQuantity);
+            orderParameters.AddString("takerAmount", takerQuantity);
+            orderParameters.AddString("feeRateBps", feeRateBps);
+            orderParameters.AddEnumAsInt("side", side);
+            orderParameters.Add("nonce", (nonce ?? 0).ToString());
+            orderParameters.Add("maker", makerAddress ?? authProvider.PublicAddress);
+            orderParameters.Add("signer", signingAddress ?? authProvider.PublicAddress);
+            orderParameters.Add("taker", takerAddress ?? "0x0000000000000000000000000000000000000000");
+            orderParameters.Add("salt", (ulong)(clientOrderId ?? ExchangeHelpers.RandomLong(16)));
+            orderParameters.AddString("expiration", (ulong)(expiration == null ? 0 : DateTimeConverter.ConvertToMilliseconds(expiration.Value)));
+            orderParameters.Add("signatureType", 0);
+            orderParameters.Add("signature", authProvider.GetOrderSignature(orderParameters));
+
             parameters.Add("order", orderParameters);
-            parameters.Add("owner", _baseClient.AuthenticationProvider?.ApiKey);
+            parameters.Add("owner", authProvider.ApiKey);
             parameters.AddEnum("orderType", timeInForce);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/order", PolymarketExchange.RateLimiter.Polymarket, 1, true);
             var result = await _baseClient.SendAsync<PolymarketOrderResult>(request, parameters, ct).ConfigureAwait(false);
