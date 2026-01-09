@@ -1,7 +1,11 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
@@ -58,7 +62,7 @@ namespace Polymarket.Net.Clients.ClobApi
             => new PolymarketAuthenticationProvider((PolymarketCredentials)credentials);
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToXXXUpdatesAsync(Action<DataEvent<PolymarketModel>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToXXXUpdatesAsync(IEnumerable<string> assetIds, Action<DataEvent<PolymarketModel>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, PolymarketModel>((receiveTime, originalData, data) =>
             {
@@ -71,8 +75,8 @@ namespace Polymarket.Net.Clients.ClobApi
                     );
             });
 
-            var subscription = new PolymarketSubscription<PolymarketModel>(_logger, new [] { "XXX" }, internalHandler, false);
-            return await SubscribeAsync(subscription, ct).ConfigureAwait(false);
+            var subscription = new PolymarketSubscription<PolymarketModel>(_logger, assetIds.ToArray(), internalHandler, false);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws/market"), subscription, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -80,10 +84,6 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             return message.GetValue<string>(_idPath);
         }
-
-        /// <inheritdoc />
-        protected override Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection) => Task.FromResult<Query?>(null);
-
 
         /// <inheritdoc />
         public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverDate = null)

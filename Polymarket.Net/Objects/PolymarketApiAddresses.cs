@@ -20,7 +20,7 @@ namespace Polymarket.Net.Objects
         public static PolymarketApiAddresses Default = new PolymarketApiAddresses
         {
             ClobRestClientAddress = "https://clob.polymarket.com",
-            SocketClientAddress = "XXX"
+            SocketClientAddress = "wss://ws-subscriptions-clob.polymarket.com"
         };
     }
 }

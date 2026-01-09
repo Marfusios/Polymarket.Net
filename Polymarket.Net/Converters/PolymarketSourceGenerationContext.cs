@@ -42,6 +42,8 @@ namespace Polymarket.Net.Converters
     [JsonSerializable(typeof(PolymarketNotification[]))]
     [JsonSerializable(typeof(PolymarketBalanceAllowance))]
 
+    [JsonSerializable(typeof(PolymarketSocketRequest))]
+
     [JsonSerializable(typeof(string))]
     [JsonSerializable(typeof(int?))]
     [JsonSerializable(typeof(int))]

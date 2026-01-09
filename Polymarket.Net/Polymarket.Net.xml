@@ -34,12 +34,6 @@
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApi.GetServerTimestampAsync">
             <inheritdoc />
         </member>
-        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApi.GetTimeSyncInfo">
-            <inheritdoc />
-        </member>
-        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApi.GetTimeOffset">
-            <inheritdoc />
-        </member>
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApi.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
             <inheritdoc />
         </member>
@@ -134,13 +128,10 @@
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
-        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToXXXUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketModel}},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToXXXUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketModel}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
-            <inheritdoc />
-        </member>
-        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.Default.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
@@ -286,6 +277,11 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceRequestArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSocketRequest">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -1097,7 +1093,7 @@
             Polymarket Clob streams
             </summary>
         </member>
-        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi.SubscribeToXXXUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketModel}},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi.SubscribeToXXXUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketModel}},System.Threading.CancellationToken)">
             <summary>
             
             <para><a href="XXX" /></para>
@@ -2045,10 +2041,6 @@
             <summary>
             ctor
             </summary>
-            <param name="logger"></param>
-            <param name="topics"></param>
-            <param name="handler"></param>
-            <param name="auth"></param>
         </member>
         <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketSubscription`1.GetSubQuery(CryptoExchange.Net.Sockets.Default.SocketConnection)">
             <inheritdoc />
@@ -2193,6 +2185,12 @@
         </member>
         <member name="M:Polymarket.Net.PolymarketTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
             <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Signing.LightEip712TypedDataEncoder.EncodeTypes(System.Collections.Generic.IDictionary{System.String,Polymarket.Net.Signing.MemberDescription[]},System.String)">
+            <summary>
+            Create a list of type => type(parameters), for example:<br />
+            { IP712Domain, EIP712Domain(string name,string version,uint256 chainId,address verifyingContract) }
+            </summary>
         </member>
         <member name="T:Polymarket.Net.SymbolOrderBooks.PolymarketClobSymbolOrderBook">
             <summary>

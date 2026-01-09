@@ -10,31 +10,29 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
     internal class PolymarketSubscription<T> : Subscription
     {
         private readonly Action<DateTime, string?, T> _handler;
+        private readonly string[] _assetIds;
 
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="topics"></param>
-        /// <param name="handler"></param>
-        /// <param name="auth"></param>
-        public PolymarketSubscription(ILogger logger, string[] topics, Action<DateTime, string?, T> handler, bool auth) : base(logger, auth)
+        public PolymarketSubscription(ILogger logger, string[] assetIds, Action<DateTime, string?, T> handler, bool auth) : base(logger, auth)
         {
             _handler = handler;
+            _assetIds = assetIds;
 
-            MessageRouter = MessageRouter.CreateWithoutTopicFilter<T>(topics, DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<T>(_assetIds, DoHandleMessage);
         }
 
         /// <inheritdoc />
         protected override Query? GetSubQuery(SocketConnection connection)
         {
-            throw new NotImplementedException();
+            return new PolymarketQuery<object>("subscribe", _assetIds);
         }
 
         /// <inheritdoc />
         protected override Query? GetUnsubQuery(SocketConnection connection)
         {
-            throw new NotImplementedException();
+            return new PolymarketQuery<object>("unsubscribe", _assetIds);
         }
 
         /// <inheritdoc />

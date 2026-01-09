@@ -22,8 +22,6 @@ namespace Polymarket.Net.Clients.ClobApi
     internal partial class PolymarketRestClientClobApi : RestApiClient, IPolymarketRestClientClobApi
     {
         #region fields 
-        internal static TimeSyncState _timeSyncState = new TimeSyncState("Clob Api");
-
         protected override ErrorMapping ErrorMapping => PolymarketErrors.Errors;
 
         public new PolymarketRestOptions ClientOptions => (PolymarketRestOptions)base.ClientOptions;
@@ -95,14 +93,6 @@ namespace Polymarket.Net.Clients.ClobApi
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
             => ExchangeData.GetServerTimeAsync();
-
-        /// <inheritdoc />
-        public override TimeSyncInfo? GetTimeSyncInfo()
-            => new TimeSyncInfo(_logger, ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp, ApiOptions.TimestampRecalculationInterval ?? ClientOptions.TimestampRecalculationInterval, _timeSyncState);
-
-        /// <inheritdoc />
-        public override TimeSpan? GetTimeOffset()
-            => _timeSyncState.TimeOffset;
 
         /// <inheritdoc />
         public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverDate = null) 

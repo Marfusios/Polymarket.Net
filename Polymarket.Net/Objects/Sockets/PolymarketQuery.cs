@@ -1,14 +1,19 @@
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Sockets.Default;
-using System;
+using Polymarket.Net.Objects.Internal;
 using Polymarket.Net.Objects.Models;
+using System;
 
 namespace Polymarket.Net.Objects.Sockets
 {
     internal class PolymarketQuery<T> : Query<T>
     {
-        public PolymarketQuery(PolymarketModel request, bool authenticated, int weight = 1) : base(request, authenticated, weight)
+        public PolymarketQuery(string type, string[] assets) : base(new PolymarketSocketRequest
+        {
+            Type = type,
+            Assets = assets
+        }, false, 1)
         {
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<T>("", HandleMessage);
         }
