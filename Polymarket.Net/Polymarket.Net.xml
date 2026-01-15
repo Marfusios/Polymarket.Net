@@ -182,6 +182,36 @@
         <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetSportTeamsAsync(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetSportsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetSportMarketTypesAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetTagsAsync(System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetTagByIdAsync(System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetTagBySlugAsync(System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetRelatedTagsByIdAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetRelatedTagsBySlugAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetTagsRelatedToTagByIdAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetTagsRelatedToTagBySlugAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiExchangeData.GetEventsAsync(System.Int64[],System.Nullable{System.Int64},System.Int64[],System.String[],System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:Polymarket.Net.Clients.GammaApi.PolymarketRestClientGammaApiTrading">
             <inheritdoc />
         </member>
@@ -416,7 +446,27 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketChat">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketChatArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClosedOnlyMode">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketCreator">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketCreatorArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -426,12 +476,37 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketEvent">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketEventArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketFeeRateBps">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketGammaMarket">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketGammaMarketArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketGeoRestriction">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketImageRef">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -442,6 +517,16 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketCategory">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketCategoryArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -586,6 +671,51 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketRelatedTag">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketRelatedTagArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeries">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeriesArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeriesCollection">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeriesCollectionArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSport">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportMarketTypes">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportsTeam">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -597,6 +727,26 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSpread">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTag">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTagArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTemplate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTemplateArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -813,6 +963,26 @@
         <member name="F:Polymarket.Net.Enums.OrderType.Market">
             <summary>
             Market order
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Enums.TagStatus">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TagStatus.Active">
+            <summary>
+            Active
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TagStatus.Closed">
+            <summary>
+            Closed
+            </summary>
+        </member>
+        <member name="F:Polymarket.Net.Enums.TagStatus.All">
+            <summary>
+            All
             </summary>
         </member>
         <member name="T:Polymarket.Net.Enums.TimeInForce">
@@ -1276,10 +1446,135 @@
         </member>
         <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetSportTeamsAsync(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-            
+            Get list of all sports teams
+            <para><a href="https://docs.polymarket.com/api-reference/pricing/get-market-price" /></para>
+            </summary>
+            <param name="league">Filter by league name</param>
+            <param name="name">Filter by name</param>
+            <param name="abbreviation">Filter by abbreviation</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="orderBy">Order by fields</param>
+            <param name="ascending">Ascending order</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetSportsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get sports meta data
+            <para><a href="https://docs.polymarket.com/api-reference/sports/get-sports-metadata-information" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns></returns>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetSportMarketTypesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get valid sport market types
+            <para><a href="https://docs.polymarket.com/api-reference/sports/get-valid-sports-market-types" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetTagsAsync(System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get tags
+            <para><a href="https://docs.polymarket.com/api-reference/tags/list-tags" /></para>
+            </summary>
+            <param name="includeTemplate">Include template</param>
+            <param name="isCarousel">Filter by carousel</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="orderBy">Order by fields</param>
+            <param name="ascending">Ascending order</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetTagByIdAsync(System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get tag by id
+            <para><a href="https://docs.polymarket.com/api-reference/tags/get-tag-by-id" /></para>
+            </summary>
+            <param name="id">Id</param>
+            <param name="includeTemplate">Include template</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetTagBySlugAsync(System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get tag by slug
+            <para><a href="https://docs.polymarket.com/api-reference/tags/get-tag-by-id" /></para>
+            </summary>
+            <param name="slug">Slug</param>
+            <param name="includeTemplate">Include template</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetRelatedTagsByIdAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <summary>
+            Get related tags for a tag
+            <para><a href="https://docs.polymarket.com/api-reference/tags/get-related-tags-relationships-by-tag-id" /></para>
+            </summary>
+            <param name="id">Id</param>
+            <param name="omitEmpty">Omit empty</param>
+            <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetRelatedTagsBySlugAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <summary>
+            Get related tags for a tag
+            <para><a href="https://docs.polymarket.com/api-reference/tags/get-related-tags-relationships-by-tag-slug" /></para>
+            </summary>
+            <param name="slug">Slug</param>
+            <param name="omitEmpty">Omit empty</param>
+            <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetTagsRelatedToTagByIdAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <summary>
+            Get tags related to a tag by id
+            <para><a href="https://docs.polymarket.com/api-reference/tags/get-related-tags-relationships-by-tag-id" /></para>
+            </summary>
+            <param name="id">Id</param>
+            <param name="omitEmpty">Omit empty</param>
+            <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetTagsRelatedToTagBySlugAsync(System.String,System.Nullable{System.Boolean},System.Nullable{Polymarket.Net.Enums.TagStatus},System.Threading.CancellationToken)">
+            <summary>
+            Get tags related to a tag by slug
+            <para><a href="https://docs.polymarket.com/api-reference/tags/get-related-tags-relationships-by-tag-slug" /></para>
+            </summary>
+            <param name="slug">Slug</param>
+            <param name="omitEmpty">Omit empty</param>
+            <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiExchangeData.GetEventsAsync(System.Int64[],System.Nullable{System.Int64},System.Int64[],System.String[],System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get events
+            <para><a href="https://docs.polymarket.com/api-reference/events/list-events" /></para>
+            </summary>
+            <param name="ids">Filter by ids</param>
+            <param name="tagId">Filter by tag id</param>
+            <param name="excludeTagIds">Filter by excluded tag ids</param>
+            <param name="slugs">Filter by slugs</param>
+            <param name="tagSlug">Filter by tag slug</param>
+            <param name="relatedTags">Filter by related tags</param>
+            <param name="active">Whether to return active</param>
+            <param name="archived">Whether to return archived</param>
+            <param name="featured">Whether to return featured</param>
+            <param name="cyom">Whether to return cyom</param>
+            <param name="includeChat">Whether to include chat</param>
+            <param name="includeTemplate">Whether to include template</param>
+            <param name="recurrence">Whether to return recurrence</param>
+            <param name="closed">Whether to return closed</param>
+            <param name="liquidityMin">Filter by min liquidity</param>
+            <param name="liquidityMax">Filter by max liquidity</param>
+            <param name="volumeMin">Filter by min volume</param>
+            <param name="volumeMax">Filter by max volume</param>
+            <param name="startTimeMin">Filter start time by min value</param>
+            <param name="startTimeMax">Filter start time by max value</param>
+            <param name="endTimeMin">Filter end time by min value</param>
+            <param name="endTimeMax">Filter end time by max value</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="orderBy">Order by fields</param>
+            <param name="ascending">Ascending order</param>
+            <param name="ct">Cancellation token</param>
         </member>
         <member name="T:Polymarket.Net.Interfaces.Clients.GammaApi.IPolymarketRestClientGammaApiTrading">
             <summary>
@@ -1469,6 +1764,46 @@
             Not canceled
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketChat">
+            <summary>
+            Chat info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.ChannelId">
+            <summary>
+            Channel id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.ChannelName">
+            <summary>
+            Channel name
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.ChannelImage">
+            <summary>
+            Channel image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.Live">
+            <summary>
+            Live
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.StartTime">
+            <summary>
+            Start time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.EndTime">
+            <summary>
+            End time
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketClosedOnlyMode">
             <summary>
             Closed only mode
@@ -1477,6 +1812,46 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketClosedOnlyMode.ClosedOnly">
             <summary>
             Is closed only enabled
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketCreator">
+            <summary>
+            Creator info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.CreatorName">
+            <summary>
+            Creator name
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.CreatorHandle">
+            <summary>
+            Creator handle
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.CreatorUrl">
+            <summary>
+            Creator URL
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.CreatorImage">
+            <summary>
+            Creator image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketCreator.UpdateTime">
+            <summary>
+            Update time
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketCreds">
@@ -1499,6 +1874,456 @@
             The passphrase
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketEvent">
+            <summary>
+            Event info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Ticker">
+            <summary>
+            Ticker
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Subtitle">
+            <summary>
+            Subtitle
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.ResolutionSource">
+            <summary>
+            Resolution source
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.StartDate">
+            <summary>
+            Start date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EndDate">
+            <summary>
+            End date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Image">
+            <summary>
+            Image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Icon">
+            <summary>
+            Icon
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Active">
+            <summary>
+            Active
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Closed">
+            <summary>
+            Closed
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Archived">
+            <summary>
+            Archived
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.New">
+            <summary>
+            New
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Featured">
+            <summary>
+            Featured
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Restricted">
+            <summary>
+            Restricted
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Liquidity">
+            <summary>
+            Liquidity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Volume">
+            <summary>
+            Volume
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.OpenInterest">
+            <summary>
+            Open interest
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.SortBy">
+            <summary>
+            Sort by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Category">
+            <summary>
+            Category
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Subcategory">
+            <summary>
+            Subcategory
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.IsTemplate">
+            <summary>
+            Is template
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.TemplateVariables">
+            <summary>
+            Template variables
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.PublishTime">
+            <summary>
+            Publish time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CreatedBy">
+            <summary>
+            Created by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.UpdatedBy">
+            <summary>
+            Updated by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.UpdateTime">
+            <summary>
+            End date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CommentsEnabled">
+            <summary>
+            Comments enabled
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Competitive">
+            <summary>
+            Competitive
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Volume24hr">
+            <summary>
+            Volume 24 hours
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Volume1wk">
+            <summary>
+            Volume 1 week
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Volume1mo">
+            <summary>
+            Volume 1 month
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Volume1yr">
+            <summary>
+            Volume 1 year
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.FeaturedImage">
+            <summary>
+            Featured image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.DisqusThread">
+            <summary>
+            Disqus thread
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.ParentEvent">
+            <summary>
+            Parent event
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EnableOrderBook">
+            <summary>
+            Enabled order book
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.LiquidityAmm">
+            <summary>
+            Liquidity AMM
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.LiquidityClob">
+            <summary>
+            Liquidity CLOB
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.NegativeRisk">
+            <summary>
+            Negative risk
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.NegativeRiskMarketId">
+            <summary>
+            Negative risk market id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.NegativeRiskFeeBips">
+            <summary>
+            Negative risk fee bps
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CommentCount">
+            <summary>
+            Number of comments
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Cyom">
+            <summary>
+            Cyom
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CloseTime">
+            <summary>
+            Close time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.ShowAllOutcomes">
+            <summary>
+            Show all outcomes
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.ShowMarketImages">
+            <summary>
+            Show market images
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.AutomaticallyResolved">
+            <summary>
+            Automatically resolved
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EnableNegativeRisk">
+            <summary>
+            Enable negative risk
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.AutomaticallyActive">
+            <summary>
+            Automatically active
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EventDate">
+            <summary>
+            Event date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.StartTime">
+            <summary>
+            Start time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EventWeek">
+            <summary>
+            Event week
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.SeriesSlug">
+            <summary>
+            Series slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Score">
+            <summary>
+            Score
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Elapsed">
+            <summary>
+            Elapsed
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Period">
+            <summary>
+            Period
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Live">
+            <summary>
+            Live
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Ended">
+            <summary>
+            Ended
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.FinishTime">
+            <summary>
+            Finish timestamp
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.GmpChartMode">
+            <summary>
+            Gmp chart mode
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.TweetCount">
+            <summary>
+            Tweet count
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.FeaturedOrder">
+            <summary>
+            Featured order
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EstimateValue">
+            <summary>
+            Estimate value
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CantEstimate">
+            <summary>
+            Cant estimate
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EstimatedValue">
+            <summary>
+            Estimated value
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.SpreadsMainLine">
+            <summary>
+            Spreads main line
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.TotalsMainLine">
+            <summary>
+            Totals main line
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.CarouselMap">
+            <summary>
+            Carousel map
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.PendingDeployment">
+            <summary>
+            Pending deployment
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Deploying">
+            <summary>
+            Deploying
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.DeployTime">
+            <summary>
+            Deploy timestamp
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.ScheduledDeployTime">
+            <summary>
+            Scheduled deployment time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.GameStatus">
+            <summary>
+            Game status
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.ImageOptimized">
+            <summary>
+            Optimized image reference
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.IconOptimized">
+            <summary>
+            Optimized icon reference
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.FeaturedImageOptimized">
+            <summary>
+            Optimized featured image reference
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.SubEvents">
+            <summary>
+            Sub events
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Markets">
+            <summary>
+            Markets
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Series">
+            <summary>
+            Series
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Collections">
+            <summary>
+            Collections
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Categories">
+            <summary>
+            Categories
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Tags">
+            <summary>
+            Tags
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.EventCreators">
+            <summary>
+            Event creators
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Chats">
+            <summary>
+            Chats
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketEvent.Templates">
+            <summary>
+            Templates
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketFeeRateBps">
             <summary>
             Fee rate in BPS
@@ -1507,6 +2332,701 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketFeeRateBps.BaseFee">
             <summary>
             Fee rate in BPS
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketGammaMarket">
+            <summary>
+            Gamma API market info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Question">
+            <summary>
+            Question
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ConditionId">
+            <summary>
+            Condition id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.TwitterCardImage">
+            <summary>
+            Twitter card image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ResolutionSource">
+            <summary>
+            Resolution source
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.EndDate">
+            <summary>
+            End date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Category">
+            <summary>
+            Category
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.AmmType">
+            <summary>
+            Amm type
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Liquidity">
+            <summary>
+            Liquidity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.SponsorName">
+            <summary>
+            Sponsor name
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.SponsorImage">
+            <summary>
+            Sponsor image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.StartDate">
+            <summary>
+            Start date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.XAxisValue">
+            <summary>
+            X axis value
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.YAxisValue">
+            <summary>
+            Y axis value
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.DenominationToken">
+            <summary>
+            Denomination token
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Fee">
+            <summary>
+            Fee
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Image">
+            <summary>
+            Image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Icon">
+            <summary>
+            Icon
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.LowerBound">
+            <summary>
+            Lower bound
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UpperBound">
+            <summary>
+            Upper bound
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Outcomes">
+            <summary>
+            Outcomes
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OutcomePrices">
+            <summary>
+            Outcome prices
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume">
+            <summary>
+            Volume
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Active">
+            <summary>
+            Active
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.MarketType">
+            <summary>
+            Market type
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.FormatType">
+            <summary>
+            Format type
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.LowerBoundDate">
+            <summary>
+            Lower bound date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UpperBoundDate">
+            <summary>
+            Upper bound date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Closed">
+            <summary>
+            Closed
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.MarketMakerAddress">
+            <summary>
+            Market maker address
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.CreatedBy">
+            <summary>
+            Created by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UpdatedBy">
+            <summary>
+            Updated by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UpdateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.CloseTime">
+            <summary>
+            Close time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.WideFormat">
+            <summary>
+            Wide format
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.New">
+            <summary>
+            New
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.MailchimpTag">
+            <summary>
+            Mailchimp tag
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Featured">
+            <summary>
+            Featured
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Archived">
+            <summary>
+            Archived
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ResolvedBy">
+            <summary>
+            Resolved by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Restricted">
+            <summary>
+            Restricted
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.MarketGroup">
+            <summary>
+            Market group
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.GroupItemTitle">
+            <summary>
+            Group item title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.GroupItemThreshold">
+            <summary>
+            Group item threshold
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.QuestionId">
+            <summary>
+            Question id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UmaEndDate">
+            <summary>
+            Uma end date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.EnableOrderBook">
+            <summary>
+            Enable order book
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OrderPriceMinTickQuantity">
+            <summary>
+            Order price min tick quantity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OrderMinQuantity">
+            <summary>
+            Order min quantity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UmaResolutionStatus">
+            <summary>
+            Uma resolution status
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.CurationOrder">
+            <summary>
+            Curation order
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.VolumeNum">
+            <summary>
+            Volume num
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.LiquidityNum">
+            <summary>
+            Liquidity num
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.EndDateIso">
+            <summary>
+            End date iso
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.StartDateIso">
+            <summary>
+            Start date iso
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UmaEndDateIso">
+            <summary>
+            Uma end date iso
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.HasReviewedDates">
+            <summary>
+            Has reviewed dates
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ReadyForCron">
+            <summary>
+            Ready for cron
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.CommentsEnabled">
+            <summary>
+            Comments enabled
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume24hr">
+            <summary>
+            Volume24hr
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1wk">
+            <summary>
+            Volume1wk
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1mo">
+            <summary>
+            Volume1mo
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1yr">
+            <summary>
+            Volume1yr
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.GameStartTime">
+            <summary>
+            Game start time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.SecondsDelay">
+            <summary>
+            Seconds delay
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ClobTokenIds">
+            <summary>
+            Clob token ids
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.DisqusThread">
+            <summary>
+            Disqus thread
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ShortOutcomes">
+            <summary>
+            Short outcomes
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.TeamAID">
+            <summary>
+            Team aid
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.TeamBID">
+            <summary>
+            Team bid
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UmaBond">
+            <summary>
+            Uma bond
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UmaReward">
+            <summary>
+            Uma reward
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.FpmmLive">
+            <summary>
+            Fpmm live
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume24hrAmm">
+            <summary>
+            Volume 24 hour amm
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1wkAmm">
+            <summary>
+            Volume 1week amm
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1moAmm">
+            <summary>
+            Volume 1month amm
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1yrAmm">
+            <summary>
+            Volume 1year amm
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume24hrClob">
+            <summary>
+            Volume 24hour clob
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1wkClob">
+            <summary>
+            Volume 1 week clob
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1moClob">
+            <summary>
+            Volume 1 month clob
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Volume1yrClob">
+            <summary>
+            Volume 1year clob
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.VolumeAmm">
+            <summary>
+            Volume amm
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.VolumeClob">
+            <summary>
+            Volume clob
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.LiquidityAmm">
+            <summary>
+            Liquidity amm
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.LiquidityClob">
+            <summary>
+            Liquidity clob
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.MakerBaseFee">
+            <summary>
+            Maker base fee
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.TakerBaseFee">
+            <summary>
+            Taker base fee
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.CustomLiveness">
+            <summary>
+            Custom liveness
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.AcceptingOrders">
+            <summary>
+            Accepting orders
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.NotificationsEnabled">
+            <summary>
+            Notifications enabled
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Score">
+            <summary>
+            Score
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ImageOptimized">
+            <summary>
+            Image optimized
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.IconOptimized">
+            <summary>
+            Icon optimized
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Events">
+            <summary>
+            Events
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Categories">
+            <summary>
+            Categories
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Tags">
+            <summary>
+            Tags
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Creator">
+            <summary>
+            Creator
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Ready">
+            <summary>
+            Ready
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Funded">
+            <summary>
+            Funded
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.PastSlugs">
+            <summary>
+            Past slugs
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ReadyTime">
+            <summary>
+            Ready time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.FundTime">
+            <summary>
+            Funded time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.AcceptingOrdersTime">
+            <summary>
+            Accepting orders time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Competitive">
+            <summary>
+            Competitive
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.RewardsMinQuantity">
+            <summary>
+            Rewards min quantity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.RewardsMaxSpread">
+            <summary>
+            Rewards max spread
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Spread">
+            <summary>
+            Spread
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.AutomaticallyResolved">
+            <summary>
+            Automatically resolved
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OneDayPriceChange">
+            <summary>
+            One day price change
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OneHourPriceChange">
+            <summary>
+            One hour price change
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OneWeekPriceChange">
+            <summary>
+            One week price change
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OneMonthPriceChange">
+            <summary>
+            One month price change
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.OneYearPriceChange">
+            <summary>
+            One year price change
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.LastTradePrice">
+            <summary>
+            Last trade price
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.BestBid">
+            <summary>
+            Best bid
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.BestAsk">
+            <summary>
+            Best ask
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.AutomaticallyActive">
+            <summary>
+            Automatically active
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ClearBookOnStart">
+            <summary>
+            Clear book on start
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ChartColor">
+            <summary>
+            Chart color
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.SeriesColor">
+            <summary>
+            Series color
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ShowGmpSeries">
+            <summary>
+            Show gmp series
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ShowGmpOutcome">
+            <summary>
+            Show gmp outcome
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.ManualActivation">
+            <summary>
+            Manual activation
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.NegativeRiskOther">
+            <summary>
+            Negative risk other
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.GameId">
+            <summary>
+            Game id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.GroupItemRange">
+            <summary>
+            Group item range
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.SportsMarketType">
+            <summary>
+            Sports market type
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Line">
+            <summary>
+            Line
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.UmaResolutionStatuses">
+            <summary>
+            Uma resolution statuses
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.PendingDeployment">
+            <summary>
+            Pending deployment
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.Deploying">
+            <summary>
+            Deploying
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.DeployTime">
+            <summary>
+            Deploying time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.SchedulDeploymentTime">
+            <summary>
+            Schedul deployment time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.RfqEnabled">
+            <summary>
+            Rfq enabled
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketGammaMarket.EventStartTime">
+            <summary>
+            Event start time
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketGeoRestriction">
@@ -1532,6 +3052,61 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketGeoRestriction.Region">
             <summary>
             Region
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketImageRef">
+            <summary>
+            Image reference
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.ImageUrlSource">
+            <summary>
+            Image url source
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.ImageUrlOptimized">
+            <summary>
+            Image url optimized
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.ImageQuantityKbSource">
+            <summary>
+            Image quantity kb source
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.ImageQuantityKbOptimized">
+            <summary>
+            Image quantity kb optimized
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.ImageOptimizedComplete">
+            <summary>
+            Image optimized complete
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.ImageOptimizedLastUpdated">
+            <summary>
+            Image optimized last updated
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.RelId">
+            <summary>
+            Related id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.Field">
+            <summary>
+            Field
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketImageRef.Relname">
+            <summary>
+            Relname
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketMarket">
@@ -1632,6 +3207,56 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketToken.Winner">
             <summary>
             Winner
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketMarketCategory">
+            <summary>
+            Category info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.Label">
+            <summary>
+            Label
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.ParentCategory">
+            <summary>
+            Parent category
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.PublishTime">
+            <summary>
+            Publish time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.CreatedBy">
+            <summary>
+            Created by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.UpdatedBy">
+            <summary>
+            Updated by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketCategory.UpdateTime">
+            <summary>
+            Update time
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketMarketDetails">
@@ -2064,6 +3689,421 @@
             Price
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketRelatedTag">
+            <summary>
+            Related tags
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketRelatedTag.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketRelatedTag.TagId">
+            <summary>
+            Tag id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketRelatedTag.RelatedTagId">
+            <summary>
+            Related tag id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketRelatedTag.Rank">
+            <summary>
+            Rank
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketSeries">
+            <summary>
+            Series info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Ticker">
+            <summary>
+            Ticker
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Subtitle">
+            <summary>
+            Subtitle
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.SeriesType">
+            <summary>
+            Series type
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Recurrence">
+            <summary>
+            Recurrence
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Image">
+            <summary>
+            Image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Icon">
+            <summary>
+            Icon
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Layout">
+            <summary>
+            Layout
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Active">
+            <summary>
+            Active
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Closed">
+            <summary>
+            Closed
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Archived">
+            <summary>
+            Archived
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.New">
+            <summary>
+            New
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Featured">
+            <summary>
+            Featured
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Restricted">
+            <summary>
+            Restricted
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.IsTemplate">
+            <summary>
+            Is template
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.TemplateVariables">
+            <summary>
+            Template variables
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.PublishTime">
+            <summary>
+            Publish time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.CreatedBy">
+            <summary>
+            Created by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.UpdatedBy">
+            <summary>
+            Updated by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.UpdateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.CommentsEnabled">
+            <summary>
+            Comments enabled
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Competitive">
+            <summary>
+            Competitive
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Volume24hr">
+            <summary>
+            Volume24hr
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Volume">
+            <summary>
+            Volume
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Liquidity">
+            <summary>
+            Liquidity
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.StartDate">
+            <summary>
+            Start date
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.PythTokenID">
+            <summary>
+            Pyth token id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.CgAssetName">
+            <summary>
+            Cg asset name
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Score">
+            <summary>
+            Score
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Events">
+            <summary>
+            Events
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Collections">
+            <summary>
+            Collections
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Categories">
+            <summary>
+            Categories
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Tags">
+            <summary>
+            Tags
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.CommentCount">
+            <summary>
+            Comment count
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeries.Chats">
+            <summary>
+            Chats
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketSeriesCollection">
+            <summary>
+            Series collection
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Ticker">
+            <summary>
+            Ticker
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Subtitle">
+            <summary>
+            Subtitle
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.CollectionType">
+            <summary>
+            Collection type
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Tags">
+            <summary>
+            Tags
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Image">
+            <summary>
+            Image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Icon">
+            <summary>
+            Icon
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.HeaderImage">
+            <summary>
+            Header image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Layout">
+            <summary>
+            Layout
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Active">
+            <summary>
+            Active
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Closed">
+            <summary>
+            Closed
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Archived">
+            <summary>
+            Archived
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.New">
+            <summary>
+            New
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Featured">
+            <summary>
+            Featured
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.Restricted">
+            <summary>
+            Restricted
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.IsTemplate">
+            <summary>
+            Is template
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.TemplateVariables">
+            <summary>
+            Template variables
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.PublishTime">
+            <summary>
+            Publish time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.CreatedBy">
+            <summary>
+            Created by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.UpdatedBy">
+            <summary>
+            Updated by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.UpdateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.CommentsEnabled">
+            <summary>
+            Comments enabled
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.ImageOptimized">
+            <summary>
+            Image optimized
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.IconOptimized">
+            <summary>
+            Icon optimized
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSeriesCollection.HeaderImageOptimized">
+            <summary>
+            Header image optimized
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketSport">
+            <summary>
+            Sport info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSport.Sport">
+            <summary>
+            Sport
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSport.Image">
+            <summary>
+            Image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSport.Resolution">
+            <summary>
+            Resolution
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSport.Ordering">
+            <summary>
+            Ordering
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSport.Tags">
+            <summary>
+            Tags
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSport.Series">
+            <summary>
+            Series
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketSportMarketTypes.MarketTypes">
+            <summary>
+            Tags
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketSportsTeam">
             <summary>
             Sports team info
@@ -2122,6 +4162,121 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketSpread.Spread">
             <summary>
             Spread
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketTag">
+            <summary>
+            Tag info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.Label">
+            <summary>
+            Label
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.ForceShow">
+            <summary>
+            Force show
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.ForceHide">
+            <summary>
+            Force hide
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.IsCarousel">
+            <summary>
+            Is carousel
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.PublishTime">
+            <summary>
+            Publish time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTag.UpdateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketTemplate">
+            <summary>
+            Template
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.EventTitle">
+            <summary>
+            Event title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.EventSlug">
+            <summary>
+            Event slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.EventImage">
+            <summary>
+            Event image
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.MarketTitle">
+            <summary>
+            Market title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.ResolutionSource">
+            <summary>
+            Resolution source
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.NegativeRisk">
+            <summary>
+            Negative risk
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.SortBy">
+            <summary>
+            Sort by
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.ShowMarketImages">
+            <summary>
+            Show market images
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.SeriesSlug">
+            <summary>
+            Series slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketTemplate.Outcomes">
+            <summary>
+            Outcomes
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketTickSize">
