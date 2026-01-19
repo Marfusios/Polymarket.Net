@@ -10,26 +10,10 @@ namespace Polymarket.Net.Interfaces
     /// </summary>
     public interface IPolymarketOrderBookFactory
     {
-        
-        /// <summary>
-        /// Clob order book factory methods
-        /// </summary>
-        IOrderBookFactory<PolymarketOrderBookOptions> Clob { get; }
-
-
-        /// <summary>
-        /// Create a SymbolOrderBook for the symbol
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="options">Book options</param>
-        /// <returns></returns>
-        ISymbolOrderBook Create(SharedSymbol symbol, Action<PolymarketOrderBookOptions>? options = null);
-
-        
         /// <summary>
         /// Create a new Clob local order book instance
         /// </summary>
-        ISymbolOrderBook CreateClob(string symbol, Action<PolymarketOrderBookOptions>? options = null);
+        ISymbolOrderBook CreateClob(string tokenId, Action<PolymarketOrderBookOptions>? options = null);
 
     }
 }

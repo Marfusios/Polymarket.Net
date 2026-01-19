@@ -131,7 +131,10 @@
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
-        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToTokenUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToPlatformUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToTokenUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
@@ -409,6 +412,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketBestBidAskUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketBookEntry">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -539,6 +547,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketResolvedUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketReward">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -570,6 +583,16 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketNegRisk">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketNewMarketEvent">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketNewMarketUpdate">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -1430,7 +1453,7 @@
             Polymarket Clob streams
             </summary>
         </member>
-        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi.SubscribeToTokenUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi.SubscribeToTokenUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate}},System.Threading.CancellationToken)">
             <summary>
             
             <para><a href="XXX" /></para>
@@ -1801,19 +1824,6 @@
             Polymarket local order book factory
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Interfaces.IPolymarketOrderBookFactory.Clob">
-            <summary>
-            Clob order book factory methods
-            </summary>
-        </member>
-        <member name="M:Polymarket.Net.Interfaces.IPolymarketOrderBookFactory.Create(CryptoExchange.Net.SharedApis.SharedSymbol,System.Action{Polymarket.Net.Objects.Options.PolymarketOrderBookOptions})">
-            <summary>
-            Create a SymbolOrderBook for the symbol
-            </summary>
-            <param name="symbol">The symbol</param>
-            <param name="options">Book options</param>
-            <returns></returns>
-        </member>
         <member name="M:Polymarket.Net.Interfaces.IPolymarketOrderBookFactory.CreateClob(System.String,System.Action{Polymarket.Net.Objects.Options.PolymarketOrderBookOptions})">
             <summary>
             Create a new Clob local order book instance
@@ -1842,6 +1852,36 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketBalanceAllowance.Allowances">
             <summary>
             Allowances
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate">
+            <summary>
+            Best bid/ask update
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate.Market">
+            <summary>
+            Market id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate.AssetId">
+            <summary>
+            Asset id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate.BestBid">
+            <summary>
+            Best bid
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate.BestAsk">
+            <summary>
+            Best ask
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate.Spread">
+            <summary>
+            Spread
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketBookUpdate">
@@ -3594,6 +3634,61 @@
             Tags
             </summary>
         </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate">
+            <summary>
+            Market resolved update
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.MarketId">
+            <summary>
+            Market Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.AssetIds">
+            <summary>
+            Asset ids
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.Outcomes">
+            <summary>
+            Outcomes
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.Question">
+            <summary>
+            Question
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.WinningAssetId">
+            <summary>
+            Winning asset id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.WinningOutcome">
+            <summary>
+            Winning outcome
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate.EventMessage">
+            <summary>
+            Event message
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketMidPrice">
             <summary>
             Mid price
@@ -3612,6 +3707,81 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketNegRisk.NegativeRisk">
             <summary>
             Negative risk
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate">
+            <summary>
+            New market update
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.MarketId">
+            <summary>
+            Market Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.AssetIds">
+            <summary>
+            Asset ids
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.Outcomes">
+            <summary>
+            Outcomes
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.Question">
+            <summary>
+            Question
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate.EventMessage">
+            <summary>
+            Event message
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketNewMarketEvent">
+            <summary>
+            New market event
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketEvent.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketEvent.Ticker">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketEvent.Slug">
+            <summary>
+            Slug
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketEvent.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketNewMarketEvent.Description">
+            <summary>
+            Description
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketNotification">
@@ -4809,7 +4979,7 @@
             The address used by the PolymarketRestClient for the Gamma API
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Objects.PolymarketApiAddresses.SocketClientAddress">
+        <member name="P:Polymarket.Net.Objects.PolymarketApiAddresses.ClobSocketClientAddress">
             <summary>
             The address used by the PolymarketSocketClient for the websocket API
             </summary>
@@ -4869,10 +5039,30 @@
         <member name="M:Polymarket.Net.Objects.PolymarketCredentials.Copy">
             <inheritdoc/>
         </member>
+        <member name="T:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}})">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.GetSubQuery(CryptoExchange.Net.Sockets.Default.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.Default.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.Default.SocketConnection,System.DateTime,System.String,Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.Default.SocketConnection,System.DateTime,System.String,Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate)">
+            <inheritdoc />
+        </member>
         <member name="T:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketTokenSubscription">
             <inheritdoc />
         </member>
-        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketTokenSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}})">
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketTokenSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate}})">
             <summary>
             ctor
             </summary>
@@ -4898,6 +5088,9 @@
         <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketTokenSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.Default.SocketConnection,System.DateTime,System.String,Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate)">
             <inheritdoc />
         </member>
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketTokenSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.Default.SocketConnection,System.DateTime,System.String,Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate)">
+            <inheritdoc />
+        </member>
         <member name="T:Polymarket.Net.PolymarketEnvironment">
             <summary>
             Polymarket environments
@@ -4913,9 +5106,9 @@
             Rest Gamma API address
             </summary>
         </member>
-        <member name="P:Polymarket.Net.PolymarketEnvironment.SocketClientAddress">
+        <member name="P:Polymarket.Net.PolymarketEnvironment.ClobSocketClientAddress">
             <summary>
-            Socket API address
+            Socket Clob API address
             </summary>
         </member>
         <member name="M:Polymarket.Net.PolymarketEnvironment.#ctor">
@@ -5023,10 +5216,9 @@
             <summary>
             Create a new order book instance
             </summary>
-            <param name="symbol">The symbol the order book is for</param>
+            <param name="tokenId">The token</param>
             <param name="optionsDelegate">Option configuration delegate</param>
             <param name="logger">Logger</param>
-            <param name="restClient">Rest client instance</param>
             <param name="socketClient">Socket client instance</param>
         </member>
         <member name="M:Polymarket.Net.SymbolOrderBooks.PolymarketClobSymbolOrderBook.DoStartAsync(System.Threading.CancellationToken)">
@@ -5051,12 +5243,6 @@
             ctor
             </summary>
             <param name="serviceProvider">Service provider for resolving logging and clients</param>
-        </member>
-        <member name="P:Polymarket.Net.SymbolOrderBooks.PolymarketOrderBookFactory.Clob">
-            <inheritdoc />
-        </member>
-        <member name="M:Polymarket.Net.SymbolOrderBooks.PolymarketOrderBookFactory.Create(CryptoExchange.Net.SharedApis.SharedSymbol,System.Action{Polymarket.Net.Objects.Options.PolymarketOrderBookOptions})">
-            <inheritdoc />
         </member>
         <member name="M:Polymarket.Net.SymbolOrderBooks.PolymarketOrderBookFactory.CreateClob(System.String,System.Action{Polymarket.Net.Objects.Options.PolymarketOrderBookOptions})">
             <inheritdoc />

@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Interfaces;
 using System;
 using System.Text.Json.Serialization;
 
@@ -58,7 +59,7 @@ namespace Polymarket.Net.Objects.Models
     /// <summary>
     /// Order book entry
     /// </summary>
-    public record PolymarketBookEntry
+    public record PolymarketBookEntry : ISymbolOrderBookEntry
     {
         /// <summary>
         /// Price

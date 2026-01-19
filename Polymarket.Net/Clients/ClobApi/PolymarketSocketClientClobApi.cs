@@ -62,6 +62,20 @@ namespace Polymarket.Net.Clients.ClobApi
             => new PolymarketAuthenticationProvider((PolymarketCredentials)credentials);
 
         /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToPlatformUpdatesAsync(
+            Action<DataEvent<PolymarketNewMarketUpdate>>? onNewMarketUpdate = null,
+            Action<DataEvent<PolymarketMarketResolvedUpdate>>? onMarketResolvedUpdate = null,
+            CancellationToken ct = default)
+        {
+            var subscription = new PolymarketGeneralSubscription(
+                _logger,
+                this,
+                onNewMarketUpdate,
+                onMarketResolvedUpdate);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws/market"), subscription, ct).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTokenUpdatesAsync(
             IEnumerable<string> assetIds,
             Action<DataEvent<PolymarketPriceChangeUpdate>>? onPriceChangeUpdate = null, 
@@ -69,8 +83,6 @@ namespace Polymarket.Net.Clients.ClobApi
             Action<DataEvent<PolymarketLastTradePriceUpdate>>? onLastTradePriceUpdate = null,
             Action<DataEvent<PolymarketTickSizeUpdate>>? onTickSizeUpdate = null,
             Action<DataEvent<PolymarketBestBidAskUpdate>>? onBestBidAskUpdate = null,
-            Action<DataEvent<PolymarketNewMarketUpdate>>? onNewMarketUpdate = null,
-            Action<DataEvent<PolymarketMarketResolvedUpdate>>? onMarketResolvedUpdate = null,
             CancellationToken ct = default)
         {
             var subscription = new PolymarketTokenSubscription(
@@ -81,9 +93,7 @@ namespace Polymarket.Net.Clients.ClobApi
                 onBookUpdate,
                 onLastTradePriceUpdate,
                 onTickSizeUpdate,
-                onBestBidAskUpdate,
-                onNewMarketUpdate,
-                onMarketResolvedUpdate);
+                onBestBidAskUpdate);
             return await SubscribeAsync(BaseAddress.AppendPath("ws/market"), subscription, ct).ConfigureAwait(false);
         }
 

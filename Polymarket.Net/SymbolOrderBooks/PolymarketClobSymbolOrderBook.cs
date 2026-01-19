@@ -7,6 +7,7 @@ using CryptoExchange.Net.OrderBook;
 using Microsoft.Extensions.Logging;
 using Polymarket.Net.Clients;
 using Polymarket.Net.Interfaces.Clients;
+using Polymarket.Net.Objects.Models;
 using Polymarket.Net.Objects.Options;
 
 namespace Polymarket.Net.SymbolOrderBooks
@@ -18,7 +19,6 @@ namespace Polymarket.Net.SymbolOrderBooks
     public class PolymarketClobSymbolOrderBook : SymbolOrderBook
     {
         private readonly bool _clientOwner;
-        private readonly IPolymarketRestClient _restClient;
         private readonly IPolymarketSocketClient _socketClient;
         private readonly TimeSpan _initialDataTimeout;
 
@@ -36,17 +36,16 @@ namespace Polymarket.Net.SymbolOrderBooks
         /// <summary>
         /// Create a new order book instance
         /// </summary>
-        /// <param name="symbol">The symbol the order book is for</param>
+        /// <param name="tokenId">The token</param>
         /// <param name="optionsDelegate">Option configuration delegate</param>
         /// <param name="logger">Logger</param>
-        /// <param name="restClient">Rest client instance</param>
         /// <param name="socketClient">Socket client instance</param>
         public PolymarketClobSymbolOrderBook(
-            string symbol,
+            string tokenId,
             Action<PolymarketOrderBookOptions>? optionsDelegate,
             ILoggerFactory? logger,
             IPolymarketRestClient? restClient,
-            IPolymarketSocketClient? socketClient) : base(logger, "Polymarket", "Clob", symbol)
+            IPolymarketSocketClient? socketClient) : base(logger, "Polymarket", "Clob", tokenId)
         {
             var options = PolymarketOrderBookOptions.Default.Copy();
             if (optionsDelegate != null)
@@ -60,14 +59,30 @@ namespace Polymarket.Net.SymbolOrderBooks
             _initialDataTimeout = options?.InitialDataTimeout ?? TimeSpan.FromSeconds(30);
             _clientOwner = socketClient == null;
             _socketClient = socketClient ?? new PolymarketSocketClient();
-            _restClient = restClient ?? new PolymarketRestClient();
         }
 
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStartAsync(CancellationToken ct)
         {
-            // XXX
-            throw new NotImplementedException();
+            var result = await _socketClient.ClobApi.SubscribeToTokenUpdatesAsync([Symbol], onBookUpdate: ProcessUpdate).ConfigureAwait(false);
+            if (!result)
+                return result;
+
+            if (ct.IsCancellationRequested)
+            {
+                await result.Data.CloseAsync().ConfigureAwait(false);
+                return result.AsError<UpdateSubscription>(new CancellationRequestedError());
+            }
+
+            Status = OrderBookStatus.Syncing;
+
+            var setResult = await WaitForSetOrderBookAsync(_initialDataTimeout, ct).ConfigureAwait(false);
+            return setResult ? result : new CallResult<UpdateSubscription>(setResult.Error!);
+        }
+
+        private void ProcessUpdate(DataEvent<PolymarketBookUpdate> @event)
+        {
+            SetSnapshot(@event.Data.Timestamp.Ticks, @event.Data.Bids, @event.Data.Asks, @event.DataTime, @event.DataTimeLocal);
         }
 
         /// <inheritdoc />
@@ -78,18 +93,14 @@ namespace Polymarket.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResyncAsync(CancellationToken ct)
         {
-            // XXX
-            throw new NotImplementedException();
+            return await WaitForSetOrderBookAsync(_initialDataTimeout, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (_clientOwner)
-            {
-                _restClient?.Dispose();
-                _socketClient?.Dispose();
-            }
+                _socketClient?.Dispose();            
 
             base.Dispose(disposing);
         }

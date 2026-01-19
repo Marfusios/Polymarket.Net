@@ -14,6 +14,11 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
     /// </summary>
     public interface IPolymarketSocketClientClobApi : ISocketApiClient, IDisposable
     {
+        Task<CallResult<UpdateSubscription>> SubscribeToPlatformUpdatesAsync(
+            Action<DataEvent<PolymarketNewMarketUpdate>>? onNewMarketUpdate = null,
+            Action<DataEvent<PolymarketMarketResolvedUpdate>>? onMarketResolvedUpdate = null,
+            CancellationToken ct = default);
+
         /// <summary>
         /// 
         /// <para><a href="XXX" /></para>
@@ -28,8 +33,6 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
             Action<DataEvent<PolymarketLastTradePriceUpdate>>? onLastTradePriceUpdate = null,
             Action<DataEvent<PolymarketTickSizeUpdate>>? onTickSizeUpdate = null,
             Action<DataEvent<PolymarketBestBidAskUpdate>>? onBestBidAskUpdate = null,
-            Action<DataEvent<PolymarketNewMarketUpdate>>? onNewMarketUpdate = null,
-            Action<DataEvent<PolymarketMarketResolvedUpdate>>? onMarketResolvedUpdate = null,
             CancellationToken ct = default);
 
     }

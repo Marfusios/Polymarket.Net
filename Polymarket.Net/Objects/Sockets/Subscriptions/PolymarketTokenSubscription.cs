@@ -17,8 +17,6 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         private readonly Action<DataEvent<PolymarketLastTradePriceUpdate>>? _lastTradePriceHandler;
         private readonly Action<DataEvent<PolymarketTickSizeUpdate>>? _lastTickSizeHandler;
         private readonly Action<DataEvent<PolymarketBestBidAskUpdate>>? _bidAskUpdateHandler;
-        private readonly Action<DataEvent<PolymarketNewMarketUpdate>>? _newMarketUpdate;
-        private readonly Action<DataEvent<PolymarketMarketResolvedUpdate>>? _marketResolvedUpdate;
         private readonly string[] _assetIds;
 
         private PolymarketSocketClientClobApi _client;
@@ -34,9 +32,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
             Action<DataEvent<PolymarketBookUpdate>>? bookHandler,
             Action<DataEvent<PolymarketLastTradePriceUpdate>>? lastTradePriceHandler,
             Action<DataEvent<PolymarketTickSizeUpdate>>? tickSizeUpdateHandler,
-            Action<DataEvent<PolymarketBestBidAskUpdate>>? bidAskUpdateHandler,
-            Action<DataEvent<PolymarketNewMarketUpdate>>? newMarketUpdate,
-            Action<DataEvent<PolymarketMarketResolvedUpdate>>? marketResolvedUpdate
+            Action<DataEvent<PolymarketBestBidAskUpdate>>? bidAskUpdateHandler
             ) : base(logger, false)
         {
             _client = client;
@@ -45,8 +41,6 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
             _lastTradePriceHandler = lastTradePriceHandler;
             _lastTickSizeHandler = tickSizeUpdateHandler;
             _bidAskUpdateHandler = bidAskUpdateHandler;
-            _newMarketUpdate = newMarketUpdate;
-            _marketResolvedUpdate = marketResolvedUpdate;
             _assetIds = assetIds;
 
             MessageRouter = MessageRouter.Create([
@@ -55,9 +49,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
                 MessageRoute<PolymarketBookUpdate[]>.CreateWithoutTopicFilter("book_snapshot", DoHandleMessage),
                 MessageRoute<PolymarketLastTradePriceUpdate>.CreateWithoutTopicFilter("last_trade_price", DoHandleMessage),
                 MessageRoute<PolymarketLastTradePriceUpdate>.CreateWithoutTopicFilter("tick_size_change", DoHandleMessage),
-                MessageRoute<PolymarketBestBidAskUpdate>.CreateWithoutTopicFilter("best_bid_ask", DoHandleMessage),
-                MessageRoute<PolymarketNewMarketUpdate>.CreateWithoutTopicFilter("new_market", DoHandleMessage),
-                MessageRoute<PolymarketNewMarketUpdate>.CreateWithoutTopicFilter("market_resolved", DoHandleMessage)
+                MessageRoute<PolymarketBestBidAskUpdate>.CreateWithoutTopicFilter("best_bid_ask", DoHandleMessage)
                 ]);
         }
 
@@ -146,32 +138,6 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
             _client.UpdateTimeOffset(message.Timestamp);
 
             _bidAskUpdateHandler?.Invoke(new DataEvent<PolymarketBestBidAskUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
-                        .WithUpdateType(SocketUpdateType.Update)
-                        .WithStreamId(message.EventType)
-                        //.WithSymbol(data.Symbol)
-                        .WithDataTimestamp(message.Timestamp, _client.GetTimeOffset()));
-            return new CallResult(null);
-        }
-
-        /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, PolymarketNewMarketUpdate message)
-        {
-            _client.UpdateTimeOffset(message.Timestamp);
-
-            _newMarketUpdate?.Invoke(new DataEvent<PolymarketNewMarketUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
-                        .WithUpdateType(SocketUpdateType.Update)
-                        .WithStreamId(message.EventType)
-                        //.WithSymbol(data.Symbol)
-                        .WithDataTimestamp(message.Timestamp, _client.GetTimeOffset()));
-            return new CallResult(null);
-        }
-
-        /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, PolymarketMarketResolvedUpdate message)
-        {
-            _client.UpdateTimeOffset(message.Timestamp);
-
-            _marketResolvedUpdate?.Invoke(new DataEvent<PolymarketMarketResolvedUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)

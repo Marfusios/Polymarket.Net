@@ -24,31 +24,11 @@ namespace Polymarket.Net.SymbolOrderBooks
         public PolymarketOrderBookFactory(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            
-            
-            Clob = new OrderBookFactory<PolymarketOrderBookOptions>(CreateClob, Create);
-
         }
 
-        
          /// <inheritdoc />
-        public IOrderBookFactory<PolymarketOrderBookOptions> Clob { get; }
-
-
-        /// <inheritdoc />
-        public ISymbolOrderBook Create(SharedSymbol symbol, Action<PolymarketOrderBookOptions>? options = null)
-        {
-            //var symbolName = symbol.GetSymbol(PolymarketExchange.FormatSymbol);
-            throw new Exception();
-#warning TODO
-
-            //return Create(symbolName, options);
-        }
-
-        
-         /// <inheritdoc />
-        public ISymbolOrderBook CreateClob(string symbol, Action<PolymarketOrderBookOptions>? options = null)
-            => new PolymarketClobSymbolOrderBook(symbol, options, 
+        public ISymbolOrderBook CreateClob(string tokenId, Action<PolymarketOrderBookOptions>? options = null)
+            => new PolymarketClobSymbolOrderBook(tokenId, options, 
                                                           _serviceProvider.GetRequiredService<ILoggerFactory>(),
                                                           _serviceProvider.GetRequiredService<IPolymarketRestClient>(),
                                                           _serviceProvider.GetRequiredService<IPolymarketSocketClient>());
