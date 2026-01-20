@@ -39,6 +39,16 @@ namespace Polymarket.Net.Objects.Models
         [JsonPropertyName("asset_id")]
         public string TokenId { get; set; } = string.Empty;
         /// <summary>
+        /// Maker address
+        /// </summary>
+        [JsonPropertyName("maker_address")]
+        public string MakerAddress { get; set; } = string.Empty;
+        /// <summary>
+        /// Transaction hash
+        /// </summary>
+        [JsonPropertyName("transaction_hash")]
+        public string TransactionHash { get; set; } = string.Empty;
+        /// <summary>
         /// Side
         /// </summary>
         [JsonPropertyName("side")]
@@ -88,6 +98,11 @@ namespace Polymarket.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("owner")]
         public string Owner { get; set; } = string.Empty;
+        /// <summary>
+        /// Role
+        /// </summary>
+        [JsonPropertyName("trader_side")]
+        public TradeRole TradeRole { get; set; }
         /// <summary>
         /// List of the maker trades the taker trade was filled against
         /// </summary>

@@ -18,6 +18,7 @@ using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Models;
 using System.Collections.Generic;
 using Polymarket.Net.Enums;
+using CryptoExchange.Net.RateLimiting.Guards;
 
 namespace Polymarket.Net.Clients.GammaApi
 {
@@ -108,7 +109,7 @@ namespace Polymarket.Net.Clients.GammaApi
             parameters.AddOptionalBoolString("ascending", ascending);
             parameters.Add("limit", limit ?? 20);
             parameters.Add("offset", offset ?? 0);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "teams", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "teams", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketSportsTeam[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -120,7 +121,7 @@ namespace Polymarket.Net.Clients.GammaApi
         public async Task<WebCallResult<PolymarketSport[]>> GetSportsAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "sports", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "sports", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketSport[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -132,7 +133,7 @@ namespace Polymarket.Net.Clients.GammaApi
         public async Task<WebCallResult<string[]>> GetSportMarketTypesAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "sports/market-types", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "sports/market-types", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             var result = await SendAsync<PolymarketSportMarketTypes>(request, parameters, ct).ConfigureAwait(false);
             return result.As<string[]>(result.Data?.MarketTypes);
         }
@@ -158,7 +159,8 @@ namespace Polymarket.Net.Clients.GammaApi
             parameters.AddOptionalBoolString("ascending", ascending);
             parameters.Add("limit", limit ?? 20);
             parameters.Add("offset", offset ?? 0);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "tags", PolymarketExchange.RateLimiter.GammaApi, 1, false,
+                limitGuard: new SingleLimitGuard(200, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             return await SendAsync<PolymarketTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -171,7 +173,7 @@ namespace Polymarket.Net.Clients.GammaApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("includeTemplate", includeTemplate);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "tags/" + id, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "tags/" + id, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketTag>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -184,7 +186,7 @@ namespace Polymarket.Net.Clients.GammaApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("includeTemplate", includeTemplate);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "tags/slug/" + slug, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "tags/slug/" + slug, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketTag>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -198,7 +200,7 @@ namespace Polymarket.Net.Clients.GammaApi
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("includeTemplate", omitEmpty);
             parameters.AddOptionalEnum("status", status);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/{id}/related-tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/{id}/related-tags", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketRelatedTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -212,7 +214,7 @@ namespace Polymarket.Net.Clients.GammaApi
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("includeTemplate", omitEmpty);
             parameters.AddOptionalEnum("status", status);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/slug/{slug}/related-tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/slug/{slug}/related-tags", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketRelatedTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -226,7 +228,7 @@ namespace Polymarket.Net.Clients.GammaApi
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("includeTemplate", omitEmpty);
             parameters.AddOptionalEnum("status", status);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/{id}/related-tags/tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/{id}/related-tags/tags", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -240,7 +242,7 @@ namespace Polymarket.Net.Clients.GammaApi
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("includeTemplate", omitEmpty);
             parameters.AddOptionalEnum("status", status);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/slug/{slug}/related-tags/tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"tags/slug/{slug}/related-tags/tags", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -306,7 +308,8 @@ namespace Polymarket.Net.Clients.GammaApi
             parameters.AddOptionalBoolString("ascending", ascending);
             parameters.Add("limit", limit ?? 20);
             parameters.Add("offset", offset ?? 0);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events", PolymarketExchange.RateLimiter.GammaApi, 1, false,
+                limitGuard: new SingleLimitGuard(500, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             return await SendAsync<PolymarketEvent[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -320,7 +323,7 @@ namespace Polymarket.Net.Clients.GammaApi
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("include_chat", includeChat);
             parameters.AddOptionalBoolString("include_template", includeTemplate);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events/" + id, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events/" + id, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketEvent>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -334,7 +337,7 @@ namespace Polymarket.Net.Clients.GammaApi
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("include_chat", includeChat);
             parameters.AddOptionalBoolString("include_template", includeTemplate);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events/slug/" + slug, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events/slug/" + slug, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketEvent>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -346,7 +349,7 @@ namespace Polymarket.Net.Clients.GammaApi
         public async Task<WebCallResult<PolymarketTag[]>> GetEventTagsAsync(string id, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events/{id}/tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"events/{id}/tags", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -413,7 +416,8 @@ namespace Polymarket.Net.Clients.GammaApi
             parameters.AddOptionalBoolString("ascending", ascending);
             parameters.Add("limit", limit ?? 20);
             parameters.Add("offset", offset ?? 0);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets", PolymarketExchange.RateLimiter.GammaApi, 1, false,
+                limitGuard: new SingleLimitGuard(300, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             return await SendAsync<PolymarketGammaMarket[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -426,7 +430,7 @@ namespace Polymarket.Net.Clients.GammaApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("include_tag", includeTag);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets/" + id, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets/" + id, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketGammaMarket>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -439,7 +443,7 @@ namespace Polymarket.Net.Clients.GammaApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("include_tag", includeTag);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets/slug/" + slug, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets/slug/" + slug, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketGammaMarket>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -451,7 +455,7 @@ namespace Polymarket.Net.Clients.GammaApi
         public async Task<WebCallResult<PolymarketTag[]>> GetMarketTagsAsync(string id, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets/{id}/tags", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"markets/{id}/tags", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketTag[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -484,7 +488,7 @@ namespace Polymarket.Net.Clients.GammaApi
             parameters.AddOptionalBoolString("ascending", ascending);
             parameters.Add("limit", limit ?? 20);
             parameters.Add("offset", offset ?? 0);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"series", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"series", PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketSeries[]>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -497,7 +501,7 @@ namespace Polymarket.Net.Clients.GammaApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalBoolString("include_chat", includeChat);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"series/" + id, PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"series/" + id, PolymarketExchange.RateLimiter.GammaApi, 1, false);
             return await SendAsync<PolymarketSeries>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -538,7 +542,8 @@ namespace Polymarket.Net.Clients.GammaApi
             parameters.AddOptional("recurrence", recurrence);
             parameters.AddOptional("exclude_tag_id", excludeTagIds);
             parameters.AddOptionalBoolString("optimized", optimized);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, $"public-search", PolymarketExchange.RateLimiter.Polymarket, 1, false);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, $"public-search", PolymarketExchange.RateLimiter.GammaApi, 1, false,
+                limitGuard: new SingleLimitGuard(350, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             return await SendAsync<PolymarketSearchResult>(request, parameters, ct).ConfigureAwait(false);
         }
 

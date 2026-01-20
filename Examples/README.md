@@ -8,6 +8,3 @@ A simple console client demonstrating basic usage
 
 ### Polymarket.Examples.OrderBook
 Example of using the client side order book implementation
-
-### Polymarket.Examples.Tracker
-Example of using the trade tracker

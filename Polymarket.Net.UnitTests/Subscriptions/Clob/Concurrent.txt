@@ -1,0 +1,5 @@
+>1 { "operation": "subscribe", "assets_ids": ["0x123"] }
+>2 { "operation": "subscribe", "assets_ids": ["0x456"] }
+=1 { "market": "0x111", "price_changes": [{ "asset_id": "0x123", "price": "0.5", "size": "200", "side": "BUY", "hash": "56621a121a47ed9333273e21c83b660cff37ae50", "best_bid": "0.5", "best_ask": "1" }], "timestamp": "1757908892351", "event_type": "price_change"}
+=2 { "market": "0x222", "price_changes": [{ "asset_id": "0x456", "price": "0.5", "size": "200", "side": "BUY", "hash": "56621a121a47ed9333273e21c83b660cff37ae50", "best_bid": "0.5", "best_ask": "1" }], "timestamp": "1757908892351", "event_type": "price_change"}
+

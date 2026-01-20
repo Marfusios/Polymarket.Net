@@ -18,9 +18,13 @@ namespace Polymarket.Net.Objects.Models
         [JsonPropertyName("balance")]
         public decimal Balance { get; set; }
         /// <summary>
+        /// Balance in USD
+        /// </summary>
+        public decimal BalanceUsd => Balance / 1000000;
+        /// <summary>
         /// Allowances
         /// </summary>
         [JsonPropertyName("allowances")]
-        public Dictionary<string, decimal> Allowances { get; set; } = new();
+        public Dictionary<string, string> Allowances { get; set; } = new();
     }
 }

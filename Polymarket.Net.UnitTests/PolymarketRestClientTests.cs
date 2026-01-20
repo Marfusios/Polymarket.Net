@@ -39,7 +39,7 @@ namespace Polymarket.Net.UnitTests
                 { "signatureType", 0 },
             };
 
-            var result = authProvider.GetOrderSignature(parameters, 80002, false).ToLower();
+            var result = authProvider.GetOrderSignature(parameters, chainId, false).ToLower();
             Assert.That(result, Is.EqualTo("0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c"));
         }
 
@@ -47,10 +47,8 @@ namespace Polymarket.Net.UnitTests
         public void CheckSignatureExample2()
         {
             var chainId = 137;
-            //var privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-            var privateKey = "";
-            var address = "";
-
+            var privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+            var address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
             var authProvider = new PolymarketAuthenticationProvider(new PolymarketCredentials(address, privateKey));
 
@@ -71,7 +69,7 @@ namespace Polymarket.Net.UnitTests
             };
 
             var result = authProvider.GetOrderSignature(parameters, chainId, true).ToLower();
-            Assert.That(result, Is.EqualTo(""));
+            Assert.That(result, Is.EqualTo("0x80339932dbe85fda07338f283ba084312addc59c90e7739067be748c12b4922054673e2f8365f5fd891cef19469ec29900d1889d9a674f0bf485f177b6acf14e1b"));
         }
 
         [Test]

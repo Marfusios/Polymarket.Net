@@ -2,7 +2,7 @@
 
 [![.NET](https://img.shields.io/github/actions/workflow/status/JKorf/Polymarket.Net/dotnet.yml?style=for-the-badge)](https://github.com/JKorf/Polymarket.Net/actions/workflows/dotnet.yml) ![License](https://img.shields.io/github/license/JKorf/Polymarket.Net?style=for-the-badge)
 
-Polymarket.Net is a client library for accessing the [Polymarket REST and Websocket API](Polymarket). 
+Polymarket.Net is a client library for accessing the [Polymarket REST and Websocket API](https://docs.polymarket.com/developers/CLOB/introduction). 
 
 ## Features
 * Response data is mapped to descriptive models
@@ -48,20 +48,107 @@ The NuGet package files are added along side the source with the latest GitHub r
 ## How to use
 * REST Endpoints
 	```csharp
-	// Get the ETH/USDT ticker via rest request
-	var restClient = new PolymarketRestClient();
-	var tickerResult = await restClient.SpotApi.ExchangeData.GetTickerAsync("ETHUSDT");
-	var lastPrice = tickerResult.Data.LastPrice;
+	// Get the order book info for the outcomes of the first market via rest request
+    var markets = await polymarketRestClient.GammaApi.GetMarketsAsync(closed: false);
+    if (!markets.Success)
+    {
+        Console.WriteLine("Failed: " + markets.Error);
+        return;
+    }
+
+    var firstMarket = markets.Data[0];
+    var bookInfo = await polymarketRestClient.ClobApi.ExchangeData.GetOrderBooksAsync(firstMarket.ClobTokenIds!);
+
 	```
 * Websocket streams
 	```csharp
-	// Subscribe to ETH/USDT ticker updates via the websocket API
-	var socketClient = new PolymarketSocketClient();
-	var tickerSubscriptionResult = socketClient.SpotApi.SubscribeToTickerUpdatesAsync("ETHUSDT", (update) => 
-	{
-	  var lastPrice = update.Data.LastPrice;
-	});
+    // Subscribe to updates for a specific token/asset via the websocket API
+    var socketClient = new PolymarketSocketClient();
+    var tokenId = "11862165566757345985240476164489718219056735011698825377388402888080786399275";
+    var subscriptionResult = await polymarketSocketClient.ClobApi.SubscribeToTokenUpdatesAsync([tokenId2],
+        priceUpdate =>
+        {
+            // Handle price change update
+        },
+        bookUpdate =>
+        {
+            // Handle order book update
+        },
+        lastTradePriceUpdate =>
+        {
+            // Handle last trade price update
+        },
+        tickSizeUpdate =>
+        {
+            // Handle tick size update
+        },
+        bestBidAskUpdate =>
+        {
+            // Handle best bid/ask change update
+        });
 	```
+
+### Authentication
+Authenticate using an email account and providing the exported private key and the funding address. This will require you to request the layer 2 credentials before orders can be placed:
+```csharp
+var credsEmailLayer1 = new PolymarketCredentials(
+    SignType.Email, // Email wallet, when creating a new wallet via the web interface
+    "0x00..", // The private key, can be exported from the web interface
+    "0x00.."); // The polymarket funding address, can be found in the web interface under `Profile -> Your Polymarket Wallet Address`
+```
+
+Authenticate using an email account and providing the exported private key and the funding address, while also providing previously requested layer 2 credentials. Can be used to place orders directly:
+```csharp
+var credsEmailWithLayer2 = new PolymarketCredentials(
+    SignType.Email,// Email wallet, when creating a new wallet via the web interface
+    "0x00..", // The private key, can be exported from the web interface
+    "KEY",// The L2 API key as previously retrieved with `polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync()`
+    "SEC", // The L2 API secret as previously retrieved with `polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync()`
+    "PASS", // The L2 API passphrase as previously retrieved with `polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync()`
+    "0x00.."); // The polymarket funding address, can be found in the web interface under `Profile -> Your Polymarket Wallet Address`
+```
+
+Authenticate using an external account, for example MetaMask, and providing the private key. This will require you to request the layer 2 credentials before orders can be placed:
+```csharp
+var credsEoaLayer1 = new PolymarketCredentials(
+    SignType.EOA, // Externally Owned Account wallet, when using an existing wallet to connect to polymarket
+    "0x00.." // The private key for the wallet
+    );
+```
+
+Authenticate using an external account, for example MetaMask, and providing the private key, while also providing previously requested layer 2 credentials. Can be used to place orders directly:
+```csharp
+var credsEoaWithLayer2 = new PolymarketCredentials(
+    SignType.EOA, // Externally Owned Account wallet, when using an existing wallet to connect to polymarket
+    "0x00..", // The private key for the wallet
+    "KEY", // The L2 API key as previously retrieved with `polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync()`
+    "SEC", // The L2 API secret as previously retrieved with `polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync()`
+    "PASS" // The L2 API passphrase as previously retrieved with `polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync()`
+    );
+```
+
+Retrieve and set layer 2 credentials need for placing orders (required when L2 credentials not provided in the credentials):
+```csharp
+var credentialResult = await polymarketRestClient.ClobApi.Account.GetOrCreateApiCredentialsAsync();
+if (credentialResult.Success)
+    polymarketRestClient.UpdateL2Credentials(credentialResult.Data);
+```
+
+Set the previously created credentials:
+```csharp
+// Via constructor
+var client = new PolymarketRestClient(options =>
+{
+    options.ApiCredentials = credentials;
+});
+
+// Via dependency injection
+services.AddPolymarket(options =>
+{
+    options.ApiCredentials = credentials
+});
+```
+
 
 For information on the clients, dependency injection, response processing and more see the [documentation](https://cryptoexchange.jkorf.dev/client-libs/getting-started), or have a look at the examples [here](https://github.com/JKorf/Polymarket.Net/tree/main/Examples) or [here](https://github.com/JKorf/CryptoExchange.Net/tree/master/Examples).
 
@@ -107,14 +194,34 @@ A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discuss
 
 ## Supported functionality
 
-### Spot
+### REST Central Limit Order Book (CLOB) API
 |API|Supported|Location|
 |--|--:|--|
-|TODO|✓|`restClient.SpotApi.Account`|
-### Futures
+|Orderbook|✓|`restClient.ClobApi.ExchangeData`|
+|Pricing|✓|`restClient.ClobApi.ExchangeData`|
+|Spreads|✓|`restClient.ClobApi.ExchangeData`|
+|Historical Timeseries Data|✓|`restClient.ClobApi.ExchangeData`|
+|Order Management|✓|`restClient.ClobApi.Trading`|
+|Trades|✓|`restClient.ClobApi.Trading`|
+
+### REST Gamma API
 |API|Supported|Location|
 |--|--:|--|
-|TODO|✓|`restClient.FuturesApi.ExchangeData`|
+|Sports|✓|`restClient.GammaApi`|
+|Tags|✓|`restClient.GammaApi`|
+|Events|✓|`restClient.GammaApi`|
+|Markets|✓|`restClient.GammaApi`|
+|Series|✓|`restClient.GammaApi`|
+|Comments|X||
+|Profiles|X||
+|Search|✓|`restClient.GammaApi`|
+
+### Websocket API
+|API|Supported|Location|
+|--|--:|--|
+|User Channel|✓|`socketClient.ClobApi`|
+|Market Channel|✓|`socketClient.ClobApi`|
+|Sports websocket|✓|`socketClient.ClobApi`|
 
 ## Support the project
 Any support is greatly appreciated.

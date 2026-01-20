@@ -1,0 +1,4 @@
+POST
+/order
+true
+{"errorMsg":"","orderID":"0x12","takingAmount":"","makingAmount":"","status":"live","success":true}

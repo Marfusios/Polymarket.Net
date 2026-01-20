@@ -1,0 +1,4 @@
+GET
+/data/order/123
+true
+{"id":"0x12","status":"LIVE","owner":"123","maker_address":"0x12","market":"0x17815081230e3b9c78b098162c33b1ffa68c4ec29c123d3d14989599e0c2e113","asset_id":"11862165566757345985240476164489718219056735011698825377388402888080786399275","side":"BUY","original_size":"5","size_matched":"0","price":"0.001","outcome":"Yes","expiration":"0","order_type":"GTC","associate_trades":[],"created_at":1768900397}

@@ -1,6 +1,6 @@
 ﻿namespace Polymarket.Net.Signing
 {
-    public static class InternalSha3Keccack
+    internal static class InternalSha3Keccack
     {
         public static byte[] CalculateHash(byte[] data)
         {

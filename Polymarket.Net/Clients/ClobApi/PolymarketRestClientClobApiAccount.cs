@@ -26,7 +26,7 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("nonce", nonce);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "auth/api-key", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "auth/api-key", PolymarketExchange.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync<PolymarketCreds>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -35,7 +35,7 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("nonce", nonce);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/derive-api-key", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/derive-api-key", PolymarketExchange.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync<PolymarketCreds>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -52,7 +52,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketApiKeys>> GetApiKeysAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/api-keys", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/api-keys", PolymarketExchange.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync<PolymarketApiKeys>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -60,7 +60,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketClosedOnlyMode>> GetClosedOnlyModeAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/ban-status/closed-only", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "auth/ban-status/closed-only", PolymarketExchange.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync<PolymarketClosedOnlyMode>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -68,7 +68,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult> DeleteApiKeyAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Delete, "auth/api-key", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "auth/api-key", PolymarketExchange.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -77,8 +77,11 @@ namespace Polymarket.Net.Clients.ClobApi
 
         public async Task<WebCallResult<PolymarketNotification[]>> GetNotificationsAsync(CancellationToken ct = default)
         {
+            if (_baseClient.AuthenticationProvider == null)
+                return new WebCallResult<PolymarketNotification[]>(new NoApiCredentialsError());
+
             var parameters = new ParameterCollection();
-            parameters.Add("signature_type", 0);
+            parameters.Add("signature_type", (int)((PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider).SignatureType);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "notifications", PolymarketExchange.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(900, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketNotification[]>(request, parameters, ct).ConfigureAwait(false);
@@ -87,8 +90,11 @@ namespace Polymarket.Net.Clients.ClobApi
 
         public async Task<WebCallResult<PolymarketNotification[]>> DropNotificationsAsync(IEnumerable<string> ids, CancellationToken ct = default)
         {
+            if (_baseClient.AuthenticationProvider == null)
+                return new WebCallResult<PolymarketNotification[]>(new NoApiCredentialsError());
+
             var parameters = new ParameterCollection();
-            parameters.Add("signature_type", 0);
+            parameters.Add("signature_type", (int)((PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider).SignatureType);
             parameters.Add("ids", string.Join(",", ids));
             var request = _definitions.GetOrCreate(HttpMethod.Delete, "notifications", PolymarketExchange.RateLimiter.ClobApi, 1, true, parameterPosition: HttpMethodParameterPosition.InUri,
                 limitGuard: new SingleLimitGuard(125, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
@@ -98,8 +104,11 @@ namespace Polymarket.Net.Clients.ClobApi
 
         public async Task<WebCallResult<PolymarketBalanceAllowance>> GetBalanceAllowanceAsync(AssetType assetType, string? tokenId = null, CancellationToken ct = default)
         {
+            if (_baseClient.AuthenticationProvider == null)
+                return new WebCallResult<PolymarketBalanceAllowance>(new NoApiCredentialsError());
+
             var parameters = new ParameterCollection();
-            parameters.Add("signature_type", 0);
+            parameters.Add("signature_type", (int)((PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider).SignatureType);
             parameters.AddEnum("asset_type", assetType);
             parameters.AddOptional("token_id", tokenId);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "balance-allowance", PolymarketExchange.RateLimiter.ClobApi, 1, true,
@@ -110,8 +119,11 @@ namespace Polymarket.Net.Clients.ClobApi
 
         public async Task<WebCallResult> UpdateBalanceAllowanceAsync(AssetType assetType, string? tokenId = null, CancellationToken ct = default)
         {
+            if (_baseClient.AuthenticationProvider == null)
+                return new WebCallResult(new NoApiCredentialsError());
+
             var parameters = new ParameterCollection();
-            parameters.Add("signature_type", 0);
+            parameters.Add("signature_type", (int)((PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider).SignatureType);
             parameters.AddEnum("asset_type", assetType);
             parameters.AddOptional("token_id", tokenId);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "balance-allowance/update", PolymarketExchange.RateLimiter.ClobApi, 1, true,
@@ -138,7 +150,7 @@ namespace Polymarket.Net.Clients.ClobApi
             parameters.AddOptionalMillisecondsString("after", startTime);
             parameters.AddOptionalMillisecondsString("before", endTime);
             parameters.AddOptional("next_cursor", cursor);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "builder/trades", PolymarketExchange.RateLimiter.Polymarket, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "builder/trades", PolymarketExchange.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
         }

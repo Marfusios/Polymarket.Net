@@ -42,7 +42,6 @@ namespace Polymarket.Net.Objects.Models
         /// Quantity
         /// </summary>
         [JsonPropertyName("size")]
-#warning decimal or long?
         public decimal Quantity { get; set; }
         /// <summary>
         /// Fee rate BPS

@@ -16,7 +16,7 @@ namespace Polymarket.Net.Objects.Models
         /// Pagination cursor
         /// </summary>
         [JsonPropertyName("next_cursor")]
-        public string NextPageCursor { get; set; }
+        public string NextPageCursor { get; set; } = string.Empty;
         /// <summary>
         /// Max number of results
         /// </summary>
@@ -31,6 +31,6 @@ namespace Polymarket.Net.Objects.Models
         /// Page data
         /// </summary>
         [JsonPropertyName("data")]
-        public T[] Data { get; set; }
+        public T[] Data { get; set; } = [];
     }
 }

@@ -57,11 +57,12 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         /// <param name="timeInForce">Time in force</param>
         /// <param name="quantity">Quantity of shares</param>
         /// <param name="price">Price, value between 0 and 1. For example 0.001 means 0.1c in the UI, 0.5 means 50c in UI</param>
-        /// <param name="nonce"></param>
+        /// <param name="postOnly">Post only order</param>
         /// <param name="feeRateBps">Fee rate basis points as required by the operator</param>
         /// <param name="takerAddress">Taker/operator address</param>
         /// <param name="clientOrderId">Client order id</param>
         /// <param name="expiration">Expiration time</param>
+        /// <param name="nonce">Nonce</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<PolymarketOrderResult>> PlaceOrderAsync(
             string tokenId,
@@ -70,12 +71,21 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
             decimal quantity,
             decimal? price = null,
             TimeInForce? timeInForce = null,
+            bool? postOnly = null,
             long? feeRateBps = null,
             string? takerAddress = null,
             long? clientOrderId = null,
             DateTime? expiration = null,
             long? nonce = null,
             CancellationToken ct = default);
+
+        /// <summary>
+        /// Place multiple orders in a single request
+        /// <para><a href="https://docs.polymarket.com/developers/CLOB/orders/create-order-batch" /></para>
+        /// </summary>
+        /// <param name="requests">Order requests</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<CallResult<PolymarketOrderResult>[]>> PlaceMultipleOrdersAsync(IEnumerable<PolymarketOrderRequest> requests, CancellationToken ct = default);
 
         /// <summary>
         /// Cancel an order

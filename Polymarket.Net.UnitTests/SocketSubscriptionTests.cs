@@ -15,17 +15,17 @@ namespace Polymarket.Net.UnitTests
     public class SocketSubscriptionTests
     {
         [Test]
-        public async Task ValidateSpotExchangeDataSubscriptions()
+        public async Task ValidateClobSubscriptions()
         {
             var client = new PolymarketSocketClient(opts =>
             {
-                opts.ApiCredentials = new PolymarketCredentials("123", "456");
+                opts.ApiCredentials = new PolymarketCredentials("123", "456", "1", "MTIz", "3");
             });
-            var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Spot", "XXX");
-            //await tester.ValidateAsync<PolymarketModel>((client, handler) => client.SpotApi.SubscribeToXXXUpdatesAsync(handler), "XXX");
+            var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Clob", "wss://ws-subscriptions-clob.polymarket.com");
+            await tester.ValidateAsync<PolymarketOrderUpdate>((client, handler) => client.ClobApi.SubscribeToUserUpdatesAsync(handler, null), "OrderUpdate", ignoreProperties: ["type"]);
+            await tester.ValidateAsync<PolymarketTradeUpdate>((client, handler) => client.ClobApi.SubscribeToUserUpdatesAsync(null, handler), "TradeUpdate", ignoreProperties: ["type"]);
         }
 
-        [TestCase(false)]
         [TestCase(true)]
         public async Task ValidateConcurrentSpotSubscriptions(bool newDeserialization)
         {
@@ -39,11 +39,11 @@ namespace Polymarket.Net.UnitTests
                 UseUpdatedDeserialization = newDeserialization
             }), logger);
 
-            var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Spot", "XXX", "data");
-            //await tester.ValidateConcurrentAsync<PolymarketModel>(
-            //    (client, handler) => client.SpotApi.ExchangeData.SubscribeToKlineUpdatesAsync("BTCUSDT", Enums.KlineInterval.EightHour, handler),
-            //    (client, handler) => client.SpotApi.ExchangeData.SubscribeToKlineUpdatesAsync("BTCUSDT", Enums.KlineInterval.OneHour, handler),
-            //    "Concurrent");
+            var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Clob", "wss://ws-subscriptions-clob.polymarket.com", "data");
+            await tester.ValidateConcurrentAsync<PolymarketPriceChangeUpdate>(
+                (client, handler) => client.ClobApi.SubscribeToTokenUpdatesAsync(["0x123"], handler),
+                (client, handler) => client.ClobApi.SubscribeToTokenUpdatesAsync(["0x456"], handler),
+                "Concurrent");
         }
     }
 }

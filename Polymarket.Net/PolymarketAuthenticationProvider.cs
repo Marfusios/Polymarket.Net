@@ -6,6 +6,7 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Sockets.Default;
+using Polymarket.Net.Enums;
 using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Options;
 using Polymarket.Net.Objects.Sockets;
@@ -30,7 +31,8 @@ namespace Polymarket.Net
         private static IStringMessageSerializer _serializer = new SystemTextJsonMessageSerializer(PolymarketExchange._serializerContext);
 
         public string PublicAddress => GetPublicAddress();
-        public string PolymarketAddress => _credentials.PolymarketAddress;
+        public SignType SignatureType => _credentials.SignatureType;
+        public string? PolymarketFundingAddress => _credentials.PolymarketFundingAddress;
         public override ApiCredentialsType[] SupportedCredentialTypes => [ApiCredentialsType.Hmac];
 
         public PolymarketAuthenticationProvider(PolymarketCredentials credentials) : base(credentials)
@@ -57,7 +59,7 @@ namespace Polymarket.Net
                 || (requestConfig.Path.Equals("/auth/derive-api-key") && requestConfig.Method == HttpMethod.Get))
             {
                 // L1 authentication
-                SignL1Custom(requestConfig);
+                SignL1Custom(requestConfig, ((PolymarketRestOptions)apiClient.ClientOptions).Environment.ChainId);
             }
             else
             {
@@ -74,12 +76,12 @@ namespace Polymarket.Net
             return new PolymarketInitialQuery<object>("USER", _credentials.L2ApiKey, _credentials.L2Secret!, _credentials.L2Pass!);
         }
 
-        private void SignL1Custom(RestRequestConfiguration requestConfig)
+        private void SignL1Custom(RestRequestConfiguration requestConfig, uint chainId)
         {
             var timestamp = DateTimeConverter.ConvertToSeconds(DateTime.UtcNow);
             requestConfig.GetPositionParameters().TryGetValue("nonce", out var nonce);
 
-            var typeRaw = GetEncodedClobAuth(timestamp.ToString()!, nonce == null ? 0 : (long)nonce);
+            var typeRaw = GetEncodedClobAuth(timestamp.ToString()!, nonce == null ? 0 : (long)nonce, chainId);
             var msg = LightEip712TypedDataEncoder.EncodeTypedDataRaw(typeRaw);
             var keccakSigned = InternalSha3Keccack.CalculateHash(msg);
 
@@ -144,14 +146,10 @@ namespace Polymarket.Net
             if (_publicAddress != null)
                 return _publicAddress;
 
-            var publicKeyBytes = new byte[64];
-            using var secp256k1 = new Secp256k1();
-            var res = secp256k1.PublicKeyCreate(publicKeyBytes, HexToBytesString(_credentials.L1PrivateKey));
-            var uncompressedKey = new byte[65];
-            secp256k1.PublicKeySerialize(uncompressedKey, publicKeyBytes, Flags.SECP256K1_EC_UNCOMPRESSED);
+            var publicKeyBytes = Secp256k1.CreatePublicKey(HexToBytesString(_credentials.L1PrivateKey), false);
 
             var withoutPrefix = new byte[64];
-            Array.Copy(uncompressedKey, 1, withoutPrefix, 0, 64);
+            Array.Copy(publicKeyBytes, 1, withoutPrefix, 0, 64);
 
             var hash = InternalSha3Keccack.CalculateHash(withoutPrefix);
             var pubAddress = new byte[20];
@@ -161,7 +159,7 @@ namespace Polymarket.Net
             return _publicAddress;
         }
 
-        public string GetOrderSignature(ParameterCollection parameters, int chainId, bool negativeRisk)
+        public string GetOrderSignature(ParameterCollection parameters, uint chainId, bool negativeRisk)
         {
             var typeRaw = GetTypeDataRawCustom(parameters, chainId, negativeRisk);
             var msg = LightEip712TypedDataEncoder.EncodeTypedDataRaw(typeRaw);
@@ -171,15 +169,10 @@ namespace Polymarket.Net
 
         private string SignHash(byte[] hash)
         {
-            using var secp256k1 = new Secp256k1();
-            var signature = new byte[65];
-            secp256k1.SignRecoverable(signature, hash, HexToBytesString(_credentials.L1PrivateKey));
-
-            var signCompact = new byte[64];
-            secp256k1.SignatureSerializeCompact(signCompact, signature);
-            var hexCompactR = BytesToHexString(new ArraySegment<byte>(signCompact, 0, 32));
-            var hexCompactS = BytesToHexString(new ArraySegment<byte>(signCompact, 32, 32));
-            var hexCompactV = BytesToHexString([(byte)(signature[64] + 27)]);
+            (var signature, var recover) = Secp256k1.SignRecoverable(hash, HexToBytesString(_credentials.L1PrivateKey));
+            var hexCompactR = BytesToHexString(new ArraySegment<byte>(signature, 0, 32));
+            var hexCompactS = BytesToHexString(new ArraySegment<byte>(signature, 32, 32));
+            var hexCompactV = BytesToHexString([(byte)(recover + 27)]);
 
             var result = "0x" + hexCompactR.PadLeft(64, '0') +
                    hexCompactS.PadLeft(64, '0') +
@@ -187,15 +180,17 @@ namespace Polymarket.Net
             return result;
         }
 
-        private string GetContract(ParameterCollection order, int chainId, bool negativeRisk)
+        private string GetContract(ParameterCollection order, uint chainId, bool negativeRisk)
         {
             if (chainId == 137)            
                 return negativeRisk ? PolymarketContractsConfig.PolygonNegRiskConfig.Exchange : PolymarketContractsConfig.PolygonConfig.Exchange;            
-            else            
-                return negativeRisk ? PolymarketContractsConfig.AmoyNegRiskConfig.Exchange : PolymarketContractsConfig.AmoyConfig.Exchange;            
+            else if (chainId == 80002)
+                return negativeRisk ? PolymarketContractsConfig.AmoyNegRiskConfig.Exchange : PolymarketContractsConfig.AmoyConfig.Exchange;
+            else
+                throw new InvalidOperationException("Unknown chainId: " + chainId);
         }
 
-        private TypedDataRaw GetTypeDataRawCustom(ParameterCollection order, int chainId, bool negativeRisk)
+        private TypedDataRaw GetTypeDataRawCustom(ParameterCollection order, uint chainId, bool negativeRisk)
         {
             return new TypedDataRaw
             {
@@ -254,7 +249,7 @@ namespace Polymarket.Net
             };
         }
 
-        public TypedDataRaw GetEncodedClobAuth(string timestamp, long nonce)
+        public TypedDataRaw GetEncodedClobAuth(string timestamp, long nonce, uint chainId)
         {
             return new TypedDataRaw
             {
@@ -263,11 +258,11 @@ namespace Polymarket.Net
                 {
                     new MemberValue { TypeName = "string", Value = "ClobAuthDomain" },
                     new MemberValue { TypeName = "string", Value = "1" },
-                    new MemberValue { TypeName = "uint256", Value = 137 },
+                    new MemberValue { TypeName = "uint256", Value = chainId },
                 },
                 Message = new MemberValue[]
                 {
-                    new MemberValue { TypeName = "address", Value = _credentials.Key },
+                    new MemberValue { TypeName = "address", Value = PublicAddress },
                     new MemberValue { TypeName = "string", Value = timestamp },
                     new MemberValue { TypeName = "uint256", Value = nonce },
                     new MemberValue { TypeName = "string", Value = _l1SignMessage }

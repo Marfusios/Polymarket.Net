@@ -22,11 +22,9 @@ namespace Polymarket.Net.Clients
         #endregion
 
         #region Api clients
-
         
          /// <inheritdoc />
         public IPolymarketSocketClientClobApi ClobApi { get; }
-
 
         #endregion
 
@@ -72,16 +70,20 @@ namespace Polymarket.Net.Clients
         /// <inheritdoc />
         public void UpdateL2Credentials(PolymarketCreds credentials)
         {
+            if (credentials == null)
+                throw new ArgumentNullException(nameof(credentials));
+
             var existingCreds = (PolymarketCredentials?)((PolymarketRestClientClobApi)ClobApi).ApiCredentials;
             if (existingCreds == null)
                 throw new InvalidOperationException("UpdateL2Credentials can not be called without having initial L1 credentials. Use `SetApiCredentials` to set full credentials");
 
             var newCredentials = new PolymarketCredentials(
-                existingCreds.PolymarketAddress,
+                existingCreds.SignatureType,
                 existingCreds.L1PrivateKey,
                 credentials.ApiKey,
                 credentials.Secret,
-                credentials.Passphrase
+                credentials.Passphrase,
+                existingCreds.PolymarketFundingAddress
                 );
 
             SetApiCredentials(newCredentials);

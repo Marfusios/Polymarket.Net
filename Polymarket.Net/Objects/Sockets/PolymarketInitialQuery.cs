@@ -16,8 +16,8 @@ namespace Polymarket.Net.Objects.Sockets
             Auth = key == null ? null : new PolymarketSocketAuth
             {
                 ApiKey = key,
-                ApiPass = pass,
-                ApiSecret = sec
+                ApiPass = pass!,
+                ApiSecret = sec!
             }
         }, false, 1)
         {

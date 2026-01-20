@@ -27,7 +27,7 @@ namespace Polymarket.Net.Objects.Models
         /// Order id
         /// </summary>
         [JsonPropertyName("orderID")]
-        public string? OrderId { get; set; }
+        public string OrderId { get; set; } = string.Empty;
         /// <summary>
         /// Order taker quantity executed
         /// </summary>

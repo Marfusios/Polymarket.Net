@@ -1,4 +1,5 @@
 using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Testing.Implementations;
 using Polymarket.Net.Objects;
 
 namespace Polymarket.Net
@@ -8,6 +9,11 @@ namespace Polymarket.Net
     /// </summary>
     public class PolymarketEnvironment : TradeEnvironment
     {
+        /// <summary>
+        /// Chain id
+        /// </summary>
+        public uint ChainId { get; }
+
         /// <summary>
         /// Rest Clob API address
         /// </summary>
@@ -29,12 +35,14 @@ namespace Polymarket.Net
 
         internal PolymarketEnvironment(
             string name,
+            uint chainId,
             string clobRestAddress,
             string gammaRestAddress,
             string clobStreamAddress,
             string sportStreamAddress) :
             base(name)
         {
+            ChainId = chainId;
             ClobRestClientAddress = clobRestAddress;
             GammaRestClientAddress = gammaRestAddress;
             ClobSocketClientAddress = clobStreamAddress;
@@ -56,6 +64,7 @@ namespace Polymarket.Net
          => name switch
          {
              TradeEnvironmentNames.Live => Live,
+             TradeEnvironmentNames.Testnet => Testnet,
              "" => Live,
              null => Live,
              _ => default
@@ -65,13 +74,25 @@ namespace Polymarket.Net
         /// Available environment names
         /// </summary>
         /// <returns></returns>
-        public static string[] All => [Live.Name];
+        public static string[] All => [Live.Name, Testnet.Name];
 
         /// <summary>
         /// Live environment
         /// </summary>
         public static PolymarketEnvironment Live { get; }
             = new PolymarketEnvironment(TradeEnvironmentNames.Live,
+                                     137,
+                                     PolymarketApiAddresses.Default.ClobRestClientAddress,
+                                     PolymarketApiAddresses.Default.GammaRestClientAddress,
+                                     PolymarketApiAddresses.Default.ClobSocketClientAddress,
+                                     PolymarketApiAddresses.Default.SportsSocketClientAddress);
+
+        /// <summary>
+        /// Test environment
+        /// </summary>
+        public static PolymarketEnvironment Testnet { get; }
+            = new PolymarketEnvironment(TradeEnvironmentNames.Testnet,
+                                     80002,
                                      PolymarketApiAddresses.Default.ClobRestClientAddress,
                                      PolymarketApiAddresses.Default.GammaRestClientAddress,
                                      PolymarketApiAddresses.Default.ClobSocketClientAddress,
@@ -83,10 +104,11 @@ namespace Polymarket.Net
         /// <returns></returns>
         public static PolymarketEnvironment CreateCustom(
                         string name,
+                        uint chainId,
                         string clobRestAddress,
                         string gammaRestAddress,
                         string clobSocketStreamsAddress,
                         string sportSocketStreamsAddress)
-            => new PolymarketEnvironment(name, clobRestAddress, gammaRestAddress, clobSocketStreamsAddress, sportSocketStreamsAddress);
+            => new PolymarketEnvironment(name, chainId, clobRestAddress, gammaRestAddress, clobSocketStreamsAddress, sportSocketStreamsAddress);
     }
 }

@@ -37,6 +37,11 @@ namespace Polymarket.Net.Objects.Models
         [JsonPropertyName("asset_id")]
         public string TokenId { get; set; } = string.Empty;
         /// <summary>
+        /// Market id
+        /// </summary>
+        [JsonPropertyName("market")]
+        public string Market { get; set; } = string.Empty;
+        /// <summary>
         /// API key of the order owner
         /// </summary>
         [JsonPropertyName("owner")]
@@ -69,6 +74,11 @@ namespace Polymarket.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("outcome")]
         public string Outcome { get; set; } = string.Empty;
+        /// <summary>
+        /// Outcome index
+        /// </summary>
+        [JsonPropertyName("outcome_index")]
+        public int? OutcomeIndex { get; set; }
         /// <summary>
         /// Order side
         /// </summary>

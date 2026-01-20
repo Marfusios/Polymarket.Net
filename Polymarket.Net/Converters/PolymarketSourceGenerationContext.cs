@@ -41,6 +41,7 @@ namespace Polymarket.Net.Converters
     [JsonSerializable(typeof(PolymarketCreds))]
     [JsonSerializable(typeof(PolymarketPage<PolymarketOrder>))]
     [JsonSerializable(typeof(PolymarketOrderResult))]
+    [JsonSerializable(typeof(PolymarketOrderResult[]))]
     [JsonSerializable(typeof(ParameterCollection))]
     [JsonSerializable(typeof(IDictionary<string, object>))]
     [JsonSerializable(typeof(string[]))]
@@ -69,6 +70,7 @@ namespace Polymarket.Net.Converters
     [JsonSerializable(typeof(PolymarketTradeUpdate))]
     [JsonSerializable(typeof(PolymarketOrderUpdate))]
 
+    [JsonSerializable(typeof(ParameterCollection[]))]
     [JsonSerializable(typeof(string))]
     [JsonSerializable(typeof(int?))]
     [JsonSerializable(typeof(int))]
