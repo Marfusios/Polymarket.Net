@@ -28,7 +28,7 @@ namespace Polymarket.Net
 
         private const string _l1SignMessage = "This message attests that I control the given wallet";
 
-        private static IStringMessageSerializer _serializer = new SystemTextJsonMessageSerializer(PolymarketExchange._serializerContext);
+        private static IStringMessageSerializer _serializer = new SystemTextJsonMessageSerializer(PolymarketPlatform._serializerContext);
 
         public string PublicAddress => GetPublicAddress();
         public SignType SignatureType => _credentials.SignatureType;

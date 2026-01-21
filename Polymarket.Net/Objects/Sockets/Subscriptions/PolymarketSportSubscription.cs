@@ -1,3 +1,4 @@
+using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
@@ -36,7 +37,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, PolymarketSportsUpdate message)
         {
-            _updateHandler?.Invoke(new DataEvent<PolymarketSportsUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _updateHandler?.Invoke(new DataEvent<PolymarketSportsUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId("sports"));
             return CallResult.SuccessResult;

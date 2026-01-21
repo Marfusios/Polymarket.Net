@@ -83,7 +83,7 @@ namespace Polymarket.Net.Clients.ClobApi
             parameters.Add("owner", authProvider.ApiKey);
             parameters.AddEnum("orderType", timeInForce ?? TimeInForce.GoodTillCanceled);
             parameters.AddOptional("postOnly", postOnly);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/order", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/order", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(3500, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketOrderResult>(request, parameters, ct).ConfigureAwait(false);
 
@@ -139,7 +139,7 @@ namespace Polymarket.Net.Clients.ClobApi
 
             var requestParams = new ParameterCollection();
             requestParams.SetBody(parameterList.ToArray());
-            var requestDef = _definitions.GetOrCreate(HttpMethod.Post, "/orders", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var requestDef = _definitions.GetOrCreate(HttpMethod.Post, "/orders", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketOrderResult[]>(requestDef, requestParams, ct).ConfigureAwait(false);
             if (!result)
@@ -258,7 +258,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketOrder>> GetOrderAsync(string orderId, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/order/" + orderId, PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/order/" + orderId, PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(900, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -267,7 +267,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketPage<PolymarketOrder>>> GetOpenOrdersAsync(string? orderId = null, string? conditionId = null, string? assetId = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/orders", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/orders", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(500, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketPage<PolymarketOrder>>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -277,7 +277,7 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             var parameters = new ParameterCollection();
             parameters.Add("order_id", orderId);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "/order-scoring", PolymarketExchange.RateLimiter.ClobApi, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/order-scoring", PolymarketPlatform.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync<PolymarketOrderScoring>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -287,7 +287,7 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             var parameters = new ParameterCollection();
             parameters.SetBody(orderIds.ToArray());
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/orders-scoring", PolymarketExchange.RateLimiter.ClobApi, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/orders-scoring", PolymarketPlatform.RateLimiter.ClobApi, 1, true);
             var result = await _baseClient.SendAsync<Dictionary<string, bool>>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -296,7 +296,7 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             var parameters = new ParameterCollection();
             parameters.Add("orderID", orderId);
-            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/order", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/order", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(3000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketCancelResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -306,7 +306,7 @@ namespace Polymarket.Net.Clients.ClobApi
         {
             var parameters = new ParameterCollection();
             parameters.SetBody(orderIds.ToArray());
-            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/orders", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/orders", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketCancelResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -317,7 +317,7 @@ namespace Polymarket.Net.Clients.ClobApi
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", market);
             parameters.AddOptional("asset_id", tokenId);
-            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/orders", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/orders", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketCancelResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -326,7 +326,7 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<WebCallResult<PolymarketCancelResult>> CancelAllOrdersAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/cancel-all", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Delete, "/cancel-all", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(250, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketCancelResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -350,7 +350,7 @@ namespace Polymarket.Net.Clients.ClobApi
             parameters.AddOptionalMillisecondsString("after", startTime);
             parameters.AddOptionalMillisecondsString("before", endTime);
             parameters.AddOptional("next_cursor", cursor);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/trades", PolymarketExchange.RateLimiter.ClobApi, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/data/trades", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(500, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketPage<PolymarketTrade>>(request, parameters, ct).ConfigureAwait(false);
             return result;

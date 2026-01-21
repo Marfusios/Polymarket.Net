@@ -12,7 +12,7 @@ namespace Polymarket.Net.Clients.MessageHandlers
     {
         private readonly ErrorMapping _errorMapping;
 
-        public override JsonSerializerOptions Options { get; } = PolymarketExchange._serializerContext;
+        public override JsonSerializerOptions Options { get; } = PolymarketPlatform._serializerContext;
 
         public PolymarketRestMessageHandler(ErrorMapping errorMapping)
         {

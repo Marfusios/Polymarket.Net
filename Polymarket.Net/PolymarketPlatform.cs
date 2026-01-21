@@ -9,47 +9,29 @@ using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.RateLimiting.Guards;
 using CryptoExchange.Net.RateLimiting.Filters;
+using CryptoExchange.Net;
 
 namespace Polymarket.Net
 {
     /// <summary>
-    /// Polymarket exchange information and configuration
+    /// Polymarket platform information and configuration
     /// </summary>
-    public static class PolymarketExchange
+    public static class PolymarketPlatform
     {
-        /// <summary>
-        /// Exchange name
-        /// </summary>
-        public static string ExchangeName => "Polymarket";
-
-        /// <summary>
-        /// Display name
-        /// </summary>
-        public static string DisplayName => "Polymarket";
-
-        /// <summary>
-        /// Url to exchange image
-        /// </summary>
-        public static string ImageUrl { get; } = "https://raw.githubusercontent.com/JKorf/Polymarket.Net/main/Polymarket.Net/Icon/icon.png";
-
-        /// <summary>
-        /// Url to the main website
-        /// </summary>
-        public static string Url { get; } = "https://www.polymarket.com";
-
-        /// <summary>
-        /// Urls to the API documentation
-        /// </summary>
-        public static string[] ApiDocsUrl { get; } = new[] {
-            "https://docs.polymarket.com/api-reference"
-            };
-
-        /// <summary>
-        /// Type of exchange
-        /// </summary>
-        public static ExchangeType Type { get; } = ExchangeType.DEX;
-
         internal static JsonSerializerOptions _serializerContext = SerializerOptions.WithConverters(JsonSerializerContextCache.GetOrCreate<PolymarketSourceGenerationContext>());
+        
+        /// <summary>
+        /// Platform metadata
+        /// </summary>
+        public static PlatformInfo Metadata { get; } = new PlatformInfo(
+                "Polymarket",
+                "Polymarket",
+                "https://raw.githubusercontent.com/JKorf/Polymarket.Net/main/Polymarket.Net/Icon/icon.png",
+                "https://www.polymarket.com",
+                ["https://docs.polymarket.com/api-reference"],
+                PlatformType.PredictionMarket,
+                CentralizationType.Decentralized
+                );
 
         /// <summary>
         /// Rate limiter configuration for the Polymarket API

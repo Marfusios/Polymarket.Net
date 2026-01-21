@@ -7,7 +7,7 @@ namespace Polymarket.Net.Clients.MessageHandlers
 {
     internal class PolymarketSocketSpotMessageHandler : JsonSocketMessageHandler
     {
-        public override JsonSerializerOptions Options { get; } = PolymarketExchange._serializerContext;
+        public override JsonSerializerOptions Options { get; } = PolymarketPlatform._serializerContext;
 
         public PolymarketSocketSpotMessageHandler()
         {

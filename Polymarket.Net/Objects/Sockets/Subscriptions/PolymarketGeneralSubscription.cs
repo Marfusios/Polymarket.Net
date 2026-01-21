@@ -1,3 +1,4 @@
+using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
@@ -51,7 +52,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         {
             _client.UpdateTimeOffset(message.Timestamp);
 
-            _newMarketUpdate?.Invoke(new DataEvent<PolymarketNewMarketUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _newMarketUpdate?.Invoke(new DataEvent<PolymarketNewMarketUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)
@@ -64,7 +65,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         {
             _client.UpdateTimeOffset(message.Timestamp);
 
-            _marketResolvedUpdate?.Invoke(new DataEvent<PolymarketMarketResolvedUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _marketResolvedUpdate?.Invoke(new DataEvent<PolymarketMarketResolvedUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)

@@ -1,3 +1,4 @@
+using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
@@ -82,7 +83,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
                 return CallResult.SuccessResult;
 
             var update = message with { PriceChanges = updates };
-            _priceChangeHandler?.Invoke(new DataEvent<PolymarketPriceChangeUpdate>(PolymarketExchange.ExchangeName, update, receiveTime, originalData)
+            _priceChangeHandler?.Invoke(new DataEvent<PolymarketPriceChangeUpdate>(PolymarketPlatform.Metadata.Id, update, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)
@@ -95,7 +96,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         {
             _client.UpdateTimeOffset(message.Timestamp);
 
-            _lastTickSizeHandler?.Invoke(new DataEvent<PolymarketTickSizeUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _lastTickSizeHandler?.Invoke(new DataEvent<PolymarketTickSizeUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)
@@ -108,7 +109,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         {
             _client.UpdateTimeOffset(message.Timestamp);
 
-            _bookHandler?.Invoke(new DataEvent<PolymarketBookUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _bookHandler?.Invoke(new DataEvent<PolymarketBookUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)
@@ -124,7 +125,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
                 if (!_tokenIds.Contains(message.AssetId))
                     continue;
 
-                _bookHandler?.Invoke(new DataEvent<PolymarketBookUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+                _bookHandler?.Invoke(new DataEvent<PolymarketBookUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                             .WithUpdateType(SocketUpdateType.Snapshot)
                             .WithStreamId(message.EventType)
                             //.WithSymbol(data.Symbol)
@@ -139,7 +140,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         {
             _client.UpdateTimeOffset(message.Timestamp);
 
-            _lastTradePriceHandler?.Invoke(new DataEvent<PolymarketLastTradePriceUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _lastTradePriceHandler?.Invoke(new DataEvent<PolymarketLastTradePriceUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)
@@ -152,7 +153,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         {
             _client.UpdateTimeOffset(message.Timestamp);
 
-            _bidAskUpdateHandler?.Invoke(new DataEvent<PolymarketBestBidAskUpdate>(PolymarketExchange.ExchangeName, message, receiveTime, originalData)
+            _bidAskUpdateHandler?.Invoke(new DataEvent<PolymarketBestBidAskUpdate>(PolymarketPlatform.Metadata.Id, message, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId(message.EventType)
                         //.WithSymbol(data.Symbol)

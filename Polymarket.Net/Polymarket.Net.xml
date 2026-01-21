@@ -5758,42 +5758,17 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Polymarket.Net.PolymarketExchange">
+        <member name="T:Polymarket.Net.PolymarketPlatform">
             <summary>
-            Polymarket exchange information and configuration
+            Polymarket platform information and configuration
             </summary>
         </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.ExchangeName">
+        <member name="P:Polymarket.Net.PolymarketPlatform.Metadata">
             <summary>
-            Exchange name
+            Platform metadata
             </summary>
         </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.DisplayName">
-            <summary>
-            Display name
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.ImageUrl">
-            <summary>
-            Url to exchange image
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.Url">
-            <summary>
-            Url to the main website
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.ApiDocsUrl">
-            <summary>
-            Urls to the API documentation
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.Type">
-            <summary>
-            Type of exchange
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.PolymarketExchange.RateLimiter">
+        <member name="P:Polymarket.Net.PolymarketPlatform.RateLimiter">
             <summary>
             Rate limiter configuration for the Polymarket API
             </summary>
