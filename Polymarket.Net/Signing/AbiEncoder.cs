@@ -56,8 +56,9 @@ namespace Polymarket.Net.Signing
             var t = value.ToByteArray();
             if (t.Length == 33)
             {
+                // Strip last byte           
                 var strip1 = new byte[32];
-                Array.Copy(t, 1, strip1, 0, 32);
+                Array.Copy(t, 0, strip1, 0, 32);
                 t = strip1;
             }
 
