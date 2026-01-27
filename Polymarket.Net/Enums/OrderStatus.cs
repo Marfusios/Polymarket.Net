@@ -20,5 +20,10 @@ namespace Polymarket.Net.Enums
         /// </summary>
         [Map("CANCELED")]
         Canceled,
+        /// <summary>
+        /// Matched
+        /// </summary>
+        [Map("MATCHED")]
+        Matched
     }
 }
