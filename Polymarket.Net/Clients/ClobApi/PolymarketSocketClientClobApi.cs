@@ -47,8 +47,6 @@ namespace Polymarket.Net.Clients.ClobApi
         internal PolymarketSocketClientClobApi(ILogger logger, PolymarketSocketOptions options) :
             base(logger, options.Environment.ClobSocketClientAddress!, options, options.ClobOptions)
         {
-            AddSystemSubscription(new PolymarketGeneralSystemSubscription(_logger));
-
             _sportUri = options.Environment.SportSocketClientAddress;
         }
         #endregion
@@ -64,6 +62,7 @@ namespace Polymarket.Net.Clients.ClobApi
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToPlatformUpdatesAsync(
+            IEnumerable<string>? assetIds = null,
             Action<DataEvent<PolymarketNewMarketUpdate>>? onNewMarketUpdate = null,
             Action<DataEvent<PolymarketMarketResolvedUpdate>>? onMarketResolvedUpdate = null,
             CancellationToken ct = default)
@@ -71,6 +70,7 @@ namespace Polymarket.Net.Clients.ClobApi
             var subscription = new PolymarketGeneralSubscription(
                 _logger,
                 this,
+                assetIds?.ToArray(),
                 onNewMarketUpdate,
                 onMarketResolvedUpdate);
             return await SubscribeAsync(BaseAddress.AppendPath("ws/market"), subscription, ct).ConfigureAwait(false);

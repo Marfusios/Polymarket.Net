@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Polymarket.Net.Clients.ClobApi;
 using Polymarket.Net.Objects.Models;
 using System;
+using System.Linq;
 
 namespace Polymarket.Net.Objects.Sockets.Subscriptions
 {
@@ -15,6 +16,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
     {
         private readonly Action<DataEvent<PolymarketNewMarketUpdate>>? _newMarketUpdate;
         private readonly Action<DataEvent<PolymarketMarketResolvedUpdate>>? _marketResolvedUpdate;
+        private readonly string[] _assetIds;
 
         private PolymarketSocketClientClobApi _client;
 
@@ -24,24 +26,31 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         public PolymarketGeneralSubscription(
             ILogger logger,
             PolymarketSocketClientClobApi client,
+            string[]? assetIds,
             Action<DataEvent<PolymarketNewMarketUpdate>>? newMarketUpdate,
             Action<DataEvent<PolymarketMarketResolvedUpdate>>? marketResolvedUpdate
             ) : base(logger, false)
         {
             _client = client;
+            _assetIds = assetIds?
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray() ?? Array.Empty<string>();
             _newMarketUpdate = newMarketUpdate;
             _marketResolvedUpdate = marketResolvedUpdate;
 
             MessageRouter = MessageRouter.Create([
                 MessageRoute<PolymarketNewMarketUpdate>.CreateWithoutTopicFilter("new_market", DoHandleMessage),
-                MessageRoute<PolymarketNewMarketUpdate>.CreateWithoutTopicFilter("market_resolved", DoHandleMessage)
+                MessageRoute<PolymarketMarketResolvedUpdate>.CreateWithoutTopicFilter("market_resolved", DoHandleMessage)
                 ]);
         }
 
         /// <inheritdoc />
         protected override Query? GetSubQuery(SocketConnection connection)
         {
-            return new PolymarketInitialQuery<object>("MARKET");
+            return new PolymarketInitialQuery<object>(
+                "MARKET",
+                assets: _assetIds.Length == 0 ? null : _assetIds);
         }
 
         /// <inheritdoc />

@@ -73,7 +73,7 @@ namespace Polymarket.Net.Clients
             if (credentials == null)
                 throw new ArgumentNullException(nameof(credentials));
 
-            var existingCreds = (PolymarketCredentials?)((PolymarketRestClientClobApi)ClobApi).ApiCredentials;
+            var existingCreds = (PolymarketCredentials?)((PolymarketSocketClientClobApi)ClobApi).ApiCredentials;
             if (existingCreds == null)
                 throw new InvalidOperationException("UpdateL2Credentials can not be called without having initial L1 credentials. Use `SetApiCredentials` to set full credentials");
 

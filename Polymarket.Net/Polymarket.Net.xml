@@ -125,7 +125,7 @@
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
-        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToPlatformUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToPlatformUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi.SubscribeToTokenUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketPriceChangeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBookUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketLastTradePriceUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketTickSizeUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketBestBidAskUpdate}},System.Threading.CancellationToken)">
@@ -1599,11 +1599,12 @@
             Polymarket Clob streams
             </summary>
         </member>
-        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi.SubscribeToPlatformUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketSocketClientClobApi.SubscribeToPlatformUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to new market and market resolved updates
             <para><a href="https://docs.polymarket.com/developers/CLOB/websocket/market-channel#new_market-message" /></para>
             </summary>
+            <param name="assetIds">Token ids to subscribe for market updates</param>
             <param name="onNewMarketUpdate">New market update handler</param>
             <param name="onMarketResolvedUpdate">Market resolved update handler</param>
             <param name="ct">Cancellation token for closing this subscription</param>
@@ -5586,7 +5587,7 @@
         <member name="T:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription">
             <inheritdoc />
         </member>
-        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}})">
+        <member name="M:Polymarket.Net.Objects.Sockets.Subscriptions.PolymarketGeneralSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketNewMarketUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Polymarket.Net.Objects.Models.PolymarketMarketResolvedUpdate}})">
             <summary>
             ctor
             </summary>

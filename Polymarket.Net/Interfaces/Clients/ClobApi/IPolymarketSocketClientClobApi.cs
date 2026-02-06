@@ -18,11 +18,13 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         /// Subscribe to new market and market resolved updates
         /// <para><a href="https://docs.polymarket.com/developers/CLOB/websocket/market-channel#new_market-message" /></para>
         /// </summary>
+        /// <param name="assetIds">Token ids to subscribe for market updates</param>
         /// <param name="onNewMarketUpdate">New market update handler</param>
         /// <param name="onMarketResolvedUpdate">Market resolved update handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToPlatformUpdatesAsync(
+            IEnumerable<string>? assetIds = null,
             Action<DataEvent<PolymarketNewMarketUpdate>>? onNewMarketUpdate = null,
             Action<DataEvent<PolymarketMarketResolvedUpdate>>? onMarketResolvedUpdate = null,
             CancellationToken ct = default);

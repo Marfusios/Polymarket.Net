@@ -14,6 +14,10 @@ namespace Polymarket.Net.Objects.Internal
 
         [JsonPropertyName("type")]
         public string Type { get; set; } = string.Empty;
+
+        [JsonPropertyName("assets_ids"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string[]? Assets { get; set; }
+
         [JsonPropertyName("custom_feature_enabled"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool? CustomFeatureEnabled { get; set; }
     }
