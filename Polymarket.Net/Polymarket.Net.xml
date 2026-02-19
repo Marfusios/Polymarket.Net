@@ -1521,6 +1521,14 @@
             <param name="orderIds">Order ids</param>
             <param name="ct">Cancellation token</param>
         </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PostHeartbeatAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Post heartbeat to keep maker orders alive for the market
+            <para><a href="https://docs.polymarket.com/developers/CLOB/orders/heartbeat" /></para>
+            </summary>
+            <param name="conditionId">Optional market/condition id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
         <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceOrderAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.OrderType,System.Decimal,System.Nullable{System.Decimal},System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Int64},System.String,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
             Place a new order
@@ -3435,6 +3443,31 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketGeoRestriction.Region">
             <summary>
             Region
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketHeartbeatResult">
+            <summary>
+            Heartbeat response
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketHeartbeatResult.Status">
+            <summary>
+            Optional status string returned by server
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketHeartbeatResult.Success">
+            <summary>
+            Optional success flag returned by server
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketHeartbeatResult.Error">
+            <summary>
+            Optional error message returned by server
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketHeartbeatResult.IsOk">
+            <summary>
+            Whether the response indicates success
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketImageRef">

@@ -278,6 +278,16 @@ namespace Polymarket.Net.Clients.ClobApi
             return result;
         }
 
+        public async Task<WebCallResult<PolymarketHeartbeatResult>> PostHeartbeatAsync(string? market = null, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.AddOptional("market", market);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/heartbeat", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
+                limitGuard: new SingleLimitGuard(500, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            var result = await _baseClient.SendAsync<PolymarketHeartbeatResult>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
         public async Task<WebCallResult<PolymarketCancelResult>> CancelOrderAsync(string orderId, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();

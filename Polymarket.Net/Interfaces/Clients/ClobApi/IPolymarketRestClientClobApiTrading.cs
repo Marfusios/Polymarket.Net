@@ -48,6 +48,14 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         Task<WebCallResult<Dictionary<string, bool>>> GetOrdersRewardScoringAsync(IEnumerable<string> orderIds, CancellationToken ct = default);
 
         /// <summary>
+        /// Post heartbeat to keep maker orders alive for the market
+        /// <para><a href="https://docs.polymarket.com/developers/CLOB/orders/heartbeat" /></para>
+        /// </summary>
+        /// <param name="conditionId">Optional market/condition id</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<PolymarketHeartbeatResult>> PostHeartbeatAsync(string? conditionId = null, CancellationToken ct = default);
+
+        /// <summary>
         /// Place a new order
         /// <para><a href="https://docs.polymarket.com/developers/CLOB/orders/create-order" /></para>
         /// </summary>
