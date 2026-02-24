@@ -20,9 +20,12 @@ namespace Polymarket.Net.Utils
         /// <summary>
         /// Update the internal spot symbol info
         /// </summary>
-        public static async Task<CallResult<PolymarketOrderBook>> GetTokenInfoAsync(string tokenId, IPolymarketRestClientClobApi client)
+        public static async Task<CallResult<PolymarketOrderBook>> GetTokenInfoAsync(
+            string tokenId,
+            IPolymarketRestClientClobApi client,
+            CancellationToken ct = default)
         {
-            await _semaphoreSpot.WaitAsync().ConfigureAwait(false);
+            await _semaphoreSpot.WaitAsync(ct).ConfigureAwait(false);
             try
             {
                 var envName = client.ClientOptions.Environment.Name;
@@ -32,7 +35,7 @@ namespace Polymarket.Net.Utils
                 if (_tokenInfos.TryGetValue(envName, out var envTokens) && envTokens.TryGetValue(tokenId, out var cachedTokenInfo))
                     return new CallResult<PolymarketOrderBook>(cachedTokenInfo); // Already have this token data
 
-                var tokenInfo = await client.ExchangeData.GetOrderBookAsync(tokenId).ConfigureAwait(false);
+                var tokenInfo = await client.ExchangeData.GetOrderBookAsync(tokenId, ct).ConfigureAwait(false);
                 if (!tokenInfo)
                     return tokenInfo;
 

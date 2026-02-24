@@ -50,7 +50,7 @@ namespace Polymarket.Net.Clients.ClobApi
             long? nonce = null,
             CancellationToken ct = default)
         {
-            var tokenResult = await PolymarketUtils.GetTokenInfoAsync(tokenId, _baseClient).ConfigureAwait(false);
+            var tokenResult = await PolymarketUtils.GetTokenInfoAsync(tokenId, _baseClient, ct).ConfigureAwait(false);
             if (!tokenResult)
                 return new WebCallResult<PolymarketOrderResult>(tokenResult.Error);
 
@@ -101,7 +101,7 @@ namespace Polymarket.Net.Clients.ClobApi
             var parameterList = new List<ParameterCollection>();
             foreach (var request in requests)
             {
-                var tokenResult = await PolymarketUtils.GetTokenInfoAsync(request.TokenId, _baseClient).ConfigureAwait(false);
+                var tokenResult = await PolymarketUtils.GetTokenInfoAsync(request.TokenId, _baseClient, ct).ConfigureAwait(false);
                 if (!tokenResult)
                     return new WebCallResult<CallResult<PolymarketOrderResult>[]>(tokenResult.Error);
 
