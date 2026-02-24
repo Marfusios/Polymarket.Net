@@ -1,0 +1,14 @@
+> { "operation": "subscribe", "assets_ids": ["0x123"] }
+= 
+[
+  {
+    "market": "0x111",
+    "asset_id": "0x123",
+    "hash": "0xabc",
+    "last_trade_price": "0.5",
+    "bids": [{ "price": "0.49", "size": "100" }],
+    "asks": [{ "price": "0.51", "size": "80" }],
+    "timestamp": "1757908892351",
+    "event_type": "book"
+  }
+]

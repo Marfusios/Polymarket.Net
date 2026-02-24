@@ -49,12 +49,12 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
             IndividualSubscriptionCount = tokenIds.Length;
 
             var routes = new List<MessageRoute>();
+            routes.Add(MessageRoute<PolymarketBookUpdate[]>.CreateWithoutTopicFilter("book_snapshot", DoHandleMessage));
 
             foreach(var item in tokenIds)
             {
                 routes.Add(MessageRoute<PolymarketPriceChangeUpdate>.CreateWithTopicFilter("price_change", item, DoHandleMessage));
                 routes.Add(MessageRoute<PolymarketBookUpdate>.CreateWithTopicFilter("book", item, DoHandleMessage));
-                routes.Add(MessageRoute<PolymarketBookUpdate[]>.CreateWithTopicFilter("book_snapshot", item, DoHandleMessage));
                 routes.Add(MessageRoute<PolymarketLastTradePriceUpdate>.CreateWithTopicFilter("last_trade_price", item, DoHandleMessage));
                 routes.Add(MessageRoute<PolymarketTickSizeUpdate>.CreateWithTopicFilter("tick_size_change", item, DoHandleMessage));
                 routes.Add(MessageRoute<PolymarketBestBidAskUpdate>.CreateWithTopicFilter("best_bid_ask", item, DoHandleMessage));
@@ -122,6 +122,10 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, PolymarketBookUpdate[] messages)
         {
+            var firstMessage = messages.FirstOrDefault();
+            if (firstMessage != null)
+                _client.UpdateTimeOffset(firstMessage.Timestamp);
+
             foreach (var message in messages)
             {
                 if (!_tokenIds.Contains(message.AssetId))

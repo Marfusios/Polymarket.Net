@@ -44,5 +44,19 @@ namespace Polymarket.Net.UnitTests
                 (client, handler) => client.ClobApi.SubscribeToTokenUpdatesAsync(["0x456"], handler),
                 "Concurrent");
         }
+
+        [Test]
+        public async Task ValidateBookSnapshotArraySubscription()
+        {
+            var client = new PolymarketSocketClient(opts =>
+            {
+                opts.ApiCredentials = new PolymarketCredentials(Enums.SignType.EOA, "456");
+            });
+
+            var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Clob", "wss://ws-subscriptions-clob.polymarket.com");
+            await tester.ValidateAsync<PolymarketBookUpdate>(
+                (socketClient, handler) => socketClient.ClobApi.SubscribeToTokenUpdatesAsync(["0x123"], onBookUpdate: handler),
+                "BookSnapshotArray");
+        }
     }
 }

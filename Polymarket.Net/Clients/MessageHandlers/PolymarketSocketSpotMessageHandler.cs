@@ -2,6 +2,7 @@ using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
 using System.Text.Json;
 using CryptoExchange.Net.Converters.SystemTextJson.MessageHandlers;
 using Polymarket.Net.Objects.Models;
+using System.Linq;
 
 namespace Polymarket.Net.Clients.MessageHandlers
 {
@@ -12,6 +13,7 @@ namespace Polymarket.Net.Clients.MessageHandlers
         public PolymarketSocketSpotMessageHandler()
         {
             AddTopicMapping<PolymarketBookUpdate>(x => x.AssetId);
+            AddTopicMapping<PolymarketBookUpdate[]>(x => x.FirstOrDefault()?.AssetId ?? string.Empty);
             AddTopicMapping<PolymarketLastTradePriceUpdate>(x => x.AssetId);
             AddTopicMapping<PolymarketTickSizeUpdate>(x => x.AssetId);
             AddTopicMapping<PolymarketBestBidAskUpdate>(x => x.AssetId);
