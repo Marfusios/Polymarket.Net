@@ -5874,7 +5874,7 @@
             Util methods for the Polymarket API
             </summary>
         </member>
-        <member name="M:Polymarket.Net.Utils.PolymarketUtils.GetTokenInfoAsync(System.String,Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApi)">
+        <member name="M:Polymarket.Net.Utils.PolymarketUtils.GetTokenInfoAsync(System.String,Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApi,System.Threading.CancellationToken)">
             <summary>
             Update the internal spot symbol info
             </summary>

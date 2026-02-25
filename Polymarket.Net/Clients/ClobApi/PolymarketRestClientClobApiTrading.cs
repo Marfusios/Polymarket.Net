@@ -230,7 +230,8 @@ namespace Polymarket.Net.Clients.ClobApi
                 takerQuantity = makerQuantity * price.Value;
             }
 
-            takerQuantity = ExchangeHelpers.RoundDown(takerQuantity, 2);
+            // Preserve sub-cent precision in taker amount so maker/taker ratio remains on valid tick after conversion.
+            takerQuantity = ExchangeHelpers.RoundDown(takerQuantity, 6);
 
             takerQuantity *= 1000000;
             makerQuantity *= 1000000;
