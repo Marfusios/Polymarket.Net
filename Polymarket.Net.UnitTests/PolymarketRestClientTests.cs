@@ -78,5 +78,20 @@ namespace Polymarket.Net.UnitTests
             CryptoExchange.Net.Testing.TestHelpers.CheckForMissingRestInterfaces<PolymarketRestClient>();
             CryptoExchange.Net.Testing.TestHelpers.CheckForMissingSocketInterfaces<PolymarketSocketClient>();
         }
+
+        [Test]
+        public void NormalizeOrderPrice_ShouldRoundToThreeDecimals()
+        {
+            var normalized = Clients.ClobApi.PolymarketRestClientClobApiTrading.NormalizeOrderPrice(0.539004975124378m);
+            Assert.That(normalized, Is.EqualTo(0.539m));
+        }
+
+        [Test]
+        public void ConvertToClobBaseUnits_ShouldProduceIntegerMicroUnits()
+        {
+            var normalizedPrice = Clients.ClobApi.PolymarketRestClientClobApiTrading.NormalizeOrderPrice(0.539004975124378m);
+            var makerAmount = Clients.ClobApi.PolymarketRestClientClobApiTrading.ConvertToClobBaseUnits(5m * normalizedPrice);
+            Assert.That(makerAmount, Is.EqualTo(2695000m));
+        }
     }
 }

@@ -216,8 +216,9 @@ namespace Polymarket.Net.Clients.ClobApi
                     price = marketPrice ?? bookInfo.Data.Bids[0].Price;
                 }
 
-                price = Math.Round(price!.Value, 3).Normalize();
             }
+
+            price = NormalizeOrderPrice(price!.Value);
 
             if (side == OrderSide.Buy)
             {
@@ -233,13 +234,23 @@ namespace Polymarket.Net.Clients.ClobApi
             // Preserve sub-cent precision in taker amount so maker/taker ratio remains on valid tick after conversion.
             takerQuantity = ExchangeHelpers.RoundDown(takerQuantity, 6);
 
-            takerQuantity *= 1000000;
-            makerQuantity *= 1000000;
+            takerQuantity = ConvertToClobBaseUnits(takerQuantity);
+            makerQuantity = ConvertToClobBaseUnits(makerQuantity);
 
             takerQuantity = takerQuantity.Normalize();
             makerQuantity = makerQuantity.Normalize();
 
             return new CallResult<(decimal, decimal)>((makerQuantity, takerQuantity));
+        }
+
+        internal static decimal NormalizeOrderPrice(decimal price)
+        {
+            return Math.Round(price, 3).Normalize();
+        }
+
+        internal static decimal ConvertToClobBaseUnits(decimal amount)
+        {
+            return Math.Truncate(amount * 1000000m);
         }
 
         public async Task<WebCallResult<PolymarketOrder>> GetOrderAsync(string orderId, CancellationToken ct = default)
