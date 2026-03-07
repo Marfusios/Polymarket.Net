@@ -396,3 +396,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+Polymarket.Net/obj-codex/opt-build/
+
+Polymarket.Net/obj-codex/opt-build-tpfix/
+
+Polymarket.Net/obj-codex/opt-tests-tpfix/
+
+Polymarket.Net/obj-codex/
