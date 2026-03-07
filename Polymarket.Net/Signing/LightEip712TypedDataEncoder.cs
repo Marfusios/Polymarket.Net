@@ -97,7 +97,8 @@ namespace Polymarket.Net.Signing
                             if (memberValue.Value is string v)
                             {
                                 if (!BigInteger.TryParse(v, out BigInteger parsedOutput))
-                                    throw new Exception("");
+                                    throw new FormatException(
+                                        $"Failed to parse EIP-712 integer value. solidityType={memberValue.TypeName}, valueType={memberValue.Value?.GetType().FullName ?? "null"}, value={FormatMemberValue(memberValue.Value)}");
 
                                 writer.Write(AbiEncoder.AbiValueEncodeBigInteger(memberValue.TypeName[0] != 'u', parsedOutput));
                             }
@@ -131,7 +132,8 @@ namespace Polymarket.Net.Signing
                             }
                             else
                             {
-                                throw new Exception();
+                                throw new InvalidOperationException(
+                                    $"Unsupported EIP-712 integer CLR type. solidityType={memberValue.TypeName}, valueType={memberValue.Value?.GetType().FullName ?? "null"}, value={FormatMemberValue(memberValue.Value)}");
                             }
                         }
                         else if (memberValue.TypeName.StartsWith("bytes"))
@@ -199,6 +201,19 @@ namespace Polymarket.Net.Signing
                 default:
                     return true;
             }
+        }
+
+        private static string FormatMemberValue(object? value)
+        {
+            if (value == null)
+                return "<null>";
+
+            return value switch
+            {
+                byte[] bytes => Convert.ToHexString(bytes),
+                IEnumerable values when value is not string => "[" + string.Join(", ", values.Cast<object?>().Select(FormatMemberValue)) + "]",
+                _ => value.ToString() ?? "<null>"
+            };
         }
     }
 }
