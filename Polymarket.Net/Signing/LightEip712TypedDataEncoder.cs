@@ -12,32 +12,69 @@ namespace Polymarket.Net.Signing
 {
     internal static class LightEip712TypedDataEncoder
     {
+        private static readonly Regex BytesPattern = new Regex(@"^bytes\d+$", RegexOptions.Compiled);
+        private static readonly Regex UintPattern = new Regex(@"^uint\d+$", RegexOptions.Compiled);
+        private static readonly Regex IntPattern = new Regex(@"^int\d+$", RegexOptions.Compiled);
+
+        // Cache domain separator hashes — domain values are constant per (chainId, contract).
+        private static readonly Dictionary<string, byte[]> _domainHashCache = new Dictionary<string, byte[]>();
+        private static readonly object _domainHashCacheLock = new object();
+
         internal static byte[] EncodeTypedDataRaw(TypedDataRaw typedData)
         {
-            using var memoryStream = new MemoryStream();
-            using var writer = new BinaryWriter(memoryStream);
-            
-            // Write 0x19 0x01 prefix
-            writer.Write((byte)0x19);
-            writer.Write((byte)0x01);
+            // Fixed size: 2 bytes prefix + 32 bytes domain hash + 32 bytes message hash = 66 bytes
+            var result = new byte[66];
+            result[0] = 0x19;
+            result[1] = 0x01;
 
-            // Write domain
-            writer.Write(HashStruct(typedData.Types, "EIP712Domain", typedData.DomainRawValues));
+            // Domain hash — cacheable when domain values are constant (e.g., per chainId+contract)
+            var domainHash = HashStructWithDomainCache(typedData.Types, typedData.DomainRawValues);
+            Buffer.BlockCopy(domainHash, 0, result, 2, 32);
 
-            // Write message
-            writer.Write(HashStruct(typedData.Types, typedData.PrimaryType, typedData.Message));
+            // Message hash — varies per order
+            var messageHash = HashStruct(typedData.Types, typedData.PrimaryType, typedData.Message);
+            Buffer.BlockCopy(messageHash, 0, result, 34, 32);
 
-            writer.Flush();
-            var result = memoryStream.ToArray();
             return result;
-            
+        }
+
+        private static byte[] HashStructWithDomainCache(IDictionary<string, MemberDescription[]> types, IEnumerable<MemberValue> domainValues)
+        {
+            // Build cache key from domain values (contract address is the distinguishing factor)
+            var domainArray = domainValues as MemberValue[] ?? domainValues.ToArray();
+            string? cacheKey = null;
+            foreach (var mv in domainArray)
+            {
+                if (mv.TypeName == "address")
+                {
+                    cacheKey = (string)mv.Value;
+                    break;
+                }
+            }
+
+            if (cacheKey != null)
+            {
+                byte[]? cached;
+                lock (_domainHashCacheLock)
+                    _domainHashCache.TryGetValue(cacheKey, out cached);
+                if (cached != null)
+                    return cached;
+
+                var hash = HashStruct(types, "EIP712Domain", domainArray);
+                lock (_domainHashCacheLock)
+                    _domainHashCache[cacheKey] = hash;
+                return hash;
+            }
+
+            return HashStruct(types, "EIP712Domain", domainArray);
         }
 
         private static byte[] HashStruct(IDictionary<string, MemberDescription[]> types, string primaryType, IEnumerable<MemberValue> message)
         {
-            var memoryStream = new MemoryStream();
+            // Pre-size: type_hash(32) + N fields × 32 bytes. Order has 12 fields = 416 bytes.
+            var memoryStream = new MemoryStream(448);
             var writer = new BinaryWriter(memoryStream);
-            
+
             // Encode the type header
             EncodeType(writer, types, primaryType);
 
@@ -45,8 +82,8 @@ namespace Polymarket.Net.Signing
             EncodeData(writer, types, message);
 
             writer.Flush();
-            return InternalSha3Keccack.CalculateHash(memoryStream.ToArray());
-            
+            // Use GetBuffer + length to avoid ToArray() copy when possible
+            return InternalSha3Keccack.CalculateHash(memoryStream.GetBuffer(), (int)memoryStream.Length);
         }
 
         private static void EncodeData(BinaryWriter writer, IDictionary<string, MemberDescription[]> types, IEnumerable<MemberValue> memberValues)
@@ -96,11 +133,21 @@ namespace Polymarket.Net.Signing
                         {
                             if (memberValue.Value is string v)
                             {
-                                if (!BigInteger.TryParse(v, out BigInteger parsedOutput))
+                                // Fast path: most order amounts fit in ulong, avoid BigInteger allocation
+                                bool signed = memberValue.TypeName[0] != 'u';
+                                if (!signed && ulong.TryParse(v, out ulong ulVal))
+                                {
+                                    writer.Write(AbiEncoder.AbiValueEncodeInt(ulVal));
+                                }
+                                else if (BigInteger.TryParse(v, out BigInteger parsedOutput))
+                                {
+                                    writer.Write(AbiEncoder.AbiValueEncodeBigInteger(signed, parsedOutput));
+                                }
+                                else
+                                {
                                     throw new FormatException(
                                         $"Failed to parse EIP-712 integer value. solidityType={memberValue.TypeName}, valueType={memberValue.Value?.GetType().FullName ?? "null"}, value={FormatMemberValue(memberValue.Value)}");
-
-                                writer.Write(AbiEncoder.AbiValueEncodeBigInteger(memberValue.TypeName[0] != 'u', parsedOutput));
+                                }
                             }
                             else if (memberValue.Value is byte b)
                             {
@@ -155,14 +202,29 @@ namespace Polymarket.Net.Signing
             }
         }
 
+        // Cache type hashes — the hash of a type schema string is deterministic for a given type definition.
+        private static readonly Dictionary<string, byte[]> _typeHashCache = new Dictionary<string, byte[]>();
+        private static readonly object _typeHashCacheLock = new object();
+
         private static void EncodeType(BinaryWriter writer, IDictionary<string, MemberDescription[]> types, string typeName)
         {
-            var encodedTypes = EncodeTypes(types, typeName);
-            var encodedPrimaryType = encodedTypes.Single(x => x.Key == typeName);
-            var encodedReferenceTypes = encodedTypes.Where(x => x.Key != typeName).OrderBy(x => x.Key).Select(x => x.Value);
-            var fullyEncodedType = encodedPrimaryType.Value + string.Join(string.Empty, encodedReferenceTypes.ToArray());
+            // Build a cache key from the type name + member definitions (stable for same schema)
+            byte[]? cached;
+            lock (_typeHashCacheLock)
+                _typeHashCache.TryGetValue(typeName, out cached);
 
-            writer.Write(InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(fullyEncodedType)));
+            if (cached == null)
+            {
+                var encodedTypes = EncodeTypes(types, typeName);
+                var encodedPrimaryType = encodedTypes.Single(x => x.Key == typeName);
+                var encodedReferenceTypes = encodedTypes.Where(x => x.Key != typeName).OrderBy(x => x.Key).Select(x => x.Value);
+                var fullyEncodedType = encodedPrimaryType.Value + string.Join(string.Empty, encodedReferenceTypes.ToArray());
+                cached = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(fullyEncodedType));
+                lock (_typeHashCacheLock)
+                    _typeHashCache[typeName] = cached;
+            }
+
+            writer.Write(cached);
         }
 
         /// <summary>
@@ -189,9 +251,9 @@ namespace Polymarket.Net.Signing
         {
             switch (typeName)
             {
-                case var bytes when new Regex("bytes\\d+").IsMatch(bytes):
-                case var @uint when new Regex("uint\\d+").IsMatch(@uint):
-                case var @int when new Regex("int\\d+").IsMatch(@int):
+                case var bytes when BytesPattern.IsMatch(bytes):
+                case var @uint when UintPattern.IsMatch(@uint):
+                case var @int when IntPattern.IsMatch(@int):
                 case "bytes":
                 case "string":
                 case "bool":

@@ -11,10 +11,26 @@ namespace Polymarket.Net.Signing
 {
     internal static class AbiEncoder
     {
+        // Cache ABI-encoded addresses — hex→bytes conversion is expensive per call.
+        private static readonly Dictionary<string, byte[]> _addressCache = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+        private static readonly object _addressCacheLock = new object();
+
+        // Cache ABI-encoded string hashes — Keccak of constant strings (e.g., domain name/version).
+        private static readonly Dictionary<string, byte[]> _stringHashCache = new Dictionary<string, byte[]>(StringComparer.Ordinal);
+        private static readonly object _stringHashCacheLock = new object();
+
         public static byte[] AbiValueEncodeString(string value)
         {
-            var abiValueEncoded = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(value));
-            return abiValueEncoded;
+            byte[]? cached;
+            lock (_stringHashCacheLock)
+                _stringHashCache.TryGetValue(value, out cached);
+            if (cached != null)
+                return cached;
+
+            var result = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(value));
+            lock (_stringHashCacheLock)
+                _stringHashCache[value] = result;
+            return result;
         }
 
         public static byte[] AbiValueEncodeBool(bool value)
@@ -56,14 +72,14 @@ namespace Polymarket.Net.Signing
             var t = value.ToByteArray();
             if (t.Length == 33)
             {
-                // Strip last byte           
+                // Strip last byte
                 var strip1 = new byte[32];
                 Array.Copy(t, 0, strip1, 0, 32);
                 t = strip1;
             }
 
             if (BitConverter.IsLittleEndian)
-                t = t.AsEnumerable().Reverse().ToArray();
+                Array.Reverse(t);
 
             t.CopyTo(result, result.Length - t.Length);
             return result;
@@ -71,9 +87,18 @@ namespace Polymarket.Net.Signing
 
         public static byte[] AbiValueEncodeAddress(string value)
         {
+            byte[]? cached;
+            lock (_addressCacheLock)
+                _addressCache.TryGetValue(value, out cached);
+            if (cached != null)
+                return cached;
+
             var result = new byte[32];
             var h = value.HexStringToBytes();
             h.CopyTo(result, result.Length - h.Length);
+
+            lock (_addressCacheLock)
+                _addressCache[value] = result;
             return result;
         }
 

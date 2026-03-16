@@ -25,10 +25,42 @@ namespace Polymarket.Net
     {
         private string? _publicAddress;
         private byte[]? _hmacBytes;
+        private byte[]? _privateKeyBytes;
 
         private const string _l1SignMessage = "This message attests that I control the given wallet";
 
         private static IStringMessageSerializer _serializer = new SystemTextJsonMessageSerializer(PolymarketPlatform._serializerContext);
+
+        // Pre-built type schemas — identical for every order, no need to reallocate per signature.
+        private static readonly Dictionary<string, MemberDescription[]> OrderTypeSchema = new Dictionary<string, MemberDescription[]>
+        {
+            { "EIP712Domain",
+                new MemberDescription[]
+                {
+                    new MemberDescription { Name = "name", Type = "string" },
+                    new MemberDescription { Name = "version", Type = "string" },
+                    new MemberDescription { Name = "chainId", Type = "uint256" },
+                    new MemberDescription { Name = "verifyingContract", Type = "address" }
+                }
+            },
+            { "Order",
+                new MemberDescription[]
+                {
+                    new MemberDescription { Name = "salt", Type = "uint256" },
+                    new MemberDescription { Name = "maker", Type = "address" },
+                    new MemberDescription { Name = "signer", Type = "address" },
+                    new MemberDescription { Name = "taker", Type = "address" },
+                    new MemberDescription { Name = "tokenId", Type = "uint256" },
+                    new MemberDescription { Name = "makerAmount", Type = "uint256" },
+                    new MemberDescription { Name = "takerAmount", Type = "uint256" },
+                    new MemberDescription { Name = "expiration", Type = "uint256" },
+                    new MemberDescription { Name = "nonce", Type = "uint256" },
+                    new MemberDescription { Name = "feeRateBps", Type = "uint256" },
+                    new MemberDescription { Name = "side", Type = "uint8" },
+                    new MemberDescription { Name = "signatureType", Type = "uint8" },
+                }
+            }
+        };
 
         public string PublicAddress => GetPublicAddress();
         public SignType SignatureType => _credentials.SignatureType;
@@ -146,7 +178,7 @@ namespace Polymarket.Net
             if (_publicAddress != null)
                 return _publicAddress;
 
-            var publicKeyBytes = Secp256k1.CreatePublicKey(HexToBytesString(_credentials.L1PrivateKey), false);
+            var publicKeyBytes = Secp256k1.CreatePublicKey(GetPrivateKeyBytes(), false);
 
             var withoutPrefix = new byte[64];
             Array.Copy(publicKeyBytes, 1, withoutPrefix, 0, 64);
@@ -167,9 +199,14 @@ namespace Polymarket.Net
             return SignHash(orderHashBytes);
         }
 
+        private byte[] GetPrivateKeyBytes()
+        {
+            return _privateKeyBytes ??= HexToBytesString(_credentials.L1PrivateKey);
+        }
+
         private string SignHash(byte[] hash)
         {
-            (var signature, var recover) = Secp256k1.SignRecoverable(hash, HexToBytesString(_credentials.L1PrivateKey));
+            (var signature, var recover) = Secp256k1.SignRecoverable(hash, GetPrivateKeyBytes());
             var hexCompactR = BytesToHexString(new ArraySegment<byte>(signature, 0, 32));
             var hexCompactS = BytesToHexString(new ArraySegment<byte>(signature, 32, 32));
             var hexCompactV = BytesToHexString([(byte)(recover + 27)]);
@@ -217,35 +254,7 @@ namespace Polymarket.Net
                     new MemberValue { TypeName = "uint8", Value = (byte)((string)order["side"] == "BUY" ? 0 : 1)},
                     new MemberValue { TypeName = "uint8", Value = (byte)(int)order["signatureType"]}
                 },
-                Types = new Dictionary<string, MemberDescription[]>
-                {
-                    { "EIP712Domain",
-                        new MemberDescription[]
-                        {
-                            new MemberDescription { Name = "name", Type = "string" },
-                            new MemberDescription { Name = "version", Type = "string" },
-                            new MemberDescription { Name = "chainId", Type = "uint256" },
-                            new MemberDescription { Name = "verifyingContract", Type = "address" }
-                        }
-                    },
-                    { "Order",
-                        new MemberDescription[]
-                        {
-                            new MemberDescription { Name = "salt", Type = "uint256" },
-                            new MemberDescription { Name = "maker", Type = "address" },
-                            new MemberDescription { Name = "signer", Type = "address" },
-                            new MemberDescription { Name = "taker", Type = "address" },
-                            new MemberDescription { Name = "tokenId", Type = "uint256" },
-                            new MemberDescription { Name = "makerAmount", Type = "uint256" },
-                            new MemberDescription { Name = "takerAmount", Type = "uint256" },
-                            new MemberDescription { Name = "expiration", Type = "uint256" },
-                            new MemberDescription { Name = "nonce", Type = "uint256" },
-                            new MemberDescription { Name = "feeRateBps", Type = "uint256" },
-                            new MemberDescription { Name = "side", Type = "uint8" },
-                            new MemberDescription { Name = "signatureType", Type = "uint8" },
-                        }
-                    }
-                }
+                Types = OrderTypeSchema
             };
         }
 
