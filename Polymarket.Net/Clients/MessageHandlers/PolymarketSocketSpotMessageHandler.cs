@@ -12,6 +12,7 @@ namespace Polymarket.Net.Clients.MessageHandlers
 
         public PolymarketSocketSpotMessageHandler()
         {
+            AddTopicMapping<PolymarketPriceChangeUpdate>(x => x.PriceChanges.FirstOrDefault()?.AssetId ?? string.Empty);
             AddTopicMapping<PolymarketBookUpdate>(x => x.AssetId);
             AddTopicMapping<PolymarketBookUpdate[]>(x => x.FirstOrDefault()?.AssetId ?? string.Empty);
             AddTopicMapping<PolymarketLastTradePriceUpdate>(x => x.AssetId);

@@ -275,6 +275,52 @@ namespace Polymarket.Net.UnitTests
             Assert.That(addr, Is.EqualTo(TestAddress.ToLower()));
         }
 
+        // ── Type-hash cache poisoning: Order (4-field EIP712Domain) vs ClobAuth (3-field) ──
+
+        [Test]
+        public void Signature_OrderThenClobAuth_NoCachePoisoning()
+        {
+            LightEip712TypedDataEncoder.ClearCaches();
+            var auth = CreateAuth();
+            const string expectedOrderSig = "0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c";
+
+            // 1. Sign an order (4-field EIP712Domain with verifyingContract)
+            var p1 = BuildOrderParams("479249096354", "1234", "100000000", "50000000", "0", "0", "100", "BUY", 0);
+            var sig1 = auth.GetOrderSignature(p1, 80002, false).ToLower();
+            Assert.That(sig1, Is.EqualTo(expectedOrderSig));
+
+            // 2. Encode ClobAuth (3-field EIP712Domain without verifyingContract)
+            var clobAuth = auth.GetEncodedClobAuth("1234567890", 0, 137);
+            var clobMsg = LightEip712TypedDataEncoder.EncodeTypedDataRaw(clobAuth);
+
+            // 3. Sign another order — must still produce the correct signature
+            var p2 = BuildOrderParams("479249096354", "1234", "100000000", "50000000", "0", "0", "100", "BUY", 0);
+            var sig2 = auth.GetOrderSignature(p2, 80002, false).ToLower();
+            Assert.That(sig2, Is.EqualTo(expectedOrderSig), "Order signature corrupted after ClobAuth — type-hash cache poisoned");
+        }
+
+        [Test]
+        public void Signature_ClobAuthThenOrder_NoCachePoisoning()
+        {
+            LightEip712TypedDataEncoder.ClearCaches();
+            var auth = CreateAuth();
+            const string expectedOrderSig = "0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c";
+
+            // 1. Encode ClobAuth FIRST (3-field EIP712Domain)
+            var clobAuth = auth.GetEncodedClobAuth("1234567890", 0, 137);
+            var clobMsg1 = LightEip712TypedDataEncoder.EncodeTypedDataRaw(clobAuth);
+
+            // 2. Sign an order (4-field EIP712Domain) — must produce correct signature
+            var p = BuildOrderParams("479249096354", "1234", "100000000", "50000000", "0", "0", "100", "BUY", 0);
+            var sig = auth.GetOrderSignature(p, 80002, false).ToLower();
+            Assert.That(sig, Is.EqualTo(expectedOrderSig), "Order signature incorrect when ClobAuth was signed first — type-hash cache poisoned");
+
+            // 3. ClobAuth again — must produce same encoding as before
+            var clobAuth2 = auth.GetEncodedClobAuth("1234567890", 0, 137);
+            var clobMsg2 = LightEip712TypedDataEncoder.EncodeTypedDataRaw(clobAuth2);
+            Assert.That(clobMsg2, Is.EqualTo(clobMsg1), "ClobAuth encoding changed after order signing");
+        }
+
         // ── Helpers ──
 
         private static PolymarketAuthenticationProvider CreateAuth()

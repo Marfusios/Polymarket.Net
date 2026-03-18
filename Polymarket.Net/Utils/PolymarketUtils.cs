@@ -25,12 +25,7 @@ namespace Polymarket.Net.Utils
             IPolymarketRestClientClobApi client,
             CancellationToken ct = default)
         {
-            // Fast path: check cache without acquiring semaphore
             var envName = client.ClientOptions.Environment.Name;
-            if (!envName.Equals("UnitTest", StringComparison.Ordinal) &&
-                _tokenInfos.TryGetValue(envName, out var envTokensFast) &&
-                envTokensFast.TryGetValue(tokenId, out var cachedFast))
-                return new CallResult<PolymarketOrderBook>(cachedFast);
 
             await _semaphoreSpot.WaitAsync(ct).ConfigureAwait(false);
             try

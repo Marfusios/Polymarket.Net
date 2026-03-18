@@ -208,10 +208,21 @@ namespace Polymarket.Net.Signing
 
         private static void EncodeType(BinaryWriter writer, IDictionary<string, MemberDescription[]> types, string typeName)
         {
-            // Build a cache key from the type name + member definitions (stable for same schema)
+            // Cache key includes member types to distinguish schemas with the same type name.
+            // EIP712Domain has two shapes: 4-field (order signing) vs 3-field (ClobAuth).
+            // Keying by typeName alone would poison one path with the other's hash.
+            string cacheKey = typeName;
+            if (types.TryGetValue(typeName, out var memberDescs))
+            {
+                var sb = new StringBuilder(typeName);
+                foreach (var m in memberDescs)
+                    sb.Append(',').Append(m.Type);
+                cacheKey = sb.ToString();
+            }
+
             byte[]? cached;
             lock (_typeHashCacheLock)
-                _typeHashCache.TryGetValue(typeName, out cached);
+                _typeHashCache.TryGetValue(cacheKey, out cached);
 
             if (cached == null)
             {
@@ -221,7 +232,7 @@ namespace Polymarket.Net.Signing
                 var fullyEncodedType = encodedPrimaryType.Value + string.Join(string.Empty, encodedReferenceTypes.ToArray());
                 cached = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(fullyEncodedType));
                 lock (_typeHashCacheLock)
-                    _typeHashCache[typeName] = cached;
+                    _typeHashCache[cacheKey] = cached;
             }
 
             writer.Write(cached);
@@ -247,6 +258,14 @@ namespace Polymarket.Net.Signing
             return result;
         }
         
+        internal static void ClearCaches()
+        {
+            lock (_typeHashCacheLock)
+                _typeHashCache.Clear();
+            lock (_domainHashCacheLock)
+                _domainHashCache.Clear();
+        }
+
         internal static bool IsReferenceType(string typeName)
         {
             switch (typeName)

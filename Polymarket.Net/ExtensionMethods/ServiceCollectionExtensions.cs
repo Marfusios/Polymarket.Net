@@ -94,7 +94,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return new PolymarketRestClient(client, serviceProvider.GetRequiredService<ILoggerFactory>(), serviceProvider.GetRequiredService<IOptions<PolymarketRestOptions>>());
             }).ConfigurePrimaryHttpMessageHandler((serviceProvider) => {
                 var options = serviceProvider.GetRequiredService<IOptions<PolymarketRestOptions>>().Value;
-                return LibraryHelpers.CreateHttpClientMessageHandler(options.Proxy, options.HttpKeepAliveInterval);
+                return LibraryHelpers.CreateHttpClientMessageHandler(options);
             });
             services.Add(new ServiceDescriptor(typeof(IPolymarketSocketClient), x => { return new PolymarketSocketClient(x.GetRequiredService<IOptions<PolymarketSocketOptions>>(), x.GetRequiredService<ILoggerFactory>()); }, socketClientLifeTime ?? ServiceLifetime.Singleton));
 
