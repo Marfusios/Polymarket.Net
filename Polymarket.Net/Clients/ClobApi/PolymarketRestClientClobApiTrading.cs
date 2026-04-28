@@ -25,6 +25,7 @@ namespace Polymarket.Net.Clients.ClobApi
     /// <inheritdoc />
     internal class PolymarketRestClientClobApiTrading : IPolymarketRestClientClobApiTrading
     {
+        private const string ZeroBytes32 = "0x0000000000000000000000000000000000000000000000000000000000000000";
         private static readonly RequestDefinitionCache _definitions = new RequestDefinitionCache();
         private readonly PolymarketRestClientClobApi _baseClient;
         private readonly ILogger _logger;
@@ -43,11 +44,11 @@ namespace Polymarket.Net.Clients.ClobApi
             decimal? price = null,
             TimeInForce? timeInForce = null,
             bool? postOnly = null,
-            long? feeRateBps = null,
-            string? takerAddress = null,
             long? clientOrderId = null,
             DateTime? expiration = null,
-            long? nonce = null,
+            string? metadata = null,
+            string? builderCode = null,
+            bool? deferExecution = null,
             CancellationToken ct = default)
         {
             var tokenResult = await PolymarketUtils.GetTokenInfoAsync(tokenId, _baseClient, ct).ConfigureAwait(false);
@@ -59,21 +60,20 @@ namespace Polymarket.Net.Clients.ClobApi
                 return new WebCallResult<PolymarketOrderResult>(makerTakerQuantities.Error);
 
             var parameters = new ParameterCollection();
-            var orderParameters = new ParameterCollection();
             var authProvider = (PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider!;
-            orderParameters.Add("salt", (ulong)(clientOrderId ?? ExchangeHelpers.RandomLong(1000000000000, 9999999999999)));
-            orderParameters.Add("maker", authProvider.PolymarketFundingAddress ?? authProvider.PublicAddress);
-            orderParameters.Add("signer", authProvider.PublicAddress);
-            orderParameters.Add("taker", takerAddress ?? "0x0000000000000000000000000000000000000000");
-            orderParameters.Add("tokenId", tokenId);
-            orderParameters.AddString("makerAmount", makerTakerQuantities.Data.MakerQuantity);
-            orderParameters.AddString("takerAmount", makerTakerQuantities.Data.TakerQuantity);
-            orderParameters.AddString("expiration", (ulong)(expiration == null ? 0 : DateTimeConverter.ConvertToSeconds(expiration.Value)));
-            orderParameters.AddString("nonce", nonce ?? 0);
-            orderParameters.AddString("feeRateBps", feeRateBps ?? 0);
-            orderParameters.AddEnum("side", side);
-            orderParameters.Add("signatureType", (int)authProvider.SignatureType);
-            orderParameters.Add("signature", 
+            var orderParameters = BuildV2OrderParameters(
+                authProvider,
+                tokenId,
+                side,
+                makerTakerQuantities.Data.MakerQuantity,
+                makerTakerQuantities.Data.TakerQuantity,
+                clientOrderId,
+                expiration,
+                metadata,
+                builderCode ?? _baseClient.ClientOptions.BuilderCode);
+
+            orderParameters.Add(
+                "signature",
                 authProvider.GetOrderSignature(
                     orderParameters,
                     _baseClient.ClientOptions.Environment.ChainId,
@@ -82,7 +82,8 @@ namespace Polymarket.Net.Clients.ClobApi
             parameters.Add("order", orderParameters);
             parameters.Add("owner", authProvider.ApiKey);
             parameters.AddEnum("orderType", timeInForce ?? TimeInForce.GoodTillCanceled);
-            parameters.AddOptional("postOnly", postOnly);
+            parameters.Add("postOnly", postOnly ?? false);
+            parameters.Add("deferExec", deferExecution ?? false);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/order", PolymarketPlatform.RateLimiter.ClobApi, 1, true,
                 limitGuard: new SingleLimitGuard(3500, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<PolymarketOrderResult>(request, parameters, ct).ConfigureAwait(false);
@@ -110,20 +111,18 @@ namespace Polymarket.Net.Clients.ClobApi
                     return new WebCallResult<CallResult<PolymarketOrderResult>[]>(makerTakerQuantities.Error);
 
                 var parameters = new ParameterCollection();
-                var orderParameters = new ParameterCollection();
                 var authProvider = (PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider!;
-                orderParameters.Add("salt", (ulong)(request.ClientOrderId ?? ExchangeHelpers.RandomLong(1000000000000, 9999999999999)));
-                orderParameters.Add("maker", authProvider.PolymarketFundingAddress ?? authProvider.PublicAddress);
-                orderParameters.Add("signer", authProvider.PublicAddress);
-                orderParameters.Add("taker", request.TakerAddress ?? "0x0000000000000000000000000000000000000000");
-                orderParameters.Add("tokenId", request.TokenId);
-                orderParameters.AddString("makerAmount", makerTakerQuantities.Data.MakerQuantity);
-                orderParameters.AddString("takerAmount", makerTakerQuantities.Data.TakerQuantity);
-                orderParameters.AddString("expiration", (ulong)(request.Expiration == null ? 0 : DateTimeConverter.ConvertToSeconds(request.Expiration.Value)));
-                orderParameters.AddString("nonce", request.Nonce ?? 0);
-                orderParameters.AddString("feeRateBps", request.FeeRateBps ?? 0);
-                orderParameters.AddEnum("side", request.Side);
-                orderParameters.Add("signatureType", (int)authProvider.SignatureType);
+                var orderParameters = BuildV2OrderParameters(
+                    authProvider,
+                    request.TokenId,
+                    request.Side,
+                    makerTakerQuantities.Data.MakerQuantity,
+                    makerTakerQuantities.Data.TakerQuantity,
+                    request.ClientOrderId,
+                    request.Expiration,
+                    request.Metadata,
+                    request.BuilderCode ?? _baseClient.ClientOptions.BuilderCode);
+
                 orderParameters.Add("signature",
                     authProvider.GetOrderSignature(
                         orderParameters,
@@ -133,7 +132,8 @@ namespace Polymarket.Net.Clients.ClobApi
                 parameters.Add("order", orderParameters);
                 parameters.Add("owner", authProvider.ApiKey);
                 parameters.AddEnum("orderType", request.TimeInForce ?? TimeInForce.GoodTillCanceled);
-                parameters.AddOptional("postOnly", request.PostOnly);
+                parameters.Add("postOnly", request.PostOnly ?? false);
+                parameters.Add("deferExec", request.DeferExecution ?? false);
                 parameterList.Add(parameters);
             }
 
@@ -158,6 +158,51 @@ namespace Polymarket.Net.Clients.ClobApi
                 return result.AsErrorWithData(new ServerError(new ErrorInfo(ErrorType.AllOrdersFailed, "All orders failed")), ordersResult.ToArray());
 
             return result.As(ordersResult.ToArray());
+        }
+
+        private static ParameterCollection BuildV2OrderParameters(
+            PolymarketAuthenticationProvider authProvider,
+            string tokenId,
+            OrderSide side,
+            decimal makerQuantity,
+            decimal takerQuantity,
+            long? clientOrderId,
+            DateTime? expiration,
+            string? metadata,
+            string? builderCode)
+        {
+            var orderParameters = new ParameterCollection();
+            orderParameters.Add("salt", (ulong)(clientOrderId ?? ExchangeHelpers.RandomLong(1000000000000, 9999999999999)));
+            orderParameters.Add("maker", authProvider.PolymarketFundingAddress ?? authProvider.PublicAddress);
+            orderParameters.Add("signer", authProvider.PublicAddress);
+            orderParameters.Add("tokenId", tokenId);
+            orderParameters.AddString("makerAmount", makerQuantity);
+            orderParameters.AddString("takerAmount", takerQuantity);
+            orderParameters.AddEnum("side", side);
+            orderParameters.Add("signatureType", (int)authProvider.SignatureType);
+            orderParameters.AddString("timestamp", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+            orderParameters.Add("metadata", NormalizeBytes32(metadata, nameof(metadata)));
+            orderParameters.Add("builder", NormalizeBytes32(builderCode, nameof(builderCode)));
+            orderParameters.AddString("expiration", (ulong)(expiration == null ? 0 : DateTimeConverter.ConvertToSeconds(expiration.Value)));
+            return orderParameters;
+        }
+
+        internal static string NormalizeBytes32(string? value, string parameterName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return ZeroBytes32;
+
+            var normalized = value.Trim();
+            if (normalized.Length != 66 || !normalized.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException($"{parameterName} must be a 0x-prefixed bytes32 hex value", parameterName);
+
+            for (var i = 2; i < normalized.Length; i++)
+            {
+                if (!Uri.IsHexDigit(normalized[i]))
+                    throw new ArgumentException($"{parameterName} must be a 0x-prefixed bytes32 hex value", parameterName);
+            }
+
+            return normalized.ToLowerInvariant();
         }
 
         private async Task<CallResult<(decimal MakerQuantity, decimal TakerQuantity)>> GetMakerTakerQuantitiesAsync(string tokenId, OrderSide side, OrderType orderType, decimal quantity, decimal? price, TimeInForce? timeInForce)

@@ -41,13 +41,13 @@ namespace Polymarket.Net.Objects.Models
         /// </summary>
         public bool? PostOnly { get; set; }
         /// <summary>
-        /// Fee rate BPS
+        /// Metadata bytes32
         /// </summary>
-        public long? FeeRateBps { get; set; }
+        public string? Metadata { get; set; }
         /// <summary>
-        /// Taker address
+        /// Builder attribution code bytes32
         /// </summary>
-        public string? TakerAddress { get; set; } = string.Empty;
+        public string? BuilderCode { get; set; }
         /// <summary>
         /// Client order id
         /// </summary>
@@ -57,9 +57,9 @@ namespace Polymarket.Net.Objects.Models
         /// </summary>
         public DateTime? Expiration { get; set; }
         /// <summary>
-        /// Nonce
+        /// Defer execution
         /// </summary>
-        public long? Nonce { get; set; }
+        public bool? DeferExecution { get; set; }
 
     }
 }

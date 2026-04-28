@@ -113,6 +113,17 @@ namespace Polymarket.Net.Clients.ClobApi
 
         #endregion
 
+        #region Get CLOB Market Info
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<PolymarketClobMarketInfo>> GetClobMarketInfoAsync(string conditionId, CancellationToken ct = default)
+        {
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/clob-markets/" + conditionId, PolymarketPlatform.RateLimiter.ClobApi, 1, false);
+            return await _baseClient.SendAsync<PolymarketClobMarketInfo>(request, null, ct).ConfigureAwait(false);
+        }
+
+        #endregion
+
         #region Get Price
 
         /// <inheritdoc />

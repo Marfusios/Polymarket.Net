@@ -17,6 +17,7 @@ namespace Polymarket.Net.UnitTests
         private const string TestPrivateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
         private const string TestAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
         private const string ZeroAddress = "0x0000000000000000000000000000000000000000";
+        private const string ZeroBytes32 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
         // ── Signature correctness after all optimizations ──
 
@@ -26,7 +27,7 @@ namespace Polymarket.Net.UnitTests
             var auth = CreateAuth();
             var parameters = BuildOrderParams("479249096354", "1234", "100000000", "50000000", "0", "0", "100", "BUY", 0);
             var result = auth.GetOrderSignature(parameters, 80002, false).ToLower();
-            Assert.That(result, Is.EqualTo("0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c"));
+            Assert.That(result, Is.EqualTo("0xbc858bfc90853f8e417f8c4b23e31d9d97e1e5c211f263b855093748ce599ef26007c93c60a9b5dbe6ce3ef250cf4bbc10e64d9c801cdfc8c7e13b7c3ba493d41c"));
         }
 
         [Test]
@@ -35,7 +36,7 @@ namespace Polymarket.Net.UnitTests
             var auth = CreateAuth();
             var parameters = BuildOrderParams("1515433236867", "11862165566757345985240476164489718219056735011698825377388402888080786399275", "5000", "5000000", "0", "0", "0", "BUY", 1);
             var result = auth.GetOrderSignature(parameters, 137, true).ToLower();
-            Assert.That(result, Is.EqualTo("0x80339932dbe85fda07338f283ba084312addc59c90e7739067be748c12b4922054673e2f8365f5fd891cef19469ec29900d1889d9a674f0bf485f177b6acf14e1b"));
+            Assert.That(result, Is.EqualTo("0xfc3b6facc2b9c36f11c4224247336f704d9476978fafa667fb051bcf68ad9402372f6025de06b8ca3efb87267658d44e7466b18e2563ee7ec5110abf8f43e8031b"));
         }
 
         // ── Signature stability: same inputs produce same output across calls ──
@@ -282,7 +283,7 @@ namespace Polymarket.Net.UnitTests
         {
             LightEip712TypedDataEncoder.ClearCaches();
             var auth = CreateAuth();
-            const string expectedOrderSig = "0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c";
+            const string expectedOrderSig = "0xbc858bfc90853f8e417f8c4b23e31d9d97e1e5c211f263b855093748ce599ef26007c93c60a9b5dbe6ce3ef250cf4bbc10e64d9c801cdfc8c7e13b7c3ba493d41c";
 
             // 1. Sign an order (4-field EIP712Domain with verifyingContract)
             var p1 = BuildOrderParams("479249096354", "1234", "100000000", "50000000", "0", "0", "100", "BUY", 0);
@@ -304,7 +305,7 @@ namespace Polymarket.Net.UnitTests
         {
             LightEip712TypedDataEncoder.ClearCaches();
             var auth = CreateAuth();
-            const string expectedOrderSig = "0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c";
+            const string expectedOrderSig = "0xbc858bfc90853f8e417f8c4b23e31d9d97e1e5c211f263b855093748ce599ef26007c93c60a9b5dbe6ce3ef250cf4bbc10e64d9c801cdfc8c7e13b7c3ba493d41c";
 
             // 1. Encode ClobAuth FIRST (3-field EIP712Domain)
             var clobAuth = auth.GetEncodedClobAuth("1234567890", 0, 137);
@@ -338,15 +339,15 @@ namespace Polymarket.Net.UnitTests
                 { "salt", salt },
                 { "maker", TestAddress },
                 { "signer", TestAddress },
-                { "taker", ZeroAddress },
                 { "tokenId", tokenId },
                 { "makerAmount", makerAmount },
                 { "takerAmount", takerAmount },
-                { "expiration", expiration },
-                { "nonce", nonce },
-                { "feeRateBps", feeRateBps },
                 { "side", side },
                 { "signatureType", signatureType },
+                { "timestamp", "1710000000000" },
+                { "metadata", ZeroBytes32 },
+                { "builder", ZeroBytes32 },
+                { "expiration", expiration },
             };
         }
     }

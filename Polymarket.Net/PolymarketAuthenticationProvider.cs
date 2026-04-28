@@ -49,15 +49,14 @@ namespace Polymarket.Net
                     new MemberDescription { Name = "salt", Type = "uint256" },
                     new MemberDescription { Name = "maker", Type = "address" },
                     new MemberDescription { Name = "signer", Type = "address" },
-                    new MemberDescription { Name = "taker", Type = "address" },
                     new MemberDescription { Name = "tokenId", Type = "uint256" },
                     new MemberDescription { Name = "makerAmount", Type = "uint256" },
                     new MemberDescription { Name = "takerAmount", Type = "uint256" },
-                    new MemberDescription { Name = "expiration", Type = "uint256" },
-                    new MemberDescription { Name = "nonce", Type = "uint256" },
-                    new MemberDescription { Name = "feeRateBps", Type = "uint256" },
                     new MemberDescription { Name = "side", Type = "uint8" },
                     new MemberDescription { Name = "signatureType", Type = "uint8" },
+                    new MemberDescription { Name = "timestamp", Type = "uint256" },
+                    new MemberDescription { Name = "metadata", Type = "bytes32" },
+                    new MemberDescription { Name = "builder", Type = "bytes32" },
                 }
             }
         };
@@ -150,27 +149,6 @@ namespace Polymarket.Net
                 signature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(signData)));
 
             requestConfig.Headers.Add("POLY_SIGNATURE", signature.Replace('+', '-').Replace('/', '_'));
-
-            var options = (PolymarketRestOptions)client.ClientOptions;
-            if (string.IsNullOrEmpty(options.BuilderApiKey)
-                || string.IsNullOrEmpty(options.BuilderSecret)
-                || string.IsNullOrEmpty(options.BuilderPass))
-            {
-                return;
-            }
-
-            // Builder headers
-            var secret = Convert.FromBase64String(options.BuilderSecret!.Replace('-', '+').Replace('_', '/'));
-
-            using var encryptor = new HMACSHA256(secret);
-            var resultBytes = encryptor.ComputeHash(Encoding.UTF8.GetBytes(signData));
-            var builderSignature = BytesToBase64String(resultBytes);
-            builderSignature = builderSignature.Replace('+', '-').Replace('/', '_');
-
-            requestConfig.Headers.Add("POLY_BUILDER_API_KEY", options.BuilderApiKey!);
-            requestConfig.Headers.Add("POLY_BUILDER_PASSPHRASE", options.BuilderPass!);
-            requestConfig.Headers.Add("POLY_BUILDER_SIGNATURE", builderSignature);
-            requestConfig.Headers.Add("POLY_BUILDER_TIMESTAMP", timestamp.Value.ToString());
         }
 
         public string GetPublicAddress()
@@ -235,7 +213,7 @@ namespace Polymarket.Net
                 DomainRawValues = new MemberValue[]
                 {
                     new MemberValue { TypeName = "string", Value = "Polymarket CTF Exchange" },
-                    new MemberValue { TypeName = "string", Value = "1" },
+                    new MemberValue { TypeName = "string", Value = "2" },
                     new MemberValue { TypeName = "uint256", Value = chainId },
                     new MemberValue { TypeName = "address", Value = GetContract(order, chainId, negativeRisk) }
                 },
@@ -244,15 +222,14 @@ namespace Polymarket.Net
                     new MemberValue { TypeName = "uint256", Value = order["salt"].ToString()! },
                     new MemberValue { TypeName = "address", Value = order["maker"]},
                     new MemberValue { TypeName = "address", Value = order["signer"]},
-                    new MemberValue { TypeName = "address", Value = order["taker"]},
                     new MemberValue { TypeName = "uint256", Value = (string)order["tokenId"]},
                     new MemberValue { TypeName = "uint256", Value = (string)order["makerAmount"]},
                     new MemberValue { TypeName = "uint256", Value = (string)order["takerAmount"]},
-                    new MemberValue { TypeName = "uint256", Value = (string)order["expiration"]},
-                    new MemberValue { TypeName = "uint256", Value = (string)order["nonce"]},
-                    new MemberValue { TypeName = "uint256", Value = (string)order["feeRateBps"]},
                     new MemberValue { TypeName = "uint8", Value = (byte)((string)order["side"] == "BUY" ? 0 : 1)},
-                    new MemberValue { TypeName = "uint8", Value = (byte)(int)order["signatureType"]}
+                    new MemberValue { TypeName = "uint8", Value = (byte)(int)order["signatureType"]},
+                    new MemberValue { TypeName = "uint256", Value = (string)order["timestamp"]},
+                    new MemberValue { TypeName = "bytes32", Value = HexToBytesString((string)order["metadata"])},
+                    new MemberValue { TypeName = "bytes32", Value = HexToBytesString((string)order["builder"])}
                 },
                 Types = OrderTypeSchema
             };

@@ -25,12 +25,12 @@ namespace Polymarket.Net.Utils
             IPolymarketRestClientClobApi client,
             CancellationToken ct = default)
         {
-            var envName = client.ClientOptions.Environment.Name;
+            var envName = $"{client.ClientOptions.Environment.Name}|{client.ClientOptions.Environment.ClobRestClientAddress}";
 
             await _semaphoreSpot.WaitAsync(ct).ConfigureAwait(false);
             try
             {
-                if (envName.Equals("UnitTest", StringComparison.Ordinal))
+                if (client.ClientOptions.Environment.Name.Equals("UnitTest", StringComparison.Ordinal))
                     return new CallResult<PolymarketOrderBook>(new PolymarketOrderBook { });
 
                 // Re-check after acquiring semaphore (another thread may have populated it)

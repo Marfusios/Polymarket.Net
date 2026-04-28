@@ -7,6 +7,7 @@ using System.Net.Http;
 using Polymarket.Net.Clients;
 using Polymarket.Net.Objects;
 using CryptoExchange.Net.Objects;
+using System;
 
 namespace Polymarket.Net.UnitTests
 {
@@ -28,19 +29,18 @@ namespace Polymarket.Net.UnitTests
                 { "salt", "479249096354" },
                 { "maker", address },
                 { "signer", address },
-                { "taker", "0x0000000000000000000000000000000000000000" },
                 { "tokenId", "1234" },
                 { "makerAmount", "100000000" },
                 { "takerAmount", "50000000" },
-                { "expiration", "0" },
-                { "nonce", "0" },
-                { "feeRateBps", "100" },
                 { "side", "BUY" },
                 { "signatureType", 0 },
+                { "timestamp", "1710000000000" },
+                { "metadata", "0x0000000000000000000000000000000000000000000000000000000000000000" },
+                { "builder", "0x0000000000000000000000000000000000000000000000000000000000000000" },
             };
 
             var result = authProvider.GetOrderSignature(parameters, chainId, false).ToLower();
-            Assert.That(result, Is.EqualTo("0x302cd9abd0b5fcaa202a344437ec0b6660da984e24ae9ad915a592a90facf5a51bb8a873cd8d270f070217fea1986531d5eec66f1162a81f66e026db653bf7ce1c"));
+            Assert.That(result, Is.EqualTo("0xbc858bfc90853f8e417f8c4b23e31d9d97e1e5c211f263b855093748ce599ef26007c93c60a9b5dbe6ce3ef250cf4bbc10e64d9c801cdfc8c7e13b7c3ba493d41c"));
         }
 
         [Test]
@@ -57,19 +57,18 @@ namespace Polymarket.Net.UnitTests
                 { "salt", "1515433236867" },
                 { "maker", address },
                 { "signer", address },
-                { "taker", "0x0000000000000000000000000000000000000000" },
                 { "tokenId", "11862165566757345985240476164489718219056735011698825377388402888080786399275" },
                 { "makerAmount", "5000" },
                 { "takerAmount", "5000000" },
-                { "expiration", "0" },
-                { "nonce", "0" },
-                { "feeRateBps", "0" },
                 { "side", "BUY" },
                 { "signatureType", 1 },
+                { "timestamp", "1710000000000" },
+                { "metadata", "0x0000000000000000000000000000000000000000000000000000000000000000" },
+                { "builder", "0x0000000000000000000000000000000000000000000000000000000000000000" },
             };
 
             var result = authProvider.GetOrderSignature(parameters, chainId, true).ToLower();
-            Assert.That(result, Is.EqualTo("0x80339932dbe85fda07338f283ba084312addc59c90e7739067be748c12b4922054673e2f8365f5fd891cef19469ec29900d1889d9a674f0bf485f177b6acf14e1b"));
+            Assert.That(result, Is.EqualTo("0xfc3b6facc2b9c36f11c4224247336f704d9476978fafa667fb051bcf68ad9402372f6025de06b8ca3efb87267658d44e7466b18e2563ee7ec5110abf8f43e8031b"));
         }
 
         [Test]
@@ -92,6 +91,33 @@ namespace Polymarket.Net.UnitTests
             var normalizedPrice = Clients.ClobApi.PolymarketRestClientClobApiTrading.NormalizeOrderPrice(0.539004975124378m);
             var makerAmount = Clients.ClobApi.PolymarketRestClientClobApiTrading.ConvertToClobBaseUnits(5m * normalizedPrice);
             Assert.That(makerAmount, Is.EqualTo(2695000m));
+        }
+
+        [Test]
+        public void NormalizeBytes32_ShouldDefaultEmptyValuesToZeroBytes32()
+        {
+            var normalized = Clients.ClobApi.PolymarketRestClientClobApiTrading.NormalizeBytes32(null, "metadata");
+
+            Assert.That(normalized, Is.EqualTo("0x0000000000000000000000000000000000000000000000000000000000000000"));
+        }
+
+        [Test]
+        public void NormalizeBytes32_ShouldLowercaseValidValues()
+        {
+            var normalized = Clients.ClobApi.PolymarketRestClientClobApiTrading.NormalizeBytes32(
+                "0xABCDEFabcdef0000000000000000000000000000000000000000000000000000",
+                "builderCode");
+
+            Assert.That(normalized, Is.EqualTo("0xabcdefabcdef0000000000000000000000000000000000000000000000000000"));
+        }
+
+        [Test]
+        public void NormalizeBytes32_ShouldRejectInvalidValues()
+        {
+            var exception = Assert.Throws<ArgumentException>(() =>
+                Clients.ClobApi.PolymarketRestClientClobApiTrading.NormalizeBytes32("builder-1", "builderCode"));
+
+            Assert.That(exception!.ParamName, Is.EqualTo("builderCode"));
         }
     }
 }

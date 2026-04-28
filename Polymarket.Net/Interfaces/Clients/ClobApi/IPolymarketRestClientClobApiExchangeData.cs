@@ -63,6 +63,13 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         Task<WebCallResult<PolymarketMarketDetails>> GetMarketAsync(string conditionId, CancellationToken ct = default);
 
         /// <summary>
+        /// Get V2 CLOB market info by condition id
+        /// </summary>
+        /// <param name="conditionId">Condition id</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<PolymarketClobMarketInfo>> GetClobMarketInfoAsync(string conditionId, CancellationToken ct = default);
+
+        /// <summary>
         /// Get price for a token
         /// <para><a href="https://docs.polymarket.com/api-reference/pricing/get-market-price" /></para>
         /// </summary>

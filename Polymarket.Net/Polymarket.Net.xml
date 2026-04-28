@@ -61,6 +61,9 @@
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiExchangeData.GetMarketAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiExchangeData.GetClobMarketInfoAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiExchangeData.GetPriceAsync(System.String,Polymarket.Net.Enums.OrderSide,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -482,6 +485,26 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClobMarketFeeDetails">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClobMarketInfo">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClobMarketToken">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClobMarketTokenArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketClosedOnlyMode">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -547,11 +570,6 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketArray">
-            <summary>
-            Defines the source generated JSON serialization contract metadata for a given type.
-            </summary>
-        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketCategory">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -602,6 +620,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMarketArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketMidPrice">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -633,11 +656,6 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrder">
-            <summary>
-            Defines the source generated JSON serialization contract metadata for a given type.
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrderArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -682,6 +700,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPagePolymarketMarket">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -712,22 +735,17 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceChangeArray">
-            <summary>
-            Defines the source generated JSON serialization contract metadata for a given type.
-            </summary>
-        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceChangeUpdate">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceHistory">
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceChangeArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceHistoryArray">
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceHistory">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -738,6 +756,11 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceHistoryWrapperArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketPriceHistoryArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -767,11 +790,6 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeriesArray">
-            <summary>
-            Defines the source generated JSON serialization contract metadata for a given type.
-            </summary>
-        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeriesCollection">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -782,17 +800,22 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSeriesArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSport">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportArray">
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportMarketTypes">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportMarketTypes">
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketSportArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -852,11 +875,6 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradeArray">
-            <summary>
-            Defines the source generated JSON serialization contract metadata for a given type.
-            </summary>
-        </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradePrice">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -868,6 +886,11 @@
             </summary>
         </member>
         <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradeUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Converters.PolymarketSourceGenerationContext.PolymarketTradeArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -1372,6 +1395,13 @@
             <param name="conditionId">Condition id</param>
             <param name="ct">Cancellation token</param>
         </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiExchangeData.GetClobMarketInfoAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get V2 CLOB market info by condition id
+            </summary>
+            <param name="conditionId">Condition id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
         <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiExchangeData.GetPriceAsync(System.String,Polymarket.Net.Enums.OrderSide,System.Threading.CancellationToken)">
             <summary>
             Get price for a token
@@ -1529,7 +1559,7 @@
             <param name="conditionId">Optional market/condition id</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceOrderAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.OrderType,System.Decimal,System.Nullable{System.Decimal},System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Int64},System.String,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.Int64},System.Threading.CancellationToken)">
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceOrderAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.OrderType,System.Decimal,System.Nullable{System.Decimal},System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Int64},System.Nullable{System.DateTime},System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
             Place a new order
             <para><a href="https://docs.polymarket.com/developers/CLOB/orders/create-order" /></para>
@@ -1541,11 +1571,11 @@
             <param name="quantity">Quantity of shares</param>
             <param name="price">Price, value between 0 and 1. For example 0.001 means 0.1c in the UI, 0.5 means 50c in UI</param>
             <param name="postOnly">Post only order</param>
-            <param name="feeRateBps">Fee rate basis points as required by the operator</param>
-            <param name="takerAddress">Taker/operator address</param>
             <param name="clientOrderId">Client order id</param>
             <param name="expiration">Expiration time</param>
-            <param name="nonce">Nonce</param>
+            <param name="metadata">Metadata bytes32</param>
+            <param name="builderCode">Builder attribution code bytes32</param>
+            <param name="deferExecution">Defer execution</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceMultipleOrdersAsync(System.Collections.Generic.IEnumerable{Polymarket.Net.Objects.Models.PolymarketOrderRequest},System.Threading.CancellationToken)">
@@ -2193,6 +2223,91 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketChat.EndTime">
             <summary>
             End time
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo">
+            <summary>
+            V2 CLOB market info
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.Tokens">
+            <summary>
+            Tokens
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.MinimumOrderSize">
+            <summary>
+            Minimum order size
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.MinimumTickSize">
+            <summary>
+            Minimum tick size
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.FeeDetails">
+            <summary>
+            Fee details
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.NegativeRisk">
+            <summary>
+            Negative risk
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.MakerBaseFee">
+            <summary>
+            Maker base fee
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketInfo.TakerBaseFee">
+            <summary>
+            Taker base fee
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketClobMarketToken">
+            <summary>
+            V2 CLOB market token
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketToken.TokenId">
+            <summary>
+            Token id
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketToken.Outcome">
+            <summary>
+            Outcome
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketToken.Price">
+            <summary>
+            Price
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketToken.Winner">
+            <summary>
+            Winner
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PolymarketClobMarketFeeDetails">
+            <summary>
+            V2 CLOB fee details
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketFeeDetails.Rate">
+            <summary>
+            Fee rate
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketFeeDetails.Exponent">
+            <summary>
+            Fee exponent
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketClobMarketFeeDetails.To">
+            <summary>
+            Fee recipient
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketClosedOnlyMode">
@@ -4220,14 +4335,14 @@
             Is post only
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.FeeRateBps">
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.Metadata">
             <summary>
-            Fee rate BPS
+            Metadata bytes32
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.TakerAddress">
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.BuilderCode">
             <summary>
-            Taker address
+            Builder attribution code bytes32
             </summary>
         </member>
         <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.ClientOrderId">
@@ -4240,9 +4355,9 @@
             Expiration
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.Nonce">
+        <member name="P:Polymarket.Net.Objects.Models.PolymarketOrderRequest.DeferExecution">
             <summary>
-            Nonce
+            Defer execution
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Models.PolymarketOrderResult">
@@ -5490,19 +5605,9 @@
             Gamma API options
             </summary>
         </member>
-        <member name="P:Polymarket.Net.Objects.Options.PolymarketRestOptions.BuilderApiKey">
+        <member name="P:Polymarket.Net.Objects.Options.PolymarketRestOptions.BuilderCode">
             <summary>
-            Builder API api key
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.Objects.Options.PolymarketRestOptions.BuilderSecret">
-            <summary>
-            Builder API secret
-            </summary>
-        </member>
-        <member name="P:Polymarket.Net.Objects.Options.PolymarketRestOptions.BuilderPass">
-            <summary>
-            Builder API passphrase
+            Optional V2 builder attribution code.
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Options.PolymarketSocketOptions">

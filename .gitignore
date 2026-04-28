@@ -404,3 +404,7 @@ Polymarket.Net/obj-codex/opt-build-tpfix/
 Polymarket.Net/obj-codex/opt-tests-tpfix/
 
 Polymarket.Net/obj-codex/
+
+Polymarket.Net.UnitTests/.build-int/
+
+Polymarket.Net.UnitTests/.build-out/

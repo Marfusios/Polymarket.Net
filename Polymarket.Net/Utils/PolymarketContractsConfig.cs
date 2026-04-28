@@ -4,15 +4,15 @@
     {
         public static PolymarketContracts PolygonConfig { get; } = new()
         {
-            Exchange = "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E",
-            Collateral = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+            Exchange = "0xE111180000d2663C0091e4f400237545B87B996B",
+            Collateral = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB",
             ConditionalTokens = "0x4D97DCd97eC945f40cF65F87097ACe5EA0476045"
         };
 
         public static PolymarketContracts PolygonNegRiskConfig { get; } = new()
         {
-            Exchange = "0xC5d563A36AE78145C45a50134d48A1215220f80a",
-            Collateral = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+            Exchange = "0xe2222d279d744050d28e00520010520000310F59",
+            Collateral = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB",
             ConditionalTokens = "0x4D97DCd97eC945f40cF65F87097ACe5EA0476045"
         };
 
