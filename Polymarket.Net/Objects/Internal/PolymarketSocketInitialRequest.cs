@@ -18,6 +18,9 @@ namespace Polymarket.Net.Objects.Internal
         [JsonPropertyName("assets_ids"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string[]? Assets { get; set; }
 
+        [JsonPropertyName("markets"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string[]? Markets { get; set; }
+
         [JsonPropertyName("custom_feature_enabled"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool? CustomFeatureEnabled { get; set; }
     }

@@ -14,13 +14,15 @@ namespace Polymarket.Net.Objects.Sockets
             string? key = null,
             string? sec = null,
             string? pass = null,
-            string[]? assets = null) : base(new PolymarketSocketInitialRequest
+            string[]? assets = null,
+            string[]? markets = null) : base(new PolymarketSocketInitialRequest
         {
             Type = type,
             Assets = assets,
+            Markets = markets,
             CustomFeatureEnabled = string.Equals(type, "MARKET", StringComparison.OrdinalIgnoreCase)
                 ? true
-                : key != null ? true : null,
+                : null,
             Auth = key == null ? null : new PolymarketSocketAuth
             {
                 ApiKey = key,

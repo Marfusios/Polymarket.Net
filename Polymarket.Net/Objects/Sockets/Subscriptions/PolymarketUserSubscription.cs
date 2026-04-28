@@ -5,8 +5,8 @@ using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using Polymarket.Net.Clients.ClobApi;
+using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Models;
-using Polymarket.Net.Objects.Sockets;
 using System;
 using System.Linq;
 
@@ -30,7 +30,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
             Action<DataEvent<PolymarketOrderUpdate>>? orderUpdate,
             Action<DataEvent<PolymarketTradeUpdate>>? tradeUpdate,
             string[]? marketIds
-            ) : base(logger, true)
+            ) : base(logger, false)
         {
             _client = client;
             _orderUpdate = orderUpdate;
@@ -51,18 +51,20 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         protected override Query? GetSubQuery(SocketConnection connection)
         {
-            return _marketIds.Length == 0
-                ? null
-                : new PolymarketUserQuery<object>("subscribe", _marketIds);
+            var credentials = _client.ApiCredentials as PolymarketCredentials;
+            if (credentials?.L2ApiKey == null)
+                throw new InvalidOperationException("Layer 2 credentials required");
+
+            return new PolymarketInitialQuery<object>(
+                "user",
+                credentials.L2ApiKey,
+                credentials.L2Secret!,
+                credentials.L2Pass!,
+                markets: _marketIds.Length == 0 ? null : _marketIds);
         }
 
         /// <inheritdoc />
-        protected override Query? GetUnsubQuery(SocketConnection connection)
-        {
-            return _marketIds.Length == 0
-                ? null
-                : new PolymarketUserQuery<object>("unsubscribe", _marketIds);
-        }
+        protected override Query? GetUnsubQuery(SocketConnection connection) => null;
 
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, PolymarketTradeUpdate message)

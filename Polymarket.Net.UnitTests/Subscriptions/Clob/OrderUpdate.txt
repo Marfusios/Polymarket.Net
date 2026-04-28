@@ -1,5 +1,4 @@
-> { "type": "user", "auth": { "apiKey": "1", "secret": "MTIz", "passphrase": "3" } }
-> { "operation": "subscribe", "markets": ["0xmarket"] }
+> { "type": "user", "markets": ["0xmarket"], "auth": { "apiKey": "1", "secret": "MTIz", "passphrase": "3" } }
 =
 {
   "asset_id": "52114319501245915516055106046884209969926127482827954674443846427813813222426",
