@@ -45,6 +45,7 @@ namespace Polymarket.Net.UnitTests
             }));
             var tester = new RestRequestValidator<PolymarketRestClient>(client, "Endpoints/Clob/Trading", "https://clob.polymarket.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.ClobApi.Trading.GetOrderAsync("123"), "GetOrder");
+            await tester.ValidateAsync(client => client.ClobApi.Trading.GetUserTradesAsync(tradeId: "trade-123", takerAddress: "0xtaker", makerAddress: "0xmaker", conditionId: "condition-123", cursor: "cursor-123"), "GetUserTrades");
             await tester.ValidateAsync(client => client.ClobApi.Trading.CancelOrderAsync("123"), "CancelOrder");
             await tester.ValidateAsync(client => client.ClobApi.Trading.PlaceOrderAsync("123", Enums.OrderSide.Buy, Enums.OrderType.Limit, 5, 0.01m), "PlaceOrder");
         }

@@ -1,0 +1,4 @@
+GET
+/data/trades
+true
+{"next_cursor":"LTE=","limit":100,"count":1,"data":[{"id":"trade-123","taker_order_id":"order-1","market":"condition-123","asset_id":"token-up","side":"BUY","size":"12","fee_rate_bps":"0.072","price":"0.41","status":"MATCHED","match_time":"2026-04-28T13:45:45Z","last_update":"2026-04-28T13:45:45Z","outcome":"Up","maker_address":"0xmaker","owner":"0xtaker","transaction_hash":"0xabc","bucket_index":0,"type":"TAKER","maker_orders":[]}]}

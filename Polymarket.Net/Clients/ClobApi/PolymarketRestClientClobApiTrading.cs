@@ -396,10 +396,10 @@ namespace Polymarket.Net.Clients.ClobApi
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            parameters.AddOptional("id", cursor);
-            parameters.AddOptional("taker", cursor);
-            parameters.AddOptional("maker", cursor);
-            parameters.AddOptional("market", cursor);
+            parameters.AddOptional("id", tradeId);
+            parameters.AddOptional("taker", takerAddress);
+            parameters.AddOptional("maker", makerAddress);
+            parameters.AddOptional("market", conditionId);
             parameters.AddOptionalMillisecondsString("after", startTime);
             parameters.AddOptionalMillisecondsString("before", endTime);
             parameters.AddOptional("next_cursor", cursor);
