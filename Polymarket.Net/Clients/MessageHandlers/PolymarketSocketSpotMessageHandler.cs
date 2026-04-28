@@ -2,7 +2,9 @@ using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
 using System.Text.Json;
 using CryptoExchange.Net.Converters.SystemTextJson.MessageHandlers;
 using Polymarket.Net.Objects.Models;
+using System;
 using System.Linq;
+using System.Net.WebSockets;
 
 namespace Polymarket.Net.Clients.MessageHandlers
 {
@@ -43,5 +45,12 @@ namespace Polymarket.Net.Clients.MessageHandlers
                 StaticIdentifier = "sports"
             }
         ];
+
+        protected override string? GetTypeIdentifierNonJson(ReadOnlySpan<byte> data, WebSocketMessageType? webSocketMessageType)
+        {
+            return data.SequenceEqual("PONG"u8)
+                ? "PONG"
+                : base.GetTypeIdentifierNonJson(data, webSocketMessageType);
+        }
     }
 }

@@ -24,6 +24,7 @@ using Polymarket.Net.Interfaces.Clients.ClobApi;
 using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Models;
 using Polymarket.Net.Objects.Options;
+using Polymarket.Net.Objects.Sockets;
 using Polymarket.Net.Objects.Sockets.Subscriptions;
 
 namespace Polymarket.Net.Clients.ClobApi
@@ -48,8 +49,28 @@ namespace Polymarket.Net.Clients.ClobApi
             base(logger, options.Environment.ClobSocketClientAddress!, options, options.ClobOptions)
         {
             _sportUri = options.Environment.SportSocketClientAddress;
+
+            RegisterPeriodicQuery(
+                "Ping",
+                TimeSpan.FromSeconds(5),
+                connection => IsClobWebsocket(connection.ConnectionUri) ? new PolymarketPingQuery() : null!,
+                (connection, result) =>
+                {
+                    if (result.Error?.ErrorType == ErrorType.Timeout)
+                    {
+                        _logger.LogWarning("[Sckt {SocketId}] Ping response timeout, reconnecting", connection.SocketId);
+                        _ = connection.TriggerReconnectAsync();
+                    }
+                });
         }
         #endregion
+
+        private static bool IsClobWebsocket(Uri uri)
+        {
+            var path = uri.AbsolutePath;
+            return path.EndsWith("/ws/market", StringComparison.OrdinalIgnoreCase)
+                || path.EndsWith("/ws/user", StringComparison.OrdinalIgnoreCase);
+        }
 
         /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(PolymarketPlatform._serializerContext);

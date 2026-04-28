@@ -60,7 +60,10 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
                 credentials.L2ApiKey,
                 credentials.L2Secret!,
                 credentials.L2Pass!,
-                markets: _marketIds.Length == 0 ? null : _marketIds);
+                assets: [],
+                markets: _marketIds,
+                operation: "subscribe",
+                initialDump: true);
         }
 
         /// <inheritdoc />

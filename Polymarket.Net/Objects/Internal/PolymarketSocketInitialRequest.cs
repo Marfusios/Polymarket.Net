@@ -23,6 +23,12 @@ namespace Polymarket.Net.Objects.Internal
 
         [JsonPropertyName("custom_feature_enabled"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool? CustomFeatureEnabled { get; set; }
+
+        [JsonPropertyName("operation"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Operation { get; set; }
+
+        [JsonPropertyName("initial_dump"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? InitialDump { get; set; }
     }
 
     internal class PolymarketSocketAuth

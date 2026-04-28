@@ -15,11 +15,15 @@ namespace Polymarket.Net.Objects.Sockets
             string? sec = null,
             string? pass = null,
             string[]? assets = null,
-            string[]? markets = null) : base(new PolymarketSocketInitialRequest
+            string[]? markets = null,
+            string? operation = null,
+            bool? initialDump = null) : base(new PolymarketSocketInitialRequest
         {
             Type = type,
             Assets = assets,
             Markets = markets,
+            Operation = operation,
+            InitialDump = initialDump,
             CustomFeatureEnabled = string.Equals(type, "MARKET", StringComparison.OrdinalIgnoreCase)
                 ? true
                 : null,
