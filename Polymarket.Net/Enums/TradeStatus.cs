@@ -13,27 +13,27 @@ namespace Polymarket.Net.Enums
         /// <summary>
         /// Matched
         /// </summary>
-        [Map("MATCHED")]
+        [Map("MATCHED", "TRADE_STATUS_MATCHED")]
         Matched,
         /// <summary>
         /// Mined
         /// </summary>
-        [Map("MINED")]
+        [Map("MINED", "TRADE_STATUS_MINED")]
         Mined,
         /// <summary>
         /// Confirmed
         /// </summary>
-        [Map("CONFIRMED")]
+        [Map("CONFIRMED", "TRADE_STATUS_CONFIRMED")]
         Confirmed,
         /// <summary>
         /// Retrying
         /// </summary>
-        [Map("RETRYING")]
+        [Map("RETRYING", "TRADE_STATUS_RETRYING")]
         Retrying,
         /// <summary>
         /// Failed
         /// </summary>
-        [Map("FAILED")]
+        [Map("FAILED", "TRADE_STATUS_FAILED")]
         Failed,
     }
 }

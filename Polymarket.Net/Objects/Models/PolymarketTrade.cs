@@ -96,7 +96,7 @@ namespace Polymarket.Net.Objects.Models
         /// <summary>
         /// Trade role
         /// </summary>
-        [JsonPropertyName("type")]
+        [JsonPropertyName("trader_side")]
         public TradeRole Role { get; set; }
         /// <summary>
         /// List of the maker trades the taker trade was filled against
