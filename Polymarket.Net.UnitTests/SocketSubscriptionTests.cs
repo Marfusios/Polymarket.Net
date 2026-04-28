@@ -22,8 +22,8 @@ namespace Polymarket.Net.UnitTests
                 opts.ApiCredentials = new PolymarketCredentials(Enums.SignType.EOA, "456", "1", "MTIz", "3", "123");
             });
             var tester = new SocketSubscriptionValidator<PolymarketSocketClient>(client, "Subscriptions/Clob", "wss://ws-subscriptions-clob.polymarket.com");
-            await tester.ValidateAsync<PolymarketOrderUpdate>((client, handler) => client.ClobApi.SubscribeToUserUpdatesAsync(handler, null, ["0xmarket"]), "OrderUpdate", ignoreProperties: ["type"]);
-            await tester.ValidateAsync<PolymarketTradeUpdate>((client, handler) => client.ClobApi.SubscribeToUserUpdatesAsync(null, handler, ["0xmarket"]), "TradeUpdate", ignoreProperties: ["type"]);
+            await tester.ValidateAsync<PolymarketOrderUpdate>((client, handler) => client.ClobApi.SubscribeToUserUpdatesAsync(handler, null, marketIds: ["0xmarket"]), "OrderUpdate", ignoreProperties: ["type"]);
+            await tester.ValidateAsync<PolymarketTradeUpdate>((client, handler) => client.ClobApi.SubscribeToUserUpdatesAsync(null, handler, marketIds: ["0xmarket"]), "TradeUpdate", ignoreProperties: ["type"]);
         }
 
         [Test]

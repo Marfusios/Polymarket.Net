@@ -102,8 +102,8 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserUpdatesAsync(
             Action<DataEvent<PolymarketOrderUpdate>>? onOrderUpdate = null,
             Action<DataEvent<PolymarketTradeUpdate>>? onTradeUpdate = null,
-            IEnumerable<string>? marketIds = null,
-            CancellationToken ct = default)
+            CancellationToken ct = default,
+            IEnumerable<string>? marketIds = null)
         {
             var subscription = new PolymarketUserSubscription(
                 _logger,

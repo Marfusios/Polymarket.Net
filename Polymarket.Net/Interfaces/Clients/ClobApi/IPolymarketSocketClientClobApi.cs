@@ -56,14 +56,14 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         /// </summary>
         /// <param name="onOrderUpdate">User order update handler</param>
         /// <param name="onTradeUpdate">User trade update handler</param>
-        /// <param name="marketIds">Condition IDs to receive events for</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <param name="marketIds">Condition IDs to receive events for</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToUserUpdatesAsync(
             Action<DataEvent<PolymarketOrderUpdate>>? onOrderUpdate = null,
             Action<DataEvent<PolymarketTradeUpdate>>? onTradeUpdate = null,
-            IEnumerable<string>? marketIds = null,
-            CancellationToken ct = default);
+            CancellationToken ct = default,
+            IEnumerable<string>? marketIds = null);
 
         /// <summary>
         /// Subscribe to sport matches updates
