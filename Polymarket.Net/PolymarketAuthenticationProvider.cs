@@ -104,7 +104,7 @@ namespace Polymarket.Net
             if (_credentials.L2ApiKey == null)
                 throw new InvalidOperationException("Layer 2 credentials required");
 
-            return new PolymarketInitialQuery<object>("USER", _credentials.L2ApiKey, _credentials.L2Secret!, _credentials.L2Pass!);
+            return new PolymarketInitialQuery<object>("user", _credentials.L2ApiKey, _credentials.L2Secret!, _credentials.L2Pass!);
         }
 
         private void SignL1Custom(RestRequestConfiguration requestConfig, uint chainId)

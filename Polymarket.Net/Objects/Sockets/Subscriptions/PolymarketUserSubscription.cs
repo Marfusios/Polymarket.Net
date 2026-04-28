@@ -6,7 +6,9 @@ using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using Polymarket.Net.Clients.ClobApi;
 using Polymarket.Net.Objects.Models;
+using Polymarket.Net.Objects.Sockets;
 using System;
+using System.Linq;
 
 namespace Polymarket.Net.Objects.Sockets.Subscriptions
 {
@@ -15,6 +17,7 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
     {
         private readonly Action<DataEvent<PolymarketOrderUpdate>>? _orderUpdate;
         private readonly Action<DataEvent<PolymarketTradeUpdate>>? _tradeUpdate;
+        private readonly string[] _marketIds;
 
         private PolymarketSocketClientClobApi _client;
 
@@ -25,12 +28,19 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
             ILogger logger,
             PolymarketSocketClientClobApi client,
             Action<DataEvent<PolymarketOrderUpdate>>? orderUpdate,
-            Action<DataEvent<PolymarketTradeUpdate>>? tradeUpdate
+            Action<DataEvent<PolymarketTradeUpdate>>? tradeUpdate,
+            string[]? marketIds
             ) : base(logger, true)
         {
             _client = client;
             _orderUpdate = orderUpdate;
             _tradeUpdate = tradeUpdate;
+            _marketIds = marketIds?
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray() ?? [];
+
+            IndividualSubscriptionCount = Math.Max(1, _marketIds.Length);
 
             MessageRouter = MessageRouter.Create([
                 MessageRoute<PolymarketTradeUpdate>.CreateWithoutTopicFilter("trade", DoHandleMessage),
@@ -39,10 +49,20 @@ namespace Polymarket.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        protected override Query? GetSubQuery(SocketConnection connection) => null;
+        protected override Query? GetSubQuery(SocketConnection connection)
+        {
+            return _marketIds.Length == 0
+                ? null
+                : new PolymarketUserQuery<object>("subscribe", _marketIds);
+        }
 
         /// <inheritdoc />
-        protected override Query? GetUnsubQuery(SocketConnection connection) => null;
+        protected override Query? GetUnsubQuery(SocketConnection connection)
+        {
+            return _marketIds.Length == 0
+                ? null
+                : new PolymarketUserQuery<object>("unsubscribe", _marketIds);
+        }
 
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, PolymarketTradeUpdate message)

@@ -102,13 +102,15 @@ namespace Polymarket.Net.Clients.ClobApi
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserUpdatesAsync(
             Action<DataEvent<PolymarketOrderUpdate>>? onOrderUpdate = null,
             Action<DataEvent<PolymarketTradeUpdate>>? onTradeUpdate = null,
+            IEnumerable<string>? marketIds = null,
             CancellationToken ct = default)
         {
             var subscription = new PolymarketUserSubscription(
                 _logger,
                 this,
                 onOrderUpdate,
-                onTradeUpdate);
+                onTradeUpdate,
+                marketIds?.ToArray());
             return await SubscribeAsync(BaseAddress.AppendPath("ws/user"), subscription, ct).ConfigureAwait(false);
         }
 

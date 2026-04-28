@@ -24,7 +24,7 @@ namespace Polymarket.Net.Objects.Internal
 
     internal class PolymarketSocketAuth
     {
-        [JsonPropertyName("apikey")]
+        [JsonPropertyName("apiKey")]
         public string ApiKey { get; set; } = string.Empty;
         [JsonPropertyName("secret")]
         public string ApiSecret { get; set; } = string.Empty;
