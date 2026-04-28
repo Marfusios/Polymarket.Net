@@ -1,4 +1,5 @@
-﻿using Polymarket.Net.Enums;
+﻿using Polymarket.Net.Converters;
+using Polymarket.Net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,9 +61,11 @@ namespace Polymarket.Net.Objects.Models
         }
 
         /// <summary>
-        /// Fee rate in BPS
+        /// Fee rate in BPS. WS maker_orders entries arrive with `fee_rate_bps:""`
+        /// (empty string), which the default decimal converter rejects — using a
+        /// permissive converter so trade frames don't get dropped wholesale.
         /// </summary>
-        [JsonPropertyName("fee_rate_bps")]
+        [JsonPropertyName("fee_rate_bps"), JsonConverter(typeof(PolymarketEmptyStringDecimalConverter))]
         public decimal FeeRateBps { get; set; }
         /// <summary>
         /// Price
