@@ -247,8 +247,11 @@ namespace Polymarket.Net
         {
             // abi.encode(ORDER_TYPE_HASH, salt, maker, signer, tokenId, makerAmount,
             //            takerAmount, side, signatureType, timestamp, metadata, builder)
-            // Each entry is 32 bytes; total = 13 * 32 = 416 bytes.
-            var buf = new byte[32 * 13];
+            // = 12 32-byte slots = 384 bytes. (Bug fixed 2026-05-04: was 13 slots
+            // and the trailing zero block silently corrupted the keccak input.
+            // The /order endpoint rejected with `invalid signature` until this
+            // was sized to 12.)
+            var buf = new byte[32 * 12];
             var p = 0;
 
             Buffer.BlockCopy(OrderTypeHash, 0, buf, p, 32); p += 32;

@@ -126,6 +126,37 @@ namespace Polymarket.Net.UnitTests
         }
 
         [Test]
+        public void Wrapped_Signature_ContentsHash_NonZero()
+        {
+            // Regression guard for the 2026-05-04 off-by-32 bug:
+            // HashOrderContents originally allocated `new byte[32 * 13]` but
+            // wrote only 12 slots (1 type-hash + 11 fields = 384 bytes). The
+            // trailing 32 zero bytes corrupted the keccak input, producing a
+            // garbage contents-hash that the live CLOB rejected with
+            // `invalid signature`. The unit suite passed because the structural
+            // tests didn't look inside the hash field.
+            //
+            // This test extracts the contents-hash slice from the wrapped
+            // signature (offset 65+32 = 97 bytes in) and asserts it isn't the
+            // zero hash. Any future buffer-size mismatch that yields all-zero
+            // tail bytes still produces a valid keccak output, so a non-zero
+            // assertion alone isn't sufficient — we also pin the hash for the
+            // fixed input set so any change to the slot count or field order
+            // breaks this test.
+            var auth = BuildAuth();
+            var order = BuildOrder(DepositWallet, DepositWallet, 3);
+            var sig = auth.GetOrderSignaturePoly1271(order, chainId: 137, negativeRisk: false);
+
+            var hex = sig.Substring(2);
+            // Layout: innerSig(130 hex) | appDomain(64) | contentsHash(64) | typeString(2N) | uint16(4)
+            var contentsHashHex = hex.Substring(130 + 64, 64);
+
+            Assert.That(contentsHashHex.Length, Is.EqualTo(64));
+            Assert.That(contentsHashHex, Is.Not.EqualTo(new string('0', 64)),
+                "contentsHash all zeros means HashOrderContents fed a corrupt buffer to keccak");
+        }
+
+        [Test]
         public void Eoa_SignTypeStill_UsesNonWrappedSignature()
         {
             // Regression guard: existing proxy/EOA accounts must produce the original
