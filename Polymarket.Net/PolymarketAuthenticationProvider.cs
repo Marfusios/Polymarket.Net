@@ -16,6 +16,7 @@ using Secp256k1Net;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -171,10 +172,152 @@ namespace Polymarket.Net
 
         public string GetOrderSignature(ParameterCollection parameters, uint chainId, bool negativeRisk)
         {
+            if (SignatureType == SignType.Poly1271)
+                return GetOrderSignaturePoly1271(parameters, chainId, negativeRisk);
+
             var typeRaw = GetTypeDataRawCustom(parameters, chainId, negativeRisk);
             var msg = LightEip712TypedDataEncoder.EncodeTypedDataRaw(typeRaw);
             var orderHashBytes = InternalSha3Keccack.CalculateHash(msg);
             return SignHash(orderHashBytes);
+        }
+
+        // ERC-7739 wrapped POLY_1271 signature, mirroring py-clob-client-v2
+        // ExchangeOrderBuilderV2._build_poly_1271_order_signature byte-for-byte. The
+        // CLOB validates this through the deposit wallet's ERC-1271 isValidSignature
+        // hook, which means the inner ECDSA digest must be anchored at the deposit
+        // wallet (TypedDataSign domain) and not at the CTF Exchange contract.
+        private const string OrderTypeString =
+            "Order(uint256 salt,address maker,address signer,uint256 tokenId," +
+            "uint256 makerAmount,uint256 takerAmount,uint8 side,uint8 signatureType," +
+            "uint256 timestamp,bytes32 metadata,bytes32 builder)";
+
+        private const string SoladyTypeString =
+            "TypedDataSign(Order contents,string name,string version,uint256 chainId," +
+            "address verifyingContract,bytes32 salt)" + OrderTypeString;
+
+        private const string DomainTypeString =
+            "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)";
+
+        private static readonly byte[] OrderTypeStringBytes = Encoding.UTF8.GetBytes(OrderTypeString);
+        private static readonly byte[] OrderTypeHash = InternalSha3Keccack.CalculateHash(OrderTypeStringBytes);
+        private static readonly byte[] SoladyTypeHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(SoladyTypeString));
+        private static readonly byte[] DomainTypeHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(DomainTypeString));
+        private static readonly byte[] DepositWalletNameHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes("DepositWallet"));
+        private static readonly byte[] DepositWalletVersionHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes("1"));
+        private static readonly byte[] CtfExchangeNameHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes("Polymarket CTF Exchange"));
+        private static readonly byte[] CtfExchangeVersionHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes("2"));
+        private static readonly byte[] DepositWalletDomainSalt = new byte[32];
+
+        private static readonly Dictionary<string, byte[]> _appDomainSeparatorCache = new(StringComparer.Ordinal);
+        private static readonly object _appDomainSeparatorCacheLock = new();
+
+        public string GetOrderSignaturePoly1271(ParameterCollection order, uint chainId, bool negativeRisk)
+        {
+            var contractAddr = GetContract(order, chainId, negativeRisk);
+            var appDomainSep = GetAppDomainSeparator(chainId, contractAddr);
+
+            var contentsHash = HashOrderContents(order);
+            var typedDataSignStructHash = HashTypedDataSignStruct(contentsHash, chainId, (string)order["signer"]);
+
+            // EIP-712 digest: keccak(0x1901 || appDomainSeparator || typedDataSignStructHash)
+            var digestInput = new byte[2 + 32 + 32];
+            digestInput[0] = 0x19;
+            digestInput[1] = 0x01;
+            Buffer.BlockCopy(appDomainSep, 0, digestInput, 2, 32);
+            Buffer.BlockCopy(typedDataSignStructHash, 0, digestInput, 34, 32);
+            var digest = InternalSha3Keccack.CalculateHash(digestInput);
+
+            var innerSig = SignHashRaw(digest);
+
+            // Wrapped layout: innerSig(65) || appDomainSep(32) || contentsHash(32)
+            //                 || ORDER_TYPE_STRING bytes || uint16_be(len(ORDER_TYPE_STRING))
+            var wrapped = new byte[65 + 32 + 32 + OrderTypeStringBytes.Length + 2];
+            var pos = 0;
+            Buffer.BlockCopy(innerSig, 0, wrapped, pos, 65); pos += 65;
+            Buffer.BlockCopy(appDomainSep, 0, wrapped, pos, 32); pos += 32;
+            Buffer.BlockCopy(contentsHash, 0, wrapped, pos, 32); pos += 32;
+            Buffer.BlockCopy(OrderTypeStringBytes, 0, wrapped, pos, OrderTypeStringBytes.Length); pos += OrderTypeStringBytes.Length;
+            wrapped[pos++] = (byte)((OrderTypeStringBytes.Length >> 8) & 0xFF);
+            wrapped[pos] = (byte)(OrderTypeStringBytes.Length & 0xFF);
+
+            return "0x" + BytesToHexString(wrapped).ToLowerInvariant();
+        }
+
+        private static byte[] HashOrderContents(ParameterCollection order)
+        {
+            // abi.encode(ORDER_TYPE_HASH, salt, maker, signer, tokenId, makerAmount,
+            //            takerAmount, side, signatureType, timestamp, metadata, builder)
+            // Each entry is 32 bytes; total = 13 * 32 = 416 bytes.
+            var buf = new byte[32 * 13];
+            var p = 0;
+
+            Buffer.BlockCopy(OrderTypeHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt((ulong)order["salt"]), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeAddress((string)order["maker"]), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeAddress((string)order["signer"]), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeBigInteger(false, BigInteger.Parse((string)order["tokenId"])), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeBigInteger(false, BigInteger.Parse((string)order["makerAmount"])), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeBigInteger(false, BigInteger.Parse((string)order["takerAmount"])), 0, buf, p, 32); p += 32;
+
+            var sideByte = (byte)((string)order["side"] == "BUY" ? 0 : 1);
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt(sideByte), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt((byte)(int)order["signatureType"]), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeBigInteger(false, BigInteger.Parse((string)order["timestamp"])), 0, buf, p, 32); p += 32;
+
+            var metadataBytes = HexToBytesString((string)order["metadata"]);
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeBytes(32, metadataBytes), 0, buf, p, 32); p += 32;
+            var builderBytes = HexToBytesString((string)order["builder"]);
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeBytes(32, builderBytes), 0, buf, p, 32);
+
+            return InternalSha3Keccack.CalculateHash(buf);
+        }
+
+        private static byte[] HashTypedDataSignStruct(byte[] contentsHash, uint chainId, string signer)
+        {
+            // abi.encode(SOLADY_TYPE_HASH, contentsHash, DEPOSIT_WALLET_NAME_HASH,
+            //            DEPOSIT_WALLET_VERSION_HASH, chainId, signer, DEPOSIT_WALLET_DOMAIN_SALT)
+            var buf = new byte[32 * 7];
+            var p = 0;
+            Buffer.BlockCopy(SoladyTypeHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(contentsHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(DepositWalletNameHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(DepositWalletVersionHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt(chainId), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeAddress(signer), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(DepositWalletDomainSalt, 0, buf, p, 32);
+            return InternalSha3Keccack.CalculateHash(buf);
+        }
+
+        private static byte[] GetAppDomainSeparator(uint chainId, string contractAddr)
+        {
+            var key = chainId.ToString() + "|" + contractAddr.ToLowerInvariant();
+            byte[]? cached;
+            lock (_appDomainSeparatorCacheLock)
+                _appDomainSeparatorCache.TryGetValue(key, out cached);
+            if (cached != null)
+                return cached;
+
+            var buf = new byte[32 * 5];
+            var p = 0;
+            Buffer.BlockCopy(DomainTypeHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(CtfExchangeNameHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(CtfExchangeVersionHash, 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt(chainId), 0, buf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeAddress(contractAddr), 0, buf, p, 32);
+            var hash = InternalSha3Keccack.CalculateHash(buf);
+
+            lock (_appDomainSeparatorCacheLock)
+                _appDomainSeparatorCache[key] = hash;
+            return hash;
+        }
+
+        private byte[] SignHashRaw(byte[] hash)
+        {
+            (var signature, var recover) = Secp256k1.SignRecoverable(hash, GetPrivateKeyBytes());
+            var result = new byte[65];
+            Buffer.BlockCopy(signature, 0, result, 0, 64);
+            result[64] = (byte)(recover + 27);
+            return result;
         }
 
         private byte[] GetPrivateKeyBytes()

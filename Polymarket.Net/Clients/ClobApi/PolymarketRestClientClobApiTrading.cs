@@ -275,10 +275,30 @@ namespace Polymarket.Net.Clients.ClobApi
             string? metadata,
             string? builderCode)
         {
+            // Deposit-wallet (POLY_1271) orders set BOTH maker and signer to the deposit
+            // wallet address. The owner EOA only contributes the inner ECDSA signature;
+            // ERC-1271 validation against the deposit wallet is what gates the order.
+            // Existing proxy/Safe accounts keep maker=funder, signer=owner EOA.
+            string maker;
+            string signer;
+            if (authProvider.SignatureType == SignType.Poly1271)
+            {
+                if (string.IsNullOrEmpty(authProvider.PolymarketFundingAddress))
+                    throw new InvalidOperationException("FundingAddress (deposit wallet) is required when SignType=Poly1271");
+
+                maker = authProvider.PolymarketFundingAddress!;
+                signer = authProvider.PolymarketFundingAddress!;
+            }
+            else
+            {
+                maker = authProvider.PolymarketFundingAddress ?? authProvider.PublicAddress;
+                signer = authProvider.PublicAddress;
+            }
+
             var orderParameters = new ParameterCollection();
             orderParameters.Add("salt", (ulong)(clientOrderId ?? ExchangeHelpers.RandomLong(1000000000000, 9999999999999)));
-            orderParameters.Add("maker", authProvider.PolymarketFundingAddress ?? authProvider.PublicAddress);
-            orderParameters.Add("signer", authProvider.PublicAddress);
+            orderParameters.Add("maker", maker);
+            orderParameters.Add("signer", signer);
             orderParameters.Add("tokenId", tokenId);
             orderParameters.AddString("makerAmount", makerQuantity);
             orderParameters.AddString("takerAmount", takerQuantity);
