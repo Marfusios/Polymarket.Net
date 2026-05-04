@@ -59,14 +59,94 @@ namespace Polymarket.Net.Clients.ClobApi
             if (!makerTakerQuantities)
                 return new WebCallResult<PolymarketOrderResult>(makerTakerQuantities.Error);
 
-            var parameters = new ParameterCollection();
+            var signed = BuildAndSignInternal(
+                tokenId,
+                side,
+                makerTakerQuantities.Data.MakerQuantity,
+                makerTakerQuantities.Data.TakerQuantity,
+                price ?? 0m,
+                quantity,
+                tokenResult.Data.NegativeRisk,
+                clientOrderId,
+                expiration,
+                metadata,
+                builderCode);
+
+            return await SubmitSignedOrderAsync(signed, timeInForce, postOnly, deferExecution, ct).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public PreSignedOrder BuildAndSignOrder(
+            string tokenId,
+            OrderSide side,
+            decimal quantity,
+            decimal price,
+            bool negativeRisk,
+            long? clientOrderId = null,
+            DateTime? expiration = null,
+            string? metadata = null,
+            string? builderCode = null,
+            bool isWideLimit = false)
+        {
+            if (string.IsNullOrEmpty(tokenId))
+                throw new ArgumentException("tokenId required", nameof(tokenId));
+            if (quantity <= 0m)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "quantity must be positive");
+            if (price <= 0m || price >= 1m)
+                throw new ArgumentOutOfRangeException(nameof(price), "price must be in (0, 1)");
+
+            // For limit orders the quantities are deterministic from price+qty (no orderbook lookup).
+            var (makerQty, takerQty) = ComputeLimitQuantities(side, quantity, NormalizeOrderPrice(price));
+            return BuildAndSignInternal(
+                tokenId,
+                side,
+                makerQty,
+                takerQty,
+                NormalizeOrderPrice(price),
+                quantity,
+                negativeRisk,
+                clientOrderId,
+                expiration,
+                metadata,
+                builderCode,
+                isWideLimit);
+        }
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<PolymarketOrderResult>> PlaceSignedOrderAsync(
+            PreSignedOrder signedOrder,
+            TimeInForce? timeInForce = null,
+            bool? postOnly = null,
+            bool? deferExecution = null,
+            CancellationToken ct = default)
+        {
+            if (signedOrder == null)
+                throw new ArgumentNullException(nameof(signedOrder));
+
+            return await SubmitSignedOrderAsync(signedOrder, timeInForce, postOnly, deferExecution, ct).ConfigureAwait(false);
+        }
+
+        private PreSignedOrder BuildAndSignInternal(
+            string tokenId,
+            OrderSide side,
+            decimal makerQty,
+            decimal takerQty,
+            decimal price,
+            decimal quantity,
+            bool negativeRisk,
+            long? clientOrderId,
+            DateTime? expiration,
+            string? metadata,
+            string? builderCode,
+            bool isWideLimit = false)
+        {
             var authProvider = (PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider!;
             var orderParameters = BuildV2OrderParameters(
                 authProvider,
                 tokenId,
                 side,
-                makerTakerQuantities.Data.MakerQuantity,
-                makerTakerQuantities.Data.TakerQuantity,
+                makerQty,
+                takerQty,
                 clientOrderId,
                 expiration,
                 metadata,
@@ -77,9 +157,33 @@ namespace Polymarket.Net.Clients.ClobApi
                 authProvider.GetOrderSignature(
                     orderParameters,
                     _baseClient.ClientOptions.Environment.ChainId,
-                    tokenResult.Data.NegativeRisk).ToLowerInvariant());
+                    negativeRisk).ToLowerInvariant());
 
-            parameters.Add("order", orderParameters);
+            var salt = (ulong)orderParameters["salt"];
+            return new PreSignedOrder(
+                orderParameters,
+                tokenId,
+                side,
+                price,
+                quantity,
+                makerQty,
+                takerQty,
+                salt,
+                DateTimeOffset.UtcNow,
+                negativeRisk,
+                isWideLimit);
+        }
+
+        private async Task<WebCallResult<PolymarketOrderResult>> SubmitSignedOrderAsync(
+            PreSignedOrder signed,
+            TimeInForce? timeInForce,
+            bool? postOnly,
+            bool? deferExecution,
+            CancellationToken ct)
+        {
+            var authProvider = (PolymarketAuthenticationProvider)_baseClient.AuthenticationProvider!;
+            var parameters = new ParameterCollection();
+            parameters.Add("order", signed.OrderParameters);
             parameters.Add("owner", authProvider.ApiKey);
             parameters.AddEnum("orderType", timeInForce ?? TimeInForce.GoodTillCanceled);
             parameters.Add("postOnly", postOnly ?? false);
@@ -291,6 +395,31 @@ namespace Polymarket.Net.Clients.ClobApi
         internal static decimal NormalizeOrderPrice(decimal price)
         {
             return Math.Round(price, 3).Normalize();
+        }
+
+        /// <summary>
+        /// Compute (makerQuantity, takerQuantity) for a LIMIT order without any HTTP call.
+        /// Mirrors the limit-order branch of <see cref="GetMakerTakerQuantitiesAsync"/>.
+        /// </summary>
+        internal static (decimal MakerQuantity, decimal TakerQuantity) ComputeLimitQuantities(
+            OrderSide side, decimal quantity, decimal normalizedPrice)
+        {
+            decimal takerQuantity;
+            decimal makerQuantity;
+            if (side == OrderSide.Buy)
+            {
+                takerQuantity = ExchangeHelpers.RoundDown(quantity, 2);
+                makerQuantity = takerQuantity * normalizedPrice;
+            }
+            else
+            {
+                makerQuantity = ExchangeHelpers.RoundDown(quantity, 2);
+                takerQuantity = makerQuantity * normalizedPrice;
+            }
+            takerQuantity = ExchangeHelpers.RoundDown(takerQuantity, 6);
+            takerQuantity = ConvertToClobBaseUnits(takerQuantity);
+            makerQuantity = ConvertToClobBaseUnits(makerQuantity);
+            return (makerQuantity.Normalize(), takerQuantity.Normalize());
         }
 
         internal static decimal ConvertToClobBaseUnits(decimal amount)

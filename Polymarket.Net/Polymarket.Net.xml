@@ -109,6 +109,18 @@
         <member name="T:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiTrading">
             <inheritdoc />
         </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiTrading.BuildAndSignOrder(System.String,Polymarket.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Boolean,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.String,System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiTrading.PlaceSignedOrderAsync(Polymarket.Net.Objects.Models.PreSignedOrder,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiTrading.ComputeLimitQuantities(Polymarket.Net.Enums.OrderSide,System.Decimal,System.Decimal)">
+            <summary>
+            Compute (makerQuantity, takerQuantity) for a LIMIT order without any HTTP call.
+            Mirrors the limit-order branch of <see cref="M:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApiTrading.GetMakerTakerQuantitiesAsync(System.String,Polymarket.Net.Enums.OrderSide,Polymarket.Net.Enums.OrderType,System.Decimal,System.Nullable{System.Decimal},System.Nullable{Polymarket.Net.Enums.TimeInForce})"/>.
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Clients.ClobApi.PolymarketSocketClientClobApi">
             <summary>
             Client providing access to the Polymarket Clob websocket Api
@@ -1591,6 +1603,35 @@
             <para><a href="https://docs.polymarket.com/developers/CLOB/orders/create-order-batch" /></para>
             </summary>
             <param name="requests">Order requests</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.BuildAndSignOrder(System.String,Polymarket.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Boolean,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.String,System.String,System.Boolean)">
+            <summary>
+            Build and sign the order body synchronously (no HTTP). Returns a pre-signed envelope
+            that can be passed to PlaceSignedOrderAsync to skip signing at placement time.
+            Each PreSignedOrder may only be submitted once: the salt acts as a server-side nonce.
+            </summary>
+            <param name="tokenId">UP or DOWN token id</param>
+            <param name="side">Buy/Sell</param>
+            <param name="quantity">Quantity in shares (limit order)</param>
+            <param name="price">Limit price (0..1)</param>
+            <param name="negativeRisk">Whether the market is a negative-risk market (from getClobMarketInfo)</param>
+            <param name="clientOrderId">Explicit salt (caller is responsible for uniqueness if provided)</param>
+            <param name="expiration">Order expiration (null = GTC, expiration field signed as 0)</param>
+            <param name="metadata">Bytes32 metadata; null becomes 0x00..</param>
+            <param name="builderCode">Bytes32 builder attribution; null falls back to client default</param>
+            <param name="isWideLimit">If true, mark the resulting order as a "wide-limit" boot entry.
+            Affects only client-side cache behavior; the signed payload is unchanged.</param>
+        </member>
+        <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.PlaceSignedOrderAsync(Polymarket.Net.Objects.Models.PreSignedOrder,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Place a pre-built and pre-signed order. Skips quantity calc, parameter assembly,
+            and EIP-712 signing — performs only the HTTP submit. Use the output of BuildAndSignOrder.
+            </summary>
+            <param name="signedOrder">Output of BuildAndSignOrder</param>
+            <param name="timeInForce">Time in force at place time</param>
+            <param name="postOnly">Post-only flag</param>
+            <param name="deferExecution">Defer execution flag</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.CancelOrderAsync(System.String,System.Threading.CancellationToken)">
@@ -5568,6 +5609,54 @@
         <member name="P:Polymarket.Net.Objects.Models.PolymarketTradeUpdate.MakerOrders">
             <summary>
             List of the maker trades the taker trade was filled against
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Objects.Models.PreSignedOrder">
+            <summary>
+            Result of <see cref="M:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApiTrading.BuildAndSignOrder(System.String,Polymarket.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Boolean,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.String,System.String,System.Boolean)"/>.
+            An assembled and EIP-712 signed order body ready to submit via PlaceSignedOrderAsync.
+            Each instance encodes a unique salt; do not reuse after a successful or failed submission.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.OrderParameters">
+            <summary>The signed parameter envelope (passed to /order endpoint).</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.TokenId">
+            <summary>Token id (UP or DOWN).</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.Side">
+            <summary>Buy or Sell.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.Price">
+            <summary>Limit price (0..1).</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.Quantity">
+            <summary>Quantity (shares).</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.MakerAmount">
+            <summary>Maker amount (USDC for buys, shares for sells) as it was signed.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.TakerAmount">
+            <summary>Taker amount (shares for buys, USDC for sells) as it was signed.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.Salt">
+            <summary>Salt that acts as the server-side replay nonce.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.SignedAt">
+            <summary>Wall clock at signing.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.NegativeRisk">
+            <summary>Whether the underlying market is a negative-risk (negRisk) market — affects
+            the verifying contract address that was baked into the signature.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Objects.Models.PreSignedOrder.IsWideLimit">
+            <summary>
+            True for "boot" entries pre-signed at the maximum buy-price ceiling so the first
+            signal in a new market can be caught regardless of where the live limit lands.
+            Wide-limit entries skip the cache's price-drift upper bound (the cached price will
+            always be much higher than the live signal price). Polymarket fills at the prevailing
+            best ask up to the signed makerAmount, so the actual fill price is unaffected — only
+            the worst-case capital commitment is widened.
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Options.PolymarketOptions">

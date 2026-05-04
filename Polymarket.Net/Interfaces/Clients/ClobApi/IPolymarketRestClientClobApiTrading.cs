@@ -96,6 +96,50 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
         Task<WebCallResult<CallResult<PolymarketOrderResult>[]>> PlaceMultipleOrdersAsync(IEnumerable<PolymarketOrderRequest> requests, CancellationToken ct = default);
 
         /// <summary>
+        /// Build and sign the order body synchronously (no HTTP). Returns a pre-signed envelope
+        /// that can be passed to PlaceSignedOrderAsync to skip signing at placement time.
+        /// Each PreSignedOrder may only be submitted once: the salt acts as a server-side nonce.
+        /// </summary>
+        /// <param name="tokenId">UP or DOWN token id</param>
+        /// <param name="side">Buy/Sell</param>
+        /// <param name="quantity">Quantity in shares (limit order)</param>
+        /// <param name="price">Limit price (0..1)</param>
+        /// <param name="negativeRisk">Whether the market is a negative-risk market (from getClobMarketInfo)</param>
+        /// <param name="clientOrderId">Explicit salt (caller is responsible for uniqueness if provided)</param>
+        /// <param name="expiration">Order expiration (null = GTC, expiration field signed as 0)</param>
+        /// <param name="metadata">Bytes32 metadata; null becomes 0x00..</param>
+        /// <param name="builderCode">Bytes32 builder attribution; null falls back to client default</param>
+        /// <param name="isWideLimit">If true, mark the resulting order as a "wide-limit" boot entry.
+        /// Affects only client-side cache behavior; the signed payload is unchanged.</param>
+        PreSignedOrder BuildAndSignOrder(
+            string tokenId,
+            OrderSide side,
+            decimal quantity,
+            decimal price,
+            bool negativeRisk,
+            long? clientOrderId = null,
+            DateTime? expiration = null,
+            string? metadata = null,
+            string? builderCode = null,
+            bool isWideLimit = false);
+
+        /// <summary>
+        /// Place a pre-built and pre-signed order. Skips quantity calc, parameter assembly,
+        /// and EIP-712 signing — performs only the HTTP submit. Use the output of BuildAndSignOrder.
+        /// </summary>
+        /// <param name="signedOrder">Output of BuildAndSignOrder</param>
+        /// <param name="timeInForce">Time in force at place time</param>
+        /// <param name="postOnly">Post-only flag</param>
+        /// <param name="deferExecution">Defer execution flag</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<PolymarketOrderResult>> PlaceSignedOrderAsync(
+            PreSignedOrder signedOrder,
+            TimeInForce? timeInForce = null,
+            bool? postOnly = null,
+            bool? deferExecution = null,
+            CancellationToken ct = default);
+
+        /// <summary>
         /// Cancel an order
         /// <para><a href="https://docs.polymarket.com/developers/CLOB/orders/cancel-orders" /></para>
         /// </summary>
