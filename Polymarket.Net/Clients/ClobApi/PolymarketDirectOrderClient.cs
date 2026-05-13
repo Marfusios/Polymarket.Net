@@ -1,9 +1,9 @@
-using Polymarket.Net.Converters;
 using Polymarket.Net.Enums;
 using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -185,7 +185,26 @@ namespace Polymarket.Net.Clients.ClobApi
 
             try
             {
-                orderResult = JsonSerializer.Deserialize(rawBody, PolymarketSourceGenerationContext.Default.PolymarketOrderResult);
+                using var document = JsonDocument.Parse(rawBody);
+                if (document.RootElement.ValueKind != JsonValueKind.Object)
+                {
+                    error = "order response is not a JSON object";
+                    return false;
+                }
+
+                orderResult = new PolymarketOrderResult
+                {
+                    Success = GetBooleanProperty(document.RootElement, "success"),
+                    Error = GetStringProperty(document.RootElement, "errorMsg") ?? GetStringProperty(document.RootElement, "error"),
+                    OrderId = GetStringProperty(document.RootElement, "orderID")
+                        ?? GetStringProperty(document.RootElement, "orderId")
+                        ?? GetStringProperty(document.RootElement, "id")
+                        ?? string.Empty,
+                    TakingQuantity = GetDecimalProperty(document.RootElement, "takingAmount"),
+                    MakingQuantity = GetDecimalProperty(document.RootElement, "makingAmount"),
+                    Status = GetOrderStatusProperty(document.RootElement, "status"),
+                    TradeHashes = GetStringArrayProperty(document.RootElement, "transactionsHashes")
+                };
                 return true;
             }
             catch (Exception ex)
@@ -193,6 +212,93 @@ namespace Polymarket.Net.Clients.ClobApi
                 error = ex.Message;
                 return false;
             }
+        }
+
+        private static bool GetBooleanProperty(JsonElement root, string propertyName)
+        {
+            if (!root.TryGetProperty(propertyName, out var property))
+                return false;
+
+            return property.ValueKind switch
+            {
+                JsonValueKind.True => true,
+                JsonValueKind.False => false,
+                JsonValueKind.String => bool.TryParse(property.GetString(), out var value) && value,
+                _ => false
+            };
+        }
+
+        private static string? GetStringProperty(JsonElement root, string propertyName)
+        {
+            if (!root.TryGetProperty(propertyName, out var property) || property.ValueKind == JsonValueKind.Null)
+                return null;
+
+            if (property.ValueKind == JsonValueKind.String)
+                return property.GetString();
+
+            return property.ValueKind is JsonValueKind.Number or JsonValueKind.True or JsonValueKind.False or JsonValueKind.Object or JsonValueKind.Array
+                ? property.GetRawText()
+                : null;
+        }
+
+        private static decimal? GetDecimalProperty(JsonElement root, string propertyName)
+        {
+            if (!root.TryGetProperty(propertyName, out var property) || property.ValueKind == JsonValueKind.Null)
+                return null;
+
+            if (property.ValueKind == JsonValueKind.Number && property.TryGetDecimal(out var number))
+                return number;
+
+            if (property.ValueKind == JsonValueKind.String
+                && decimal.TryParse(property.GetString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed))
+                return parsed;
+
+            return null;
+        }
+
+        private static OrderStatus? GetOrderStatusProperty(JsonElement root, string propertyName)
+        {
+            var raw = GetStringProperty(root, propertyName);
+            if (string.IsNullOrWhiteSpace(raw))
+                return null;
+
+            return raw.Trim() switch
+            {
+                var value when value.Equals("LIVE", StringComparison.OrdinalIgnoreCase) => OrderStatus.Live,
+                var value when value.Equals("CANCELED", StringComparison.OrdinalIgnoreCase) => OrderStatus.Canceled,
+                var value when value.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase) => OrderStatus.Canceled,
+                var value when value.Equals("MATCHED", StringComparison.OrdinalIgnoreCase) => OrderStatus.Matched,
+                var value when value.Equals("DELAYED", StringComparison.OrdinalIgnoreCase) => OrderStatus.Delayed,
+                _ => null
+            };
+        }
+
+        private static string[] GetStringArrayProperty(JsonElement root, string propertyName)
+        {
+            if (!root.TryGetProperty(propertyName, out var property) || property.ValueKind == JsonValueKind.Null)
+                return Array.Empty<string>();
+
+            if (property.ValueKind == JsonValueKind.String)
+            {
+                var value = property.GetString();
+                return string.IsNullOrEmpty(value) ? Array.Empty<string>() : new[] { value };
+            }
+
+            if (property.ValueKind != JsonValueKind.Array)
+                return Array.Empty<string>();
+
+            var values = new List<string>();
+            foreach (var item in property.EnumerateArray())
+            {
+                if (item.ValueKind == JsonValueKind.String)
+                {
+                    var value = item.GetString();
+                    if (!string.IsNullOrEmpty(value))
+                        values.Add(value);
+                }
+            }
+
+            return values.Count == 0 ? Array.Empty<string>() : values.ToArray();
         }
 
         private static string ResolveErrorMessage(string rawBody, string? fallback)
@@ -204,9 +310,22 @@ namespace Polymarket.Net.Clients.ClobApi
             {
                 using var document = JsonDocument.Parse(rawBody);
                 if (document.RootElement.TryGetProperty("error", out var errorProperty))
-                    return errorProperty.GetString() ?? fallback ?? "unknown";
+                {
+                    var error = errorProperty.ValueKind == JsonValueKind.String
+                        ? errorProperty.GetString()
+                        : errorProperty.GetRawText();
+                    if (!string.IsNullOrWhiteSpace(error))
+                        return error;
+                }
+
                 if (document.RootElement.TryGetProperty("errorMsg", out var errorMsgProperty))
-                    return errorMsgProperty.GetString() ?? fallback ?? "unknown";
+                {
+                    var errorMsg = errorMsgProperty.ValueKind == JsonValueKind.String
+                        ? errorMsgProperty.GetString()
+                        : errorMsgProperty.GetRawText();
+                    if (!string.IsNullOrWhiteSpace(errorMsg))
+                        return errorMsg;
+                }
             }
             catch
             {
