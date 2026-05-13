@@ -127,30 +127,45 @@ namespace Polymarket.Net
 
         private void SignL2(RestApiClient client, RestRequestConfiguration requestConfig)
         {
+            requestConfig.Headers ??= new Dictionary<string, string>();
+
+            var body = string.Empty;
+            if (requestConfig.Method == HttpMethod.Post || requestConfig.Method == HttpMethod.Delete)
+            {
+                body = (requestConfig.BodyParameters == null || requestConfig.BodyParameters.Count == 0) ? string.Empty : SerializeBody(requestConfig.BodyParameters);
+                requestConfig.SetBodyContent(body);
+            }
+
+            foreach (var header in CreateL2Headers(requestConfig.Method, requestConfig.Path, body))
+                requestConfig.Headers.Add(header.Key, header.Value);
+        }
+
+        internal Dictionary<string, string> CreateL2Headers(HttpMethod method, string path, string body)
+        {
             if (_hmacBytes == null)
                 throw new ArgumentException("Layer 2 credentials required");
 
             var timestamp = DateTimeConverter.ConvertToSeconds(DateTime.UtcNow);
-            requestConfig.Headers ??= new Dictionary<string, string>();
-            requestConfig.Headers.Add("POLY_ADDRESS", GetPublicAddress());
-            requestConfig.Headers.Add("POLY_API_KEY", _credentials.L2ApiKey!);
-            requestConfig.Headers.Add("POLY_PASSPHRASE", _credentials.L2Pass!);
-            requestConfig.Headers.Add("POLY_TIMESTAMP", timestamp.Value.ToString());
-
-            var signData = timestamp + requestConfig.Method.ToString() + requestConfig.Path;
-            if (requestConfig.Method == HttpMethod.Post || requestConfig.Method == HttpMethod.Delete)
-            {
-                var body = (requestConfig.BodyParameters == null || requestConfig.BodyParameters.Count == 0) ? string.Empty : GetSerializedBody(_serializer, requestConfig.BodyParameters);
-                signData += body;
-                requestConfig.SetBodyContent(body);
-            }
+            var signData = timestamp + method.ToString() + path;
+            if (method == HttpMethod.Post || method == HttpMethod.Delete)
+                signData += body ?? string.Empty;
 
             string signature;
             using (var hmac = new HMACSHA256(_hmacBytes))
                 signature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(signData)));
 
-            requestConfig.Headers.Add("POLY_SIGNATURE", signature.Replace('+', '-').Replace('/', '_'));
+            return new Dictionary<string, string>
+            {
+                { "POLY_ADDRESS", GetPublicAddress() },
+                { "POLY_API_KEY", _credentials.L2ApiKey! },
+                { "POLY_PASSPHRASE", _credentials.L2Pass! },
+                { "POLY_TIMESTAMP", timestamp.Value.ToString() },
+                { "POLY_SIGNATURE", signature.Replace('+', '-').Replace('/', '_') }
+            };
         }
+
+        internal static string SerializeBody(IDictionary<string, object> parameters)
+            => GetSerializedBody(_serializer, parameters);
 
         public string GetPublicAddress()
         {

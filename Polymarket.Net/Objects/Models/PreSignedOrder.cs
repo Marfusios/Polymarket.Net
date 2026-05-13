@@ -1,4 +1,5 @@
 using CryptoExchange.Net.Objects;
+using Polymarket.Net;
 using Polymarket.Net.Enums;
 using System;
 
@@ -11,6 +12,8 @@ namespace Polymarket.Net.Objects.Models
     /// </summary>
     public sealed class PreSignedOrder
     {
+        private string? _defaultSubmitBody;
+
         /// <summary>The signed parameter envelope (passed to /order endpoint).</summary>
         internal ParameterCollection OrderParameters { get; }
 
@@ -52,6 +55,19 @@ namespace Polymarket.Net.Objects.Models
         /// </summary>
         public bool IsWideLimit { get; }
 
+        /// <summary>
+        /// Pre-build the JSON body that will be sent to the CLOB /order endpoint.
+        /// L2 HMAC headers are intentionally not cached because they include the send timestamp.
+        /// </summary>
+        public void PrepareSubmitBody(
+            string owner,
+            TimeInForce? timeInForce = null,
+            bool? postOnly = null,
+            bool? deferExecution = null)
+        {
+            _ = GetSubmitBody(owner, timeInForce, postOnly, deferExecution);
+        }
+
         internal PreSignedOrder(
             ParameterCollection orderParameters,
             string tokenId,
@@ -76,6 +92,41 @@ namespace Polymarket.Net.Objects.Models
             SignedAt = signedAt;
             NegativeRisk = negativeRisk;
             IsWideLimit = isWideLimit;
+        }
+
+        internal string GetSubmitBody(
+            string owner,
+            TimeInForce? timeInForce = null,
+            bool? postOnly = null,
+            bool? deferExecution = null)
+        {
+            var effectiveTimeInForce = timeInForce ?? TimeInForce.GoodTillCanceled;
+            var effectivePostOnly = postOnly ?? false;
+            var effectiveDeferExecution = deferExecution ?? false;
+            if (effectiveTimeInForce == TimeInForce.GoodTillCanceled &&
+                !effectivePostOnly &&
+                !effectiveDeferExecution &&
+                _defaultSubmitBody != null)
+            {
+                return _defaultSubmitBody;
+            }
+
+            var parameters = new ParameterCollection();
+            parameters.Add("order", OrderParameters);
+            parameters.Add("owner", owner);
+            parameters.AddEnum("orderType", effectiveTimeInForce);
+            parameters.Add("postOnly", effectivePostOnly);
+            parameters.Add("deferExec", effectiveDeferExecution);
+
+            var body = PolymarketAuthenticationProvider.SerializeBody(parameters);
+            if (effectiveTimeInForce == TimeInForce.GoodTillCanceled &&
+                !effectivePostOnly &&
+                !effectiveDeferExecution)
+            {
+                _defaultSubmitBody = body;
+            }
+
+            return body;
         }
     }
 }

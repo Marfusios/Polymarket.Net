@@ -4,6 +4,55 @@
         <name>Polymarket.Net</name>
     </assembly>
     <members>
+        <member name="T:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderClient">
+            <summary>
+            Minimal /order submitter for already-signed orders.
+            </summary>
+        </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderClient.#ctor(System.Net.Http.HttpClient,Polymarket.Net.PolymarketEnvironment,Polymarket.Net.Objects.PolymarketCredentials)">
+            <summary>
+            Create a direct order submitter using the supplied HTTP client.
+            </summary>
+        </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderClient.PrepareSignedOrder(Polymarket.Net.Objects.Models.PreSignedOrder,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary>
+            Pre-serialize the /order request body for a signed order.
+            </summary>
+        </member>
+        <member name="M:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderClient.PlaceSignedOrderAsync(Polymarket.Net.Objects.Models.PreSignedOrder,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Submit an already-signed order using a pre-serialized request body plus fresh L2 headers.
+            </summary>
+        </member>
+        <member name="T:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult">
+            <summary>
+            Response metadata from the direct signed-order submitter.
+            </summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.Success">
+            <summary>True when HTTP and CLOB order processing both succeeded.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.Data">
+            <summary>Parsed order result, when the response body could be parsed.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ResponseStatusCode">
+            <summary>HTTP status code returned by the CLOB endpoint.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ResponseVersion">
+            <summary>Negotiated HTTP version reported by HttpClient.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ResponseHeaders">
+            <summary>Response headers from the CLOB endpoint.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ErrorType">
+            <summary>Short error category for logging.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ErrorMessage">
+            <summary>Human-readable error message.</summary>
+        </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.RawBody">
+            <summary>Raw response body.</summary>
+        </member>
         <member name="T:Polymarket.Net.Clients.ClobApi.PolymarketRestClientClobApi">
             <inheritdoc cref="T:Polymarket.Net.Interfaces.Clients.ClobApi.IPolymarketRestClientClobApi" />
         </member>
@@ -5662,6 +5711,12 @@
             always be much higher than the live signal price). Polymarket fills at the prevailing
             best ask up to the signed makerAmount, so the actual fill price is unaffected — only
             the worst-case capital commitment is widened.
+            </summary>
+        </member>
+        <member name="M:Polymarket.Net.Objects.Models.PreSignedOrder.PrepareSubmitBody(System.String,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary>
+            Pre-build the JSON body that will be sent to the CLOB /order endpoint.
+            L2 HMAC headers are intentionally not cached because they include the send timestamp.
             </summary>
         </member>
         <member name="T:Polymarket.Net.Objects.Options.PolymarketOptions">
