@@ -1142,6 +1142,11 @@
             Matched
             </summary>
         </member>
+        <member name="F:Polymarket.Net.Enums.OrderStatus.Delayed">
+            <summary>
+            Delayed
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Enums.OrderType">
             <summary>
             Order type
