@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -75,14 +75,19 @@ namespace Polymarket.Net.Clients.ClobApi
             if (signedOrder == null)
                 throw new ArgumentNullException(nameof(signedOrder));
 
+            // The HMAC signs the string form; the wire content reuses the UTF-8 bytes
+            // cached at PrepareSubmitBody time, skipping a per-submit re-encode.
             var body = signedOrder.GetSubmitBody(_owner, timeInForce, postOnly, deferExecution);
+            var bodyUtf8 = signedOrder.GetSubmitBodyUtf8(_owner, timeInForce, postOnly, deferExecution);
             var headers = _authProvider.CreateL2Headers(HttpMethod.Post, OrderPath, body);
 
+            var content = new ByteArrayContent(bodyUtf8);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
             using var request = new HttpRequestMessage(HttpMethod.Post, _orderUri)
             {
                 Version = _httpClient.DefaultRequestVersion,
                 VersionPolicy = _httpClient.DefaultVersionPolicy,
-                Content = new StringContent(body, Encoding.UTF8, "application/json")
+                Content = content
             };
             foreach (var header in headers)
                 request.Headers.TryAddWithoutValidation(header.Key, header.Value);

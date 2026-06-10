@@ -5724,6 +5724,13 @@
             L2 HMAC headers are intentionally not cached because they include the send timestamp.
             </summary>
         </member>
+        <member name="M:Polymarket.Net.Objects.Models.PreSignedOrder.GetSubmitBodyUtf8(System.String,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary>
+            UTF-8 encoding of <see cref="M:Polymarket.Net.Objects.Models.PreSignedOrder.GetSubmitBody(System.String,System.Nullable{Polymarket.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.Nullable{System.Boolean})"/>, cached for the default-flags
+            case so the submit path can use a ByteArrayContent without re-encoding the
+            body on every order.
+            </summary>
+        </member>
         <member name="T:Polymarket.Net.Objects.Options.PolymarketOptions">
             <summary>
             Polymarket options

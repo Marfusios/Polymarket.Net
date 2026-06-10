@@ -2,6 +2,7 @@ using CryptoExchange.Net.Objects;
 using Polymarket.Net;
 using Polymarket.Net.Enums;
 using System;
+using System.Text;
 
 namespace Polymarket.Net.Objects.Models
 {
@@ -13,6 +14,7 @@ namespace Polymarket.Net.Objects.Models
     public sealed class PreSignedOrder
     {
         private string? _defaultSubmitBody;
+        private byte[]? _defaultSubmitBodyUtf8;
 
         /// <summary>The signed parameter envelope (passed to /order endpoint).</summary>
         internal ParameterCollection OrderParameters { get; }
@@ -66,6 +68,7 @@ namespace Polymarket.Net.Objects.Models
             bool? deferExecution = null)
         {
             _ = GetSubmitBody(owner, timeInForce, postOnly, deferExecution);
+            _ = GetSubmitBodyUtf8(owner, timeInForce, postOnly, deferExecution);
         }
 
         internal PreSignedOrder(
@@ -127,6 +130,33 @@ namespace Polymarket.Net.Objects.Models
             }
 
             return body;
+        }
+
+        /// <summary>
+        /// UTF-8 encoding of <see cref="GetSubmitBody"/>, cached for the default-flags
+        /// case so the submit path can use a ByteArrayContent without re-encoding the
+        /// body on every order.
+        /// </summary>
+        internal byte[] GetSubmitBodyUtf8(
+            string owner,
+            TimeInForce? timeInForce = null,
+            bool? postOnly = null,
+            bool? deferExecution = null)
+        {
+            var effectiveTimeInForce = timeInForce ?? TimeInForce.GoodTillCanceled;
+            var effectivePostOnly = postOnly ?? false;
+            var effectiveDeferExecution = deferExecution ?? false;
+            var isDefault = effectiveTimeInForce == TimeInForce.GoodTillCanceled &&
+                            !effectivePostOnly &&
+                            !effectiveDeferExecution;
+            if (isDefault && _defaultSubmitBodyUtf8 != null)
+                return _defaultSubmitBodyUtf8;
+
+            var bytes = Encoding.UTF8.GetBytes(GetSubmitBody(owner, timeInForce, postOnly, deferExecution));
+            if (isDefault)
+                _defaultSubmitBodyUtf8 = bytes;
+
+            return bytes;
         }
     }
 }
