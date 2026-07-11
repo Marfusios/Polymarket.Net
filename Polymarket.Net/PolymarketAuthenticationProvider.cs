@@ -112,18 +112,39 @@ namespace Polymarket.Net
         {
             var timestamp = DateTimeConverter.ConvertToSeconds(DateTime.UtcNow);
             requestConfig.GetPositionParameters().TryGetValue("nonce", out var nonce);
+            var nonceValue = nonce == null ? 0L : (long)nonce;
 
-            var typeRaw = GetEncodedClobAuth(timestamp.ToString()!, nonce == null ? 0 : (long)nonce, chainId);
-            var msg = LightEip712TypedDataEncoder.EncodeTypedDataRaw(typeRaw);
-            var keccakSigned = InternalSha3Keccack.CalculateHash(msg);
+            string address;
+            string signature;
+            if (UseWalletBoundAuth)
+            {
+                // Deposit-wallet flow: claim the wallet, sign the ClobAuth attestation
+                // wrapped in the ERC-7739 TypedDataSign envelope (same shape as the
+                // POLY_1271 order signature) so the venue can validate via ERC-1271
+                // and bind the api key to the wallet.
+                address = _credentials.PolymarketFundingAddress!;
+                signature = GetClobAuthSignaturePoly1271(timestamp.Value.ToString(), nonceValue, chainId);
+            }
+            else
+            {
+                var typeRaw = GetEncodedClobAuth(timestamp.ToString()!, nonceValue, chainId);
+                var msg = LightEip712TypedDataEncoder.EncodeTypedDataRaw(typeRaw);
+                var keccakSigned = InternalSha3Keccack.CalculateHash(msg);
+                address = GetPublicAddress();
+                signature = SignHash(keccakSigned);
+            }
 
-            var signature = SignHash(keccakSigned);
             requestConfig.Headers ??= new Dictionary<string, string>();
-            requestConfig.Headers.Add("POLY_ADDRESS", GetPublicAddress());
+            requestConfig.Headers.Add("POLY_ADDRESS", address);
             requestConfig.Headers.Add("POLY_SIGNATURE", signature.ToLowerInvariant());
             requestConfig.Headers.Add("POLY_TIMESTAMP", timestamp.Value.ToString());
             requestConfig.Headers.Add("POLY_NONCE", nonce?.ToString() ?? "0");
         }
+
+        private bool UseWalletBoundAuth =>
+            _credentials.WalletBoundL1Auth
+            && SignatureType == SignType.Poly1271
+            && !string.IsNullOrEmpty(_credentials.PolymarketFundingAddress);
 
         private void SignL2(RestApiClient client, RestRequestConfiguration requestConfig)
         {
@@ -156,7 +177,8 @@ namespace Polymarket.Net
 
             return new Dictionary<string, string>
             {
-                { "POLY_ADDRESS", GetPublicAddress() },
+                // Wallet-bound api keys must claim the wallet on L2 too.
+                { "POLY_ADDRESS", UseWalletBoundAuth ? _credentials.PolymarketFundingAddress! : GetPublicAddress() },
                 { "POLY_API_KEY", _credentials.L2ApiKey! },
                 { "POLY_PASSPHRASE", _credentials.L2Pass! },
                 { "POLY_TIMESTAMP", timestamp.Value.ToString() },
@@ -225,6 +247,81 @@ namespace Polymarket.Net
 
         private static readonly Dictionary<string, byte[]> _appDomainSeparatorCache = new(StringComparer.Ordinal);
         private static readonly object _appDomainSeparatorCacheLock = new();
+
+        // --- ERC-7739-wrapped ClobAuth (L1 auth) for POLY_1271 deposit wallets ---
+        // Same envelope as the order signature below, with ClobAuth as contents and
+        // the ClobAuthDomain (3-field domain: no verifyingContract) as the app domain.
+        private const string ClobAuthTypeString =
+            "ClobAuth(address address,string timestamp,uint256 nonce,string message)";
+
+        private const string SoladyClobAuthTypeString =
+            "TypedDataSign(ClobAuth contents,string name,string version,uint256 chainId," +
+            "address verifyingContract,bytes32 salt)" + ClobAuthTypeString;
+
+        private static readonly byte[] ClobAuthTypeStringBytes = Encoding.UTF8.GetBytes(ClobAuthTypeString);
+        private static readonly byte[] ClobAuthTypeHash = InternalSha3Keccack.CalculateHash(ClobAuthTypeStringBytes);
+        private static readonly byte[] SoladyClobAuthTypeHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(SoladyClobAuthTypeString));
+        private static readonly byte[] Domain3TypeHash = InternalSha3Keccack.CalculateHash(
+            Encoding.UTF8.GetBytes("EIP712Domain(string name,string version,uint256 chainId)"));
+        private static readonly byte[] ClobAuthDomainNameHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes("ClobAuthDomain"));
+        private static readonly byte[] ClobAuthDomainVersionHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes("1"));
+        private static readonly byte[] L1SignMessageHash = InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(_l1SignMessage));
+
+        internal string GetClobAuthSignaturePoly1271(string timestamp, long nonce, uint chainId)
+        {
+            var wallet = _credentials.PolymarketFundingAddress!;
+
+            // ClobAuthDomain separator: keccak(domain3TypeHash || name || version || chainId)
+            var domBuf = new byte[32 * 4];
+            var p = 0;
+            Buffer.BlockCopy(Domain3TypeHash, 0, domBuf, p, 32); p += 32;
+            Buffer.BlockCopy(ClobAuthDomainNameHash, 0, domBuf, p, 32); p += 32;
+            Buffer.BlockCopy(ClobAuthDomainVersionHash, 0, domBuf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt(chainId), 0, domBuf, p, 32);
+            var clobAuthDomainSep = InternalSha3Keccack.CalculateHash(domBuf);
+
+            // contentsHash = keccak(typeHash || address(wallet) || keccak(ts) || nonce || keccak(msg))
+            var cBuf = new byte[32 * 5];
+            p = 0;
+            Buffer.BlockCopy(ClobAuthTypeHash, 0, cBuf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeAddress(wallet), 0, cBuf, p, 32); p += 32;
+            Buffer.BlockCopy(InternalSha3Keccack.CalculateHash(Encoding.UTF8.GetBytes(timestamp)), 0, cBuf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt((ulong)nonce), 0, cBuf, p, 32); p += 32;
+            Buffer.BlockCopy(L1SignMessageHash, 0, cBuf, p, 32);
+            var contentsHash = InternalSha3Keccack.CalculateHash(cBuf);
+
+            // TypedDataSign struct hash anchored at the deposit wallet
+            var tBuf = new byte[32 * 7];
+            p = 0;
+            Buffer.BlockCopy(SoladyClobAuthTypeHash, 0, tBuf, p, 32); p += 32;
+            Buffer.BlockCopy(contentsHash, 0, tBuf, p, 32); p += 32;
+            Buffer.BlockCopy(DepositWalletNameHash, 0, tBuf, p, 32); p += 32;
+            Buffer.BlockCopy(DepositWalletVersionHash, 0, tBuf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeInt(chainId), 0, tBuf, p, 32); p += 32;
+            Buffer.BlockCopy(AbiEncoder.AbiValueEncodeAddress(wallet), 0, tBuf, p, 32); p += 32;
+            Buffer.BlockCopy(DepositWalletDomainSalt, 0, tBuf, p, 32);
+            var typedDataSignStructHash = InternalSha3Keccack.CalculateHash(tBuf);
+
+            var digestInput = new byte[2 + 32 + 32];
+            digestInput[0] = 0x19;
+            digestInput[1] = 0x01;
+            Buffer.BlockCopy(clobAuthDomainSep, 0, digestInput, 2, 32);
+            Buffer.BlockCopy(typedDataSignStructHash, 0, digestInput, 34, 32);
+            var digest = InternalSha3Keccack.CalculateHash(digestInput);
+
+            var innerSig = SignHashRaw(digest);
+
+            var wrapped = new byte[65 + 32 + 32 + ClobAuthTypeStringBytes.Length + 2];
+            var pos = 0;
+            Buffer.BlockCopy(innerSig, 0, wrapped, pos, 65); pos += 65;
+            Buffer.BlockCopy(clobAuthDomainSep, 0, wrapped, pos, 32); pos += 32;
+            Buffer.BlockCopy(contentsHash, 0, wrapped, pos, 32); pos += 32;
+            Buffer.BlockCopy(ClobAuthTypeStringBytes, 0, wrapped, pos, ClobAuthTypeStringBytes.Length); pos += ClobAuthTypeStringBytes.Length;
+            wrapped[pos++] = (byte)((ClobAuthTypeStringBytes.Length >> 8) & 0xFF);
+            wrapped[pos] = (byte)(ClobAuthTypeStringBytes.Length & 0xFF);
+
+            return "0x" + BytesToHexString(wrapped).ToLowerInvariant();
+        }
 
         public string GetOrderSignaturePoly1271(ParameterCollection order, uint chainId, bool negativeRisk)
         {

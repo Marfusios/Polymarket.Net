@@ -35,6 +35,17 @@ namespace Polymarket.Net.Objects
         public string? L2Pass { get; set; }
 
         /// <summary>
+        /// Deposit-wallet (POLY_1271) accounts created after 2026-04-28: bind the L2
+        /// API key to the DEPOSIT WALLET instead of the owner EOA. L1 auth then sends
+        /// POLY_ADDRESS = funding address with an ERC-7739-wrapped ClobAuth signature
+        /// (validated through the wallet's ERC-1271 hook), and L2 requests claim the
+        /// wallet address. Required for fresh deposit-wallet accounts — the venue
+        /// rejects orders whose signer (the wallet) differs from the api-key address.
+        /// Leave false for grandfathered accounts whose EOA-bound keys still work.
+        /// </summary>
+        public bool WalletBoundL1Auth { get; set; }
+
+        /// <summary>
         /// Create new API credentials with a Polymarket public address and the private key for the funding address
         /// </summary>
         /// <param name="signType">The signature type</param>
@@ -79,14 +90,16 @@ namespace Polymarket.Net.Objects
             {
                 return new PolymarketCredentials(SignatureType, L1PrivateKey, L2ApiKey, L2Secret!, L2Pass!, PolymarketFundingAddress)
                 {
-                    CredentialType = this.CredentialType
+                    CredentialType = this.CredentialType,
+                    WalletBoundL1Auth = this.WalletBoundL1Auth
                 };
             }
             else
             {
                 return new PolymarketCredentials(SignatureType, L1PrivateKey, PolymarketFundingAddress)
                 {
-                    CredentialType = this.CredentialType
+                    CredentialType = this.CredentialType,
+                    WalletBoundL1Auth = this.WalletBoundL1Auth
                 };
             }
         }
