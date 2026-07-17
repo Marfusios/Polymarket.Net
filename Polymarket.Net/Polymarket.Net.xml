@@ -44,6 +44,12 @@
         <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ResponseHeaders">
             <summary>Response headers from the CLOB endpoint.</summary>
         </member>
+        <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.HttpSendStartedTimestamp">
+            <summary>
+            Monotonic <see cref="M:System.Diagnostics.Stopwatch.GetTimestamp"/> value captured immediately before
+            entering <see cref="M:System.Net.Http.HttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)"/>.
+            </summary>
+        </member>
         <member name="P:Polymarket.Net.Clients.ClobApi.PolymarketDirectOrderResult.ErrorType">
             <summary>Short error category for logging.</summary>
         </member>

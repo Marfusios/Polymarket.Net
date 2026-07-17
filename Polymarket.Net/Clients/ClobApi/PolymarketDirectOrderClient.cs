@@ -3,6 +3,7 @@ using Polymarket.Net.Objects;
 using Polymarket.Net.Objects.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -92,8 +93,10 @@ namespace Polymarket.Net.Clients.ClobApi
             foreach (var header in headers)
                 request.Headers.TryAddWithoutValidation(header.Key, header.Value);
 
+            var httpSendStartedTimestamp = 0L;
             try
             {
+                httpSendStartedTimestamp = Stopwatch.GetTimestamp();
                 using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
                 var rawBody = response.Content == null
                     ? string.Empty
@@ -106,6 +109,7 @@ namespace Polymarket.Net.Clients.ClobApi
                         response.StatusCode,
                         response.Version,
                         responseHeaders,
+                        httpSendStartedTimestamp,
                         "DeserializeError",
                         ResolveErrorMessage(rawBody, deserializeError),
                         rawBody);
@@ -117,6 +121,7 @@ namespace Polymarket.Net.Clients.ClobApi
                         response.StatusCode,
                         response.Version,
                         responseHeaders,
+                        httpSendStartedTimestamp,
                         "ServerError",
                         ResolveErrorMessage(rawBody, orderResult?.Error),
                         rawBody,
@@ -129,6 +134,7 @@ namespace Polymarket.Net.Clients.ClobApi
                         response.StatusCode,
                         response.Version,
                         responseHeaders,
+                        httpSendStartedTimestamp,
                         "DeserializeError",
                         "empty order response",
                         rawBody);
@@ -140,6 +146,7 @@ namespace Polymarket.Net.Clients.ClobApi
                         response.StatusCode,
                         response.Version,
                         responseHeaders,
+                        httpSendStartedTimestamp,
                         "ServerError",
                         orderResult.Error,
                         rawBody,
@@ -150,6 +157,7 @@ namespace Polymarket.Net.Clients.ClobApi
                     response.StatusCode,
                     response.Version,
                     responseHeaders,
+                    httpSendStartedTimestamp,
                     rawBody,
                     orderResult);
             }
@@ -163,6 +171,7 @@ namespace Polymarket.Net.Clients.ClobApi
                     null,
                     null,
                     Array.Empty<KeyValuePair<string, IEnumerable<string>>>(),
+                    httpSendStartedTimestamp,
                     ex.GetType().Name,
                     ex.Message,
                     rawBody: string.Empty);
@@ -351,6 +360,7 @@ namespace Polymarket.Net.Clients.ClobApi
             HttpStatusCode? responseStatusCode,
             Version? responseVersion,
             IReadOnlyList<KeyValuePair<string, IEnumerable<string>>> responseHeaders,
+            long httpSendStartedTimestamp,
             string? errorType,
             string? errorMessage,
             string rawBody,
@@ -360,6 +370,7 @@ namespace Polymarket.Net.Clients.ClobApi
             ResponseStatusCode = responseStatusCode;
             ResponseVersion = responseVersion;
             ResponseHeaders = responseHeaders;
+            HttpSendStartedTimestamp = httpSendStartedTimestamp;
             ErrorType = errorType;
             ErrorMessage = errorMessage;
             RawBody = rawBody;
@@ -381,6 +392,12 @@ namespace Polymarket.Net.Clients.ClobApi
         /// <summary>Response headers from the CLOB endpoint.</summary>
         public IReadOnlyList<KeyValuePair<string, IEnumerable<string>>> ResponseHeaders { get; }
 
+        /// <summary>
+        /// Monotonic <see cref="Stopwatch.GetTimestamp"/> value captured immediately before
+        /// entering <see cref="HttpClient.SendAsync(HttpRequestMessage, HttpCompletionOption, CancellationToken)"/>.
+        /// </summary>
+        public long HttpSendStartedTimestamp { get; }
+
         /// <summary>Short error category for logging.</summary>
         public string? ErrorType { get; }
 
@@ -394,18 +411,20 @@ namespace Polymarket.Net.Clients.ClobApi
             HttpStatusCode responseStatusCode,
             Version responseVersion,
             IReadOnlyList<KeyValuePair<string, IEnumerable<string>>> responseHeaders,
+            long httpSendStartedTimestamp,
             string rawBody,
             PolymarketOrderResult data)
-            => new(true, responseStatusCode, responseVersion, responseHeaders, null, null, rawBody, data);
+            => new(true, responseStatusCode, responseVersion, responseHeaders, httpSendStartedTimestamp, null, null, rawBody, data);
 
         internal static PolymarketDirectOrderResult Failed(
             HttpStatusCode? responseStatusCode,
             Version? responseVersion,
             IReadOnlyList<KeyValuePair<string, IEnumerable<string>>> responseHeaders,
+            long httpSendStartedTimestamp,
             string errorType,
             string errorMessage,
             string rawBody,
             PolymarketOrderResult? data = null)
-            => new(false, responseStatusCode, responseVersion, responseHeaders, errorType, errorMessage, rawBody, data);
+            => new(false, responseStatusCode, responseVersion, responseHeaders, httpSendStartedTimestamp, errorType, errorMessage, rawBody, data);
     }
 }
