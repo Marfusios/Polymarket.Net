@@ -124,6 +124,29 @@ namespace Polymarket.Net.Interfaces.Clients.ClobApi
             bool isWideLimit = false);
 
         /// <summary>
+        /// Build and sign a marketable BUY from an explicit USDC maker amount. The maker
+        /// amount is rounded down to cents and the resulting share amount to four decimals.
+        /// This performs no HTTP request; submit the result with PlaceSignedOrderAsync.
+        /// </summary>
+        /// <param name="tokenId">UP or DOWN token id</param>
+        /// <param name="makerNotionalUsd">Maximum USDC to spend</param>
+        /// <param name="limitPrice">Worst accepted execution price (0..1)</param>
+        /// <param name="negativeRisk">Whether the market is a negative-risk market</param>
+        /// <param name="clientOrderId">Explicit unique salt</param>
+        /// <param name="expiration">Order expiration (null signs zero)</param>
+        /// <param name="metadata">Bytes32 metadata</param>
+        /// <param name="builderCode">Bytes32 builder attribution</param>
+        PreSignedOrder BuildAndSignMarketBuyOrder(
+            string tokenId,
+            decimal makerNotionalUsd,
+            decimal limitPrice,
+            bool negativeRisk,
+            long? clientOrderId = null,
+            DateTime? expiration = null,
+            string? metadata = null,
+            string? builderCode = null);
+
+        /// <summary>
         /// Place a pre-built and pre-signed order. Skips quantity calc, parameter assembly,
         /// and EIP-712 signing — performs only the HTTP submit. Use the output of BuildAndSignOrder.
         /// </summary>

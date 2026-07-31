@@ -113,6 +113,36 @@ namespace Polymarket.Net.Clients.ClobApi
         }
 
         /// <inheritdoc />
+        public PreSignedOrder BuildAndSignMarketBuyOrder(
+            string tokenId,
+            decimal makerNotionalUsd,
+            decimal limitPrice,
+            bool negativeRisk,
+            long? clientOrderId = null,
+            DateTime? expiration = null,
+            string? metadata = null,
+            string? builderCode = null)
+        {
+            if (string.IsNullOrEmpty(tokenId))
+                throw new ArgumentException("tokenId required", nameof(tokenId));
+
+            var normalizedPrice = NormalizeOrderPrice(limitPrice);
+            var quantities = ComputeMarketBuyQuantities(makerNotionalUsd, normalizedPrice);
+            return BuildAndSignInternal(
+                tokenId,
+                OrderSide.Buy,
+                quantities.MakerQuantity,
+                quantities.TakerQuantity,
+                normalizedPrice,
+                quantities.TakerShares,
+                negativeRisk,
+                clientOrderId,
+                expiration,
+                metadata,
+                builderCode);
+        }
+
+        /// <inheritdoc />
         public async Task<WebCallResult<PolymarketOrderResult>> PlaceSignedOrderAsync(
             PreSignedOrder signedOrder,
             TimeInForce? timeInForce = null,
@@ -440,6 +470,34 @@ namespace Polymarket.Net.Clients.ClobApi
             takerQuantity = ConvertToClobBaseUnits(takerQuantity);
             makerQuantity = ConvertToClobBaseUnits(makerQuantity);
             return (makerQuantity.Normalize(), takerQuantity.Normalize());
+        }
+
+        /// <summary>
+        /// Compute a marketable BUY payload from an explicit USDC maker amount. Polymarket
+        /// accepts at most two decimals for the maker amount and four decimals for the
+        /// corresponding share amount on this order path.
+        /// </summary>
+        internal static (decimal MakerQuantity, decimal TakerQuantity, decimal TakerShares) ComputeMarketBuyQuantities(
+            decimal makerNotionalUsd,
+            decimal normalizedLimitPrice)
+        {
+            if (makerNotionalUsd <= 0m)
+                throw new ArgumentOutOfRangeException(nameof(makerNotionalUsd), "maker notional must be positive");
+            if (normalizedLimitPrice <= 0m || normalizedLimitPrice >= 1m)
+                throw new ArgumentOutOfRangeException(nameof(normalizedLimitPrice), "limit price must be in (0, 1)");
+
+            var makerAmount = ExchangeHelpers.RoundDown(makerNotionalUsd, 2);
+            if (makerAmount <= 0m)
+                throw new ArgumentOutOfRangeException(nameof(makerNotionalUsd), "maker notional must be at least one cent");
+
+            var takerShares = ExchangeHelpers.RoundDown(makerAmount / normalizedLimitPrice, 4);
+            if (takerShares <= 0m)
+                throw new ArgumentOutOfRangeException(nameof(makerNotionalUsd), "maker notional produces no shares");
+
+            return (
+                ConvertToClobBaseUnits(makerAmount).Normalize(),
+                ConvertToClobBaseUnits(takerShares).Normalize(),
+                takerShares.Normalize());
         }
 
         internal static decimal ConvertToClobBaseUnits(decimal amount)

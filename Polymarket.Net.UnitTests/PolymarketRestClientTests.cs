@@ -93,6 +93,36 @@ namespace Polymarket.Net.UnitTests
             Assert.That(makerAmount, Is.EqualTo(2695000m));
         }
 
+        [TestCase(4.10, 0.42, 4100000, 9761900, 9.7619)]
+        [TestCase(6.20, 0.63, 6200000, 9841200, 9.8412)]
+        [TestCase(4.10, 0.411, 4100000, 9975600, 9.9756)]
+        public void ComputeMarketBuyQuantities_ShouldUseCentMakerAndFourDecimalTaker(
+            double makerNotional,
+            double limitPrice,
+            double expectedMakerQuantity,
+            double expectedTakerQuantity,
+            double expectedShares)
+        {
+            var quantities = Clients.ClobApi.PolymarketRestClientClobApiTrading.ComputeMarketBuyQuantities(
+                (decimal)makerNotional,
+                (decimal)limitPrice);
+
+            Assert.That(quantities.MakerQuantity, Is.EqualTo((decimal)expectedMakerQuantity));
+            Assert.That(quantities.TakerQuantity, Is.EqualTo((decimal)expectedTakerQuantity));
+            Assert.That(quantities.TakerShares, Is.EqualTo((decimal)expectedShares));
+        }
+
+        [TestCase(0, 0.42)]
+        [TestCase(4.10, 0)]
+        [TestCase(4.10, 1)]
+        public void ComputeMarketBuyQuantities_ShouldRejectInvalidInputs(double makerNotional, double limitPrice)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                Clients.ClobApi.PolymarketRestClientClobApiTrading.ComputeMarketBuyQuantities(
+                    (decimal)makerNotional,
+                    (decimal)limitPrice));
+        }
+
         [Test]
         public void NormalizeBytes32_ShouldDefaultEmptyValuesToZeroBytes32()
         {
